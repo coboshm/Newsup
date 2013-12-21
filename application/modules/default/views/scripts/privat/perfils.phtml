@@ -1,0 +1,96 @@
+
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+
+            <div id="left-column" class="column narrow attached-menu  group">
+                 <?php
+                //aqui fem un include
+                echo $this->render("opcionsperfil.phtml"); ?>
+
+            </div>
+            <div id="main-column" class="column attached-menu group">
+                <div id="carregador-url">
+                    <form id="submit-form" class="group">
+                        <input type="text" value="¡Envía su Link!" tabindex="1" id="url-submit-url" class="text-input text-input1">
+                        <button id="url-submit-button" tabindex="2" class="btn2 btn-special2 has-tooltip" name="button" type="button">Subir URL</button>
+                    </form>
+                </div>
+                <ul id="comment-sorting" class="pillboxes filter-menu group" style="margin-top: 10px; margin-bottom: 10px; background: #eee;">
+                    <li>
+                        <a id="filter-24h-perfils" class="sort">24h</a>
+                    </li>
+                    <li>
+                        <a id="filter-7d-perfils" class="sort" >7 Días</a>
+                    </li>
+                    <li>
+                        <a id="filter-31d-perfils" class="sort active">31 Días</a>
+                    </li>
+                    <li>
+                        <a id="filter-tot-perfils" class="sort">Histórico</a>
+                    </li>
+                    <li>
+                        <a id="filter-recientes-perfils">Recientes</a>
+                    </li>
+                     <li class="divider show-expanded">
+                        <a id="filter-segueixo-perfils">Yo sigo</a>
+                    </li>
+                    <li class="divider show-expanded">
+                        <a id="filter-segueixen-perfils">Me siguen</a>
+                    </li>
+                </ul>
+                <!--<div id="filtreUsuarisSeguits">
+                    <div class="marcarTots">
+                        <span class="marcarTots1">Marcar Todos</span>
+                        <span style="padding-left:3px; padding-right:3px;">-</span>
+                        <span class="marcarTots1">Desmarcar Todos</span>
+                      </div>
+                    <div style="margin-top:10px; margin-bottom: 10px;">
+                    <?php foreach($this->usuarisSeguits as $seguit){ ?>
+                        <div class="seguitPerfil">
+                            <div style="padding-right:7px; float:left;" rel="<?php echo $seguit->getId(); ?>"><img src="<?php echo $this->baseUrl(); ?>/images/checkbox1.png"/></div>
+                            <?php echo $seguit->getUsername(); ?>
+                        </div>
+                    <?php } ?>
+                    <span class="acceptar-categories">Aceptar</span>
+                    </div>
+                </div>-->
+                <div id="aquiNews">
+                <?php if($this->noticiesFinals == null){ ?>
+                    <div  class="story-item-gutters group" style="margin-top: 17px; margin-bottom: 14px;">
+                        <div style="padding:5px;font-weight: bold;padding-left:10%;">¿Aún no sigue a nadie? ¡Házte fan de la gente que sube las noticias que le interesan!<br/></div>
+                    </div>
+                <?php }else{ ?>
+                <?php
+                //aqui fem un include
+                echo $this->render("foreachnoticiesperfil.phtml"); ?>
+                <?php } ?>
+                <?php if($this->cantitat >15){ ?>
+                <ul class="pagination group btn-loader btn-loader-bottom no-prev no-next story-list-container" role="navigation"aria-labelledby="paginglabel">
+                    <li class="prev" >
+                        <a class="btn btn-default btn-small" id="prev-perf" rel="<?php echo $this->pagina; ?>" tip="1">
+                            <span class="uitext" id="prev">Prev</span>
+                        </a>
+                    </li>
+                    <li class="page-num" style="padding-top:7px;">
+                        Pagina
+                        <span class="pagination-current"><?php echo $this->pagina; ?></span>
+                    </li>
+                    <li class="next">
+                        <a class="btn btn-default btn-small" id="next-perf" rel="<?php echo $this->pagina; ?>" tip="1">
+                            <span class="uitext" id="next">Next</span>
+                        </a>
+                    </li>
+                </ul>
+                <?php } ?>
+            </div>
+           </div>
+            <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

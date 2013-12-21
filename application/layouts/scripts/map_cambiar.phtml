@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <meta http-equiv="expires" content="-1" />
+        <meta name="Description" content="NewsUP es un servicio web de noticias que permite compartir contenido con carácter informativo con el resto del mundo." />
+
+        <title>NewsUp Cambiar Posición de la Noticia</title>
+
+        <?php echo $this->headTitle() ?>
+
+
+<!-- Meta Images -->
+         <base href="http://<?php echo $this->escape($_SERVER['HTTP_HOST']) . $this->escape($this->baseUrl()); ?>/" />
+
+	 <link rel="shortcut icon" href="<?php echo $this->baseUrl();?>/images/favicon.ico" type="image/x-icon" />
+         <script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/jquery-1.3.2.min.js"></script>
+         <script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/jquery-ui-1.7.2.custom.min.js"></script>
+         <script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/funcionsTempsNext.js"></script>
+
+<!-- Title and External Script Integration -->
+	 <title>NewsUp</title>
+
+
+         <script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-21991981-1']);
+          _gaq.push(['_setDomainName', '.newsup.es']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
+        </script>
+
+
+<!-- Stylesheets -->
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/style3.css',      'screen, projection') ?>
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/styleSearch.css',      'screen, projection') ?>
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/style2.css',      'screen, projection') ?>
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/style.css',      'screen, projection') ?>
+	 <?php echo $this->headLink() ?>
+         <?php echo $this->headScript() ?>
+
+         <script type="text/javascript">
+             var baseUrl = "<?php echo $this->baseUrl() ?>";
+             var loggedIn = false;
+             var votat = false;
+             var imatge = false;
+         </script>
+
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript">
+
+          var map;
+          var marker;
+          var x=0;
+
+          function initialize(){
+
+            geocoder = new google.maps.Geocoder();
+
+            var latlng = new google.maps.LatLng(40, -3);
+            var myOptions = {
+              zoom: 5,
+              center: latlng,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+           
+                map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+                 var latLng = new google.maps.LatLng(<?php echo addslashes($this->noticia->getLatitude()); ?>,<?php echo addslashes($this->noticia->getLongitude()); ?>);
+                addMarker(latLng);
+         }
+
+         function addMarker(latLng){
+             x=1;
+
+              var image = new google.maps.MarkerImage(baseUrl+'/images/<?php echo addslashes($this->noticia->getCategoria()->getId()); ?>.png',
+              new google.maps.Size(32, 32),
+              new google.maps.Point(0,0),
+              new google.maps.Point(12, 32));
+
+              var shadow = new google.maps.MarkerImage(baseUrl+'/images/shadow.png',
+              new google.maps.Size(25, 18),
+              new google.maps.Point(0,0),
+              new google.maps.Point(0, 18));
+
+              
+
+             marker = new google.maps.Marker({
+                    position: latLng,
+                    //shadow: shadow,
+                    icon: image,
+                    title: "<?php echo addslashes($this->noticia->getTitul());?>",
+                    draggable:true
+                    
+
+             });
+             marker.setMap(map);
+
+                var contentString = '<div id="content" style="height:90px;">'+
+                                    '<div id="siteNotice">'+
+                                    '</div>'+
+                                    '<div id="bodyContent">'+
+                                    '<div class="story-item-gutters group">'+
+                                    '<div class="story-item-diggbtn" id="puntuacio<?php echo $this->noticia->getId();?>">'+
+                                    '<div class="newsup-btn has-tooltip newsup-dugg">'+
+                                    '<a class="newsup-count-wrapper">'+
+                                    '<span class="newsup-count"><span><?php echo $this->noticia->getNumVots();?></span></span>'+
+                                    '</a>';
+
+               if(votat==true){
+                   contentString+= '<span class="btnpunts-votat btn-special-javotat has-tooltip" rel="<?php echo $this->noticia->getId(); ?>" votat="<?php echo $this->noticia->getId(); ?>"  id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>';
+               }else{
+                   contentString += '<span class="btnpunts btn-special-punts has-tooltip" rel="<?php echo $this->noticia->getId(); ?>" votat="0"   id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>';
+               }
+
+                   contentString+= '</div>'+
+                                    '</div>'+
+                                    '<div class="story-item-content group" style="width:92%;">'+
+                                    '<div class="story-item-details">'+
+                                    '<h3 class="story-item-title">'+
+                                    '<a><?php echo addslashes($this->noticia->getTitul200());?></a>'+
+                                    '</h3>'+
+                                    '</div>'+
+                                    '<ul class="story-item-meta group">'+
+                                         '<li class="story-item-submitter">Enviado por: <a  class="hcard-trigger" href="<?php echo $this->baseUrl();?>/usuario/<?php echo addslashes($this->noticia->getUsuari()->getUsername());?>"><?php echo addslashes($this->noticia->getUsuari()->getUsername());?></a></li>'+
+                                         '<li class="story-item-submitter">Enviado el&nbsp;<?php echo $this->noticia->getData();?></li>'+
+                                         '<div id="boto-colocar">'+
+                                            '<div  id="fixardiv" style="margin-top: -10px;">'+
+                                               'Fijar Aquí'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</ul>'+
+                                    '</div>';
+               if(imatge==true){
+                   contentString+= '<div class="story-item-media" style="margin-top:15px;">'+
+                                    '<a rel="nofollow" class="story-item-thumb" href="">'+
+                                        '<div class="thumb-edges"></div>'+
+                                        '<img  src="<?php echo $this->baseUrl();?>/imgnotice/<?php echo addslashes($this->noticia->getImatge()); ?>">'+
+                                    '</a>'+
+                                    '</div>';
+               }
+
+                 contentString +=   '</div>'+
+                                    '</div>'+
+                                    '</div>';
+
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
+                google.maps.event.addListener(marker, 'click', function() {
+                  infowindow.open(map,marker);
+                });
+
+                infowindow.open(map,marker);
+         }
+
+    function codeAddress() {
+        var address = document.getElementById("address").value;
+        geocoder.geocode( { 'address': address}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            map.setZoom(7);
+            if(x==1){
+                marker.setPosition(results[0].geometry.location);
+            }else{
+                addMarker(results[0].geometry.location);
+            }
+          }
+        });
+      }
+
+
+
+    jQuery("div#fixardiv").live("click",function(){
+       position = marker.getPosition();
+       id = jQuery("#puntsNotice").attr("rel");
+       if(loggedIn==false){
+            jQuery("div#no-login-dock-punts").fadeIn(300);
+       }else{
+            $(location).attr('href',baseUrl+"/privat/afegirposition/id/"+id+"/position/"+position);
+       }
+    });
+
+
+
+
+
+
+</script>
+    </head>
+    <body style="min-width:960px;" onload="initialize()">
+    <div id="preloadImages"></div>
+    <?php echo $this->render("missatjes.phtml"); ?>
+    <div style="height: 91%; width: 100%; background: #fff; position: absolute; min-width:960px;">
+        <?php if($this->loggedIn==true){ ?>
+        <script>
+            loggedIn= true;
+        </script>
+        <?php } ?>
+        <div class="header-wrapper">
+        <div class="header group">
+            <a id="header-logo" class="sprite1 newsup-logo" href="<?php echo $this->baseUrl();?>">NewsUP</a>
+            <ul class="main-navigation tabbed-navigation group">
+                <?php if($this->loggedIn==true): ?>
+                <li>
+                    <a id="header-mynews" <?php if($this->mostra == "1") { echo "class='active'"; } ?> href="<?php echo $this->baseUrl(); ?>/privat"><span class="elbow-left"></span><span class="elbow-right"></span>Mis Noticias</a>
+                </li>
+                <?php endif ?>
+                <li>
+                    <a id="header-topnews" <?php if($this->mostra == "2") { echo "class='active'"; } ?> href="<?php echo $this->baseUrl(); ?>"><span class="elbow-left"></span><span class="elbow-right"></span>Noticias Top</a>
+                </li>
+                <li>
+                    <a id="header-upcoming"  <?php if($this->mostra == "3") { echo "class='active'"; } ?>href="<?php echo $this->baseUrl(); ?>/map"><span class="elbow-left"></span><span class="elbow-right"></span>El Mapa</a>
+                </li>
+                <li>
+                    <a id="header-upcoming"  <?php if($this->mostra == "5") { echo "class='active'"; } ?>href="<?php echo $this->baseUrl(); ?>/quiosco"><span class="elbow-left"></span><span class="elbow-right"></span>Quiosco</a>
+                </li>
+            </ul>
+        <?php if($this->loggedIn==true): ?>
+        <div class="float-right-login group">
+        <?php else: ?>
+        <div class="float-right group">
+        <?php endif ?>
+            <?php echo $this->render("login.phtml"); ?>
+
+            <form id="header-search-form" class="header-search" method="get" action="<?php echo $this->baseUrl(); ?>/search">
+                <input type="text" value="Buscar usuarios y noticias" id="q" name="buscador"/>
+                <input type="submit" value="" id="search-button" name="submit"/>
+            </form>
+        </div>
+        </div>
+        </div>
+        <div class="" style="background:#fff; height: 25%; width: 100%; margin-top:1%; margin-bottom:10px;">
+            <div style="width:60%; padding-top: 0.5%; float:left; margin-left: 1.5%;border-right: 1px solid #eee;padding-right:6px;">
+            <?php $votat=0; ?>
+            <?php if($this->loggedIn==true): ?>
+            <?php foreach($this->noticia->getAllVots() as $vot){ ?>
+            <?php if($vot->getidUsuari()==$this->user->id_user){ ?>
+                
+            <?php $votat=1; ?>
+            <script>
+                    votat = true;
+            </script>
+
+            <?php }?>
+                
+            <?php } ?>
+            <?php endif ?>
+
+                <div class="story-item-gutters group">
+                    <div class="story-item-diggbtn" id="puntuacio<?php echo $this->noticia->getId();?>">
+                    <div class="newsup-btn has-tooltip newsup-dugg">
+                        <a class="newsup-count-wrapper" href="">
+                            <span class="newsup-count"><span><?php echo $this->noticia->getNumVots();?></span></span>
+                        </a>
+                        <?php if($votat==1){?>
+                        <span class="btnpunts-votat btn-special-javotat has-tooltip" rel="<?php echo $this->noticia->getId(); ?>" votat="<?php echo $this->noticia->getId(); ?>"  id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>
+                        <?php }else{?>
+                        <span class="btnpunts btn-special-punts has-tooltip" rel="<?php echo $this->noticia->getId(); ?>" votat="0"  id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>
+                        <?php } ?>
+                    </div>
+                    </div>
+                    <?php if($this->noticia->getImatge() !=null){ ?>
+                    <div class="story-item-content group" style="width:97%;">
+                    <?php }else{ ?>
+                    <div class="story-item-content group" style="width:110%;">
+                    <?php } ?>
+                        <div class="story-item-details">
+                            <h3 class="story-item-title">
+                                <a target="_blank" href="<?php echo $this->noticia->getUrl();?>"><?php echo $this->noticia->getTitul();?></a>
+                            </h3>
+                        <p class="story-item-description" style="margin-bottom:5px;">
+                            <span rel="nofollow" class="story-item-teaser"><?php echo $this->noticia->getDescripcio180();?>
+                            </span>
+                        </p>
+                        </div>
+                        <ul class="story-item-meta group">
+                             <li class="story-item-submitter">Enviado por: <a  class="hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $this->noticia->getUsuari()->getUsername();?>"><?php echo $this->noticia->getUsuari()->getUsername();?></a></li>
+                             <li class="story-item-submitter">Enviado el&nbsp;<?php echo $this->noticia->getData();?></li>
+                             <li class="story-item-comments">
+                                   <a href="<?php echo $this->baseUrl(); ?>/noticia/<?php echo $this->noticia->getUrlTitul(); ?>">
+                                       <span class="storylist-icon comments dib"></span>
+                                       <span class="storylist-item-comment-count"><?php echo $this->noticia->getNumComentaris();?></span>&nbsp;Comentarios
+                                   </a>
+                               </li>
+                        </ul>
+
+                    </div>
+
+                    <?php if($this->noticia->getImatge() !=null){ ?>
+                        <script>
+                            imatge = true;
+                        </script>
+                        <div class="story-item-media">
+                            <div rel="nofollow" class="story-item-thumb">
+                                <div class="thumb-edges"></div>
+                                <img alt=""  src="<?php echo $this->baseUrl();?>/imgnotice/<?php echo $this->noticia->getImatge(); ?>"/>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+                </div>
+                <div style="float:left; width: 34%; margin-left: 0.5%;">
+                    <div class="main-content-header group" style="font-size:12px; color:#333;">
+                        <div style="padding:5px;">1 - Algun <strong>usuario la ha colocado</strong> en esta posición.<br/></div>
+                        <div style="padding:5px;">2 - Si cree que <strong>la posición es erronea</strong><br/></div>
+                        <div style="padding:5px;">3 - <strong>Arrastre el puntero de la noticia</strong> a su nueva ubicación<br/></div>
+                    </div>
+                    <div style="padding-bottom:15px; padding-top:18px; padding-left:15px;">
+                        <h5 style="float:left; padding-top:6px;">Buscar:</h5><input style="float:left; margin-left:10px;" id="address" type="textbox" value="" onchange="codeAddress()"/>
+                        <div id="posicionar" style="float:left; margin-left: 5px; margin-top: 4px; cursor:pointer;"><img src="<?php echo $this->baseUrl();?>/images/arrow2.jpeg"/></div>
+                     </div>
+                </div>
+        </div>
+        <?php echo $this->layout()->content ?>
+    
+            <div class="footer">
+            <?php echo $this->render("footer.phtml"); ?>
+        </div>
+    </div>
+    <script>
+        var mapa = 62;
+        //alert(screen.height);
+        if(screen.height>800){
+            y = screen.height - 800;
+            z = (y/13)*0.2;
+            mapa = mapa + z;
+            jQuery("div#map_canvas").css("height",mapa+"%")
+        }else{
+            mapa = mapa -0.5;
+            jQuery("div#map_canvas").css("height",mapa+"%")
+        }
+    </script>
+    </body>
+</html>

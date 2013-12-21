@@ -1,0 +1,189 @@
+<div id="carregador-url1">
+    <form id="submit-form-step-two" class="group" method="post" action="<?php echo $this->baseUrl();?>/index/guardarnew">
+     <div id="submission-crawl-container" class="submission-form-contents">
+         <div id="fotos" style="">
+            <?php if(count($this->imatges)!=0){ ?>
+             <script>
+                 var imatges = new Array();
+                 var x=0;
+             </script>
+             <input type="hidden" value="<?php echo $this->imatges[0]; ?>" id="imatgeFinal" name="imatgeFinal">
+                <?php for($x=0; $x<=7; $x++){ ?>
+                     <script>
+                         imatges[x] = <?php echo $x; ?>;  
+                         x++;
+                    </script>
+                    <?php if($x==0){?>
+                    <img id="<?php echo $x;?>" src="<?php echo $this->imatges[$x]; ?>" width="66" height="66" rel="si" class="imatgeSelec">
+                    <?php }else{ ?>
+                    <img id="<?php echo $x;?>" src="<?php echo $this->imatges[$x]; ?>" width="66" height="66" rel="si" class="imatgeNova">
+                    <?php } ?>
+                    <?php if($x==7 || count($this->imatges)==$x+1){ ?>
+                        <?php if(count($this->imatges)==$x+1){ $x=10; } ?>
+                    <img id="<?php echo $x+1; ?>" src="<?php echo $this->baseUrl();?>/images/noimage.png" rel="no" class="imatgeNova" width="66" height="66">
+                        <script>
+                            x++;
+                            imtges[x] = x; 
+                        </script>
+                    <?php } ?>
+                <?php } ?>
+           <?php }else{ ?>
+             <input type="hidden" value="" id="imatgeFinal" name="imatgeFinal">
+           <?php } ?>
+         </div>
+         <div class="submission-detail-field" id="titul-div" style="margin-top:10px;">
+            <p id="submit-title"><?php echo $this->titul?></p>
+            <div class="flexible-input" style="width: 100%;">
+                <?php $titul = str_replace("'","\"",$this->titul); ?>
+                <input type="text" id="user-title-text" class="text-input" value='<?php echo $titul;?>' name="user-title-text">
+            </div>
+        </div>
+         <a id="edit-title" class="edit-input">Editar</a>
+        <div class="submission-detail-field" id="description-div">
+            <p id="submit-description"><?php echo $this->descripcion; ?></p>
+            <div class="flexible-input-descripcion" style="display:none; width: 100%;">
+                <textarea style="width:100%;resize: none;" id="user-desc-text" name="user-desc-text" rows="4" class="text-input"><?php echo $this->descripcion; ?></textarea>
+            </div>
+        </div>
+         <a id="edit-description" class="edit-input">Editar</a>
+        <div class="submission-buttons group">
+            <div id="topic-dropdown-list" class="dropdown-container" style="background:-moz-linear-gradient(center top , #FFFFFF, #E3ECF6) repeat scroll 0 0 #E3ECF6; clear:both;">
+            <a class="dropdown-label">
+                <span class="sprite menu-arrows"></span>Categoría
+            </a>
+            <ul id="categorias-lista">
+                <?php foreach($this->llistaCategories as $categoria){ ?>
+                    <?php if($categoria->getNom()!="Todas"){ ?>
+                    <li><a  class="dropdown-option" rel="<?php echo $categoria->getId(); ?>"><?php echo $categoria->getNom(); ?></a></li>
+                    <?php } ?>
+               <?php } ?>
+            </ul>
+            </div>
+            <div class="buttons-wrapper">
+                <a id="submit-cancel">Cancelar</a>
+                <button id="submit-create" class="btn btn-special has-tooltip" name="button" type="button" style="width:100px;">Publicar<span class="sprite digg-it-large" style=" margin-left:10px;"></span></button>
+            </div>
+        </div>
+        <input type="hidden" value="<?php echo $this->url ?>" id="url-pujada" name="url-pujada">
+        <input type="hidden" value="" id="categoria-pujada" name="categoria-pujada">
+    </div>
+</form>
+</div>
+
+<script>
+    var categoria_selecionada="";
+
+    jQuery("#submit-cancel").live("click",function(){
+        jQuery("div#carregador-url").html("<form id=\"submit-form\" class=\"group\">"+
+                                          "<input type=\"text\" value=\"Envia tu Link!\" tabindex=\"1\" id=\"url-submit-url\" class=\"text-input text-input1\" >"+
+                                          "<button id=\"url-submit-button\" tabindex=\"2\" class=\"btn2 btn-special2 has-tooltip\" name=\"button\" type=\"button\">Subir URL</button>"+
+                                          "</form>");
+         categories = 0;
+         x=0;
+    });
+
+    jQuery("button#submit-create").live("click",function(){
+        var error =0;
+
+        if(categoria_selecionada==""){
+            error=1;
+            jQuery("div#no-categoria-dock").fadeIn(300);
+            setTimeout("tancarFinestreCategoria()", 5000);
+        }
+        if(error==0){
+            if(jQuery("textarea#user-desc-text").val()==""){
+                error=1;
+                jQuery("div#no-camposnew-dock").fadeIn(300);
+                setTimeout("tancarFinestreNoCampo()", 5000);
+            }
+            if(jQuery("textarea#user-desc-text").val()=="No hay descripción, escrívela usted porfavor"){
+                error=1;
+                jQuery("div#no-camposnew-dock").fadeIn(300);
+                setTimeout("tancarFinestreNoCampo()", 5000);
+            }
+            if(jQuery("input#user-title-text").val()==""){
+                error=1;
+                jQuery("div#no-camposnew-dock").fadeIn(300);
+                setTimeout("tancarFinestreNoCampo()", 5000);
+            }
+            if(jQuery("input#user-title-text").val()=="Error, escriva usted el título porfavor"){
+                error=1;
+                jQuery("div#no-camposnew-dock").fadeIn(300);
+                setTimeout("tancarFinestreNoCampo()", 5000);
+            }
+        }
+
+        if(error==0){
+            jQuery("form#submit-form-step-two").submit();
+        }
+    });
+
+    function tancarFinestreNoCampo(){
+        jQuery("div#no-camposnew-dock").slideUp(400);
+    }
+
+    function tancarFinestreCategoria(){
+        jQuery("div#no-categoria-dock").slideUp(400);
+    }
+
+    jQuery("a.dismiss-no-categoria").live("click",function(){
+        jQuery("div#no-categoria-dock").fadeOut(50);
+    });
+
+    jQuery("a.dismiss-no-camposnew").live("click",function(){
+        jQuery("div#no-camposnew-dock").fadeOut(50);
+    });
+
+    jQuery("a#edit-title").live("click",function(){
+
+        jQuery("a#edit-title").fadeOut(0);
+        jQuery("p#submit-title").fadeOut(0);
+        jQuery("div.flexible-input").fadeIn(100);
+        jQuery("div#titul-div").css("width","91%");
+
+    });
+
+    jQuery("a#edit-description").live("click",function(){
+
+        jQuery("a#edit-description").fadeOut(0);
+        jQuery("p#submit-description").fadeOut(0);
+        jQuery("div.flexible-input-descripcion").fadeIn(100);
+        jQuery("div#description-div").css("width","91%");
+
+    });
+
+    jQuery("a.dropdown-option").live("click",function(){
+
+      jQuery("a.dropdown-label").html("<span class=\"sprite menu-arrows\"></span>"+jQuery(this).html());
+      jQuery("a.dropdown-option").removeClass("selected");
+      jQuery(this).addClass("selected");
+      jQuery("input#categoria-pujada").val(jQuery(this).attr("rel"));
+      categoria_selecionada = jQuery(this).attr("rel");
+      //alert(jQuery("input#categoria-pujada").val());
+    });
+
+    jQuery("img.imatgeNova").live("click",function(){
+        rel = jQuery(this).attr("rel");
+        if(rel=="no"){
+            jQuery("input#imatgeFinal").val("");
+        }else{
+            jQuery("input#imatgeFinal").val(jQuery(this).attr("src"));
+        }//alert(jQuery("input#imatgeFinal").val());
+        jQuery("img.imatgeSelec").addClass("imatgeNova");
+        jQuery("img.imatgeSelec").removeClass("imatgeSelec");
+        jQuery(this).removeClass("imatgeNova");
+        jQuery(this).addClass("imatgeSelec");
+        
+        /*for(x=0;x<imatges.length;x++){
+                    jQuery("img#"+imatges[x]).removeClass("imatgeSelec");
+                    jQuery("img#"+imatges[x]).addClass("imatgeNova");
+                if(imatges[x] == rel){
+                    jQuery("img#"+imatges[x]).addClass("imatgeSelec");
+                    jQuery("img#"+imatges[x]).removeClass("imatgeNova");
+                    
+                }
+        }*/
+    });
+
+    
+</script>

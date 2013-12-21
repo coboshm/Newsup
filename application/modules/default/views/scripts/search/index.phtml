@@ -1,0 +1,105 @@
+    <div class="column-container group">
+        <div class="columns group">
+            <!--IZQUIERDA -->
+            <div id="left-column" class="column narrow attached-menu group">
+               <div class="search-facet group">
+                    <h4>Tiempo</h4>
+                    <ul class="sidebar-menu">
+                        <li class="group">
+                            <a id="facet-all-dates" class="active" href="<?php echo $this->baseUrl(); ?>/search/index/buscador/<?php echo $this->paraula; ?>/categoria/<?php echo $this->idCategoria; ?>" >Todos los días</a>
+                        </li>
+                        <li class="group">
+                            <a id="facet-last-day" href="<?php echo $this->baseUrl(); ?>/search/searchundia/paraula/<?php echo $this->paraula; ?>/categoria/<?php echo $this->idCategoria; ?>">1 Día</a>
+                        </li>
+                        <li class="group">
+                            <a id="facet-last-week" href="<?php echo $this->baseUrl(); ?>/search/searchunasemana/paraula/<?php echo $this->paraula; ?>/categoria/<?php echo $this->idCategoria; ?>">1 Semana</a>
+                        </li>
+                        <li class="group">
+                            <a id="facet-last-month" href="<?php echo $this->baseUrl(); ?>/search/searchunmes/paraula/<?php echo $this->paraula; ?>/categoria/<?php echo $this->idCategoria; ?>">1 Mes</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="search-facet group">
+                    <h4>Categorías</h4>
+                    <ul class="sidebar-menu">
+                        <?php foreach($this->llistaCategories as $categoria){ ?>
+                            <?php if($categoria->getId()==$this->idCategoria){ ?>
+                            <li><a class="active" href="<?php echo $this->baseUrl()."/search/searchcategoria/id/".$categoria->getId()."/paraula/".$this->paraula;?>"><?php echo $categoria->getNom(); ?></a></li>
+                            <?php }else{?>
+                            <li><a href="<?php echo $this->baseUrl()."/search/searchcategoria/id/".$categoria->getId()."/paraula/".$this->paraula;?>"><?php echo $categoria->getNom(); ?></a></li>
+                            <?php } ?>
+                        <?php } ?>
+                    </ul>
+                </div>
+            </div>
+     <!--MAIN -->
+            <div id="main-column" class="column attached-menu group" style="min-height: 560px;">
+                <ul style="background: #fff;margin-top:10px; font-weight: bold; padding:8px 10px;" class="group">
+                    <li style="float:left; margin-right:7px; padding-top:7px;">
+                        <a style="color:#333; padding: 5px 6px 6px 5px; cursor:default;" id="filter-recientes">
+                            <?php echo count($this->noticiesFinals); ?>
+                            Resultado/s Noticias
+                        </a>
+                    </li>
+                </ul>
+                <div class="list-container" id="story-list-container">
+                    <div id="story-items" class="story-list inner-container topbar-spacer" style="width: 100%;">
+                        <div class="stories" id="aquiNews">
+                            <?php if($this->noticiesFinals == null){ ?>
+                                <div class="nothing-found topbar-spacer">
+                                    <p class="title">No hay noticias con estas características.</p>
+                                </div>
+                            <?php }else{ ?>
+                            <?php
+                            //aqui fem un include
+                            echo $this->render("foreachnoticies.phtml"); ?>
+                            <?php } ?>
+                        </div>
+                    </div>
+            </div>    
+            </div>
+            <!-- fi main-->
+            <!-- MENU DERECHA-->
+            <div id="right-column" class="column wide">
+                <ul style="background: #fff;margin-top:6px; margin-bottom: 12px; font-weight: bold; padding:8px 10px;" class="group">
+                    <li style="float:left;margin-right:7px; padding-top:7px;">
+                        <a  style="color:#333; padding: 5px 6px 6px 5px; cursor:default;" id="filter-recientes">
+                            <?php echo count($this->noticiesUsuaris); ?>
+                            Resultado/s Usuarios
+                        </a>
+                    </li>
+                </ul>
+                <div id="user-search-results" class="user-search-results" style="margin-top:-5px;">
+                    <?php if(count($this->noticiesUsuaris)==0){?>
+                        <div class="nothing-found">
+                             <p class="title">No hay Usuarios.</p>
+                        </div>
+                    <?php }else{?>
+                    <?php foreach($this->noticiesUsuaris as $user){ ?>
+                    <?php $votat=0; ?>
+                    <?php if($this->loggedIn==true): ?>
+                    <?php endif ?>
+                    <!-- OBJECTE USUARI-->
+                    <div class="user-result group">
+                        <?php if($user->getImage()!=null){ ?>
+                            <img class="rounded-img large" src="<?php echo $this->baseUrl();?>/img/<?php echo $user->getImage(); ?>" width="48x" height="48px" >
+                        <?php }else{ ?>
+                            <img class="rounded-img large"  src="<?php echo $this->baseUrl() ?>/images/defaultuser.png" width="48x" height="48px" >
+                        <?php } ?>
+                        <dl>
+                            <dt><a href="<?php echo $this->baseUrl();?>/usuario/<?php echo $user->getUsername();?>"><?php echo $user->getUsername();?></a></dt>
+                            <dd>
+                                <span class="follower-count">Ha subido <?php echo $user->getNumNoticies(); ?> Noticia/s</span>
+                            </dd>
+                        </dl>
+                    </div>
+                    <!--FI OBJECTE -->
+                    <?php } ?>
+                </div>
+                <?php } ?>
+            </div><!--FI MENU DERECHA -->
+        </div>
+        </div>
+    </div>
+

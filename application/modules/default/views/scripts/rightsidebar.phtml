@@ -1,0 +1,139 @@
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=110386902375619";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div style="margin-bottom: -5px; margin-top: -6px;">
+<div class="publicidad2">
+    <script type="text/javascript"><!--
+google_ad_client = "ca-pub-4111996023407712";
+/* NewsUP Anuncios */
+google_ad_slot = "3140686674";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
+</div>
+<?php if($this->loggedIn==true){ ?>
+    <?php if($this->usuario->getImage()== null){?>
+ <div id="profile-picture-module" class="sidebar-content">
+     <div id="titul-categorias" style="padding-left:4px; background:#f2f2f2; border-top:1px solid #e2e2e2; padding:4px 5px 4px 5px;">Házte Reconocible</div>
+     <div class="module" style="margin-top:10px;">
+         <div class="form-fields float-left" id="photo-img">
+             <img alt="usuario" class="profile-photo" src="http://cdn1.diggstatic.com/img/user/c.76489405.png">
+         </div>
+         <div class="form-fields" style="padding-top:4px;">
+             <a href="<?php echo $this->baseUrl();?>/privat/editar" for="photo" class="block-label" style="padding-left:47px;">Sube su foto de perfil!</a>
+             <span style="padding-left: 5px;">Ayudará a los usuarios a reconocerle!</span>
+         </div>
+     </div>
+ </div>
+     <?php }?>
+ <?php }?>
+ <?php if($this->rightBuscaOut == null){ ?>
+   <div id="profile-picture-module" class="sidebar-content">
+     <div id="titul-categorias" style="padding-left:4px; background:#f2f2f2; border-top:1px solid #e2e2e2; padding:4px 5px 4px 5px;">
+         Busca las noticias de sus Amigos!
+     </div>
+     <div class="module" style="margin-top:10px;">
+         <div class="form-fields float-left" id="photo-img">
+             <a id="gmail">
+                <img alt="gmail" class="profile-photo" src="<?php echo $this->baseUrl();?>/images/gmail.png">
+             </a>
+         </div>
+         <div class="form-fields" style="padding-top:8px;">
+             <a id="gmail" class="block-label" style="padding-left:60px;">Encuentre a sus contactos de Gmail</a>
+             <span style="padding-left: 17px;">Podrá ver que les gusta</span>
+         </div>
+     </div>
+ <div class="module" style="margin-top:10px;">
+         <div class="form-fields float-left" id="photo-img">
+             <a id="windows">
+                 <img alt="windowslive" class="profile-photo" src="<?php echo $this->baseUrl();?>/images/windowslive.png">
+             </a>
+         </div>
+         <div class="form-fields" style="padding-top:8px;">
+             <a id="windows" class="block-label" style="padding-left:60px;">Encuentre a sus contactos de Hotmail</a>
+             <span style="padding-left: 11px;">Podrá seguirlos y que le sigan</span>
+         </div>
+     </div>
+     <div class="module" style="margin-top:10px;">
+         <div class="form-fields float-left" id="photo-img">
+             <a id="facebook">
+                <img alt="facebook" class="profile-photo" src="<?php echo $this->baseUrl();?>/images/facebookIco.png">
+             </a>
+         </div>
+         <div class="form-fields" style="padding-top:4px;">
+             <a id="facebook"  class="block-label" style="padding-left:60px;">Encuentre a sus amigos de Facebook</a>
+             <span style="padding-left: 14px;">Mira que noticias suben</span>
+         </div>
+     </div>
+ </div>
+<?php }?>
+<div id="rankig" style="margin-bottom:15px;">
+        <div id="titul-categorias" style="color: #000;padding-left:4px; background:#f2f2f2; border-top:1px solid #e2e2e2; padding:4px 5px 4px 5px; margin-bottom:20px;">
+             Ahora, Siguenos en Facebook.
+        </div>
+	<div style="margin-bottom: -5px; margin-top: -6px;">
+<div class="publicidad2">
+	<div class="fb-like-box" data-href="http://www.facebook.com/pages/NewsUP/200980069940739" data-width="292" data-height="290" data-show-faces="true" data-stream="false" data-header="true"></div>
+	</div></div>
+</div>
+ <?php if(!isset($this->sidebarRanking)): ?>
+    <div id="rankig">
+        <a href="<?php echo $this->baseUrl()?>/index/ranking">
+            <div id="titul-categorias" style="color: #000;padding-left:4px; background:#f2f2f2; border-top:1px solid #e2e2e2; padding:4px 5px 4px 5px;">
+             Clasificación de Usuarios
+            </div>
+        </a>
+        <div class="form-fields float-left" id="photo-img">
+             <a  href="<?php echo $this->baseUrl()?>/index/ranking">
+                <img alt="facebook" class="profile-photo" src="<?php echo $this->baseUrl();?>/images/Rank-History.png">
+             </a>
+         </div>
+         <div class="form-fields" style="padding-top:4px;">
+             <a   href="<?php echo $this->baseUrl()?>/index/ranking" class="block-label" style="padding-left:60px;">Encuentra su posición en la clasificación</a>
+             <span style="padding-left: 14px;">¿Será de los primeros de NewsUP?</span>
+         </div>
+         
+    </div>
+      <?php endif ?>
+</div>
+   <script type="text/javascript">
+
+
+    jQuery("a#gmail").live("click",function(){
+        if(loggedIn==false){
+            jQuery("div#no-login-dock-punts").fadeIn(300);
+            setTimeout("tancarFinestreNoLoginDockPunts()", 5000);
+        }else{
+            window.location.href = baseUrl+"/buscar/Gmail";
+        }
+    });
+
+    jQuery("a#facebook").live("click",function(){
+        if(loggedIn==false){
+            jQuery("div#no-login-dock-punts").fadeIn(300);
+            setTimeout("tancarFinestreNoLoginDockPunts()", 5000);
+        }else{
+            window.location.href = baseUrl+"/buscar/Facebook";
+        }
+    });
+
+    jQuery("a#windows").live("click",function(){
+        if(loggedIn==false){
+            jQuery("div#no-login-dock-punts").fadeIn(300);
+            setTimeout("tancarFinestreNoLoginDockPunts()", 5000);
+        }else{
+            window.location.href = baseUrl+"/buscar/Windows_live";
+        }
+    });
+    
+</script>

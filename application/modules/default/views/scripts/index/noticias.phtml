@@ -1,0 +1,590 @@
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+            <div id="main-column-noticia" class="column attached-menu group">
+                <?php $votat=0; ?>
+                <?php if($this->loggedIn==true): ?>
+                <?php foreach($this->noticia->getAllVots() as $vot){ ?>
+                <?php if($vot->getidUsuari()==$this->user->id_user){ $votat=$this->noticia->getId();; }?>
+                <?php } ?>
+                <?php endif ?>
+                <div class="story-item-gutters group">
+                    <div class="story-item-diggbtn" id="puntuacio<?php echo $this->noticia->getId();?>">
+                    <div class="newsup-btn has-tooltip newsup-dugg">
+                        <a class="newsup-count-wrapper">
+                            <span class="newsup-count"><span><?php echo $this->noticia->getNumVots();?></span></span>
+                        </a>
+                        <?php if($votat!=0){?>
+                        <span class="btnpunts-votat btn-special-javotat has-tooltip" rel="<?php echo $this->noticia->getId(); ?>" votat="<?php echo $votat; ?>"  id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>
+                        <?php }else{?>
+                        <span class="btnpunts btn-special-punts has-tooltip" rel="<?php echo $this->noticia->getId(); ?>" votat="<?php echo $votat; ?>"  id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>
+                        <?php } ?>
+                    </div>
+                    </div>
+                    <?php if($this->noticia->getImatge() !=null){ ?>
+                    <div class="story-item-content group" style="width:97%;">
+                    <?php }else{ ?>
+                    <div class="story-item-content group" style="width:110%;">
+                    <?php } ?>
+                        <div class="story-item-details">
+                            <h3 class="story-item-title">
+                                <a target="_blank" href="<?php echo $this->noticia->getUrl();?>"><?php echo stripslashes($this->noticia->getTitul());?></a>
+                            </h3>
+                        <p class="story-item-description" style="margin-bottom:20px;">
+                            <span rel="nofollow" class="story-item-teaser"><?php echo stripslashes(strip_tags($this->noticia->getDescripcio()));?>
+                            </span>
+                        </p>
+                        </div>
+                        <ul class="story-item-meta group">
+                             <li class="story-item-submitter">Enviado por: <a  class="hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $this->noticia->getUsuari()->getUsername(); ?>"><?php echo $this->noticia->getUsuari()->getUsername();?></a></li>
+                             <li class="story-item-submitter">Enviado el&nbsp;<?php echo $this->noticia->getData();?></li>
+                             <li class="story-item-newcomment" rel="<?php echo $this->noticia->getId(); ?>">
+                                 <a class="story-item-action-post-comment">Comentar</a>
+                                 <span class="story-item-newcomment-nub"></span>
+                             </li>
+                             <?php if( $this->noticia->getLatitude() == null ||  $this->noticia->getLongitude() == null){ ?>
+                               <li class="mapa-colocar">
+                                   <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/colocar/<?php echo  $this->noticia->getUrlTitul() ?>">
+                                       <span class="mapa-color-span"><img src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                                       <span>Colocar en el Mapa</span>
+                                   </a>
+                               </li>
+                               <?php }else{ ?>
+                                  <?php if($this->loggedIn==true){ ?>
+                                  <?php if( $this->noticia->getUsuari()->getId()== $this->usuario->getId()){?>
+                                   <li class="mapa-colocar">
+                                       <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/cambiar/<?php echo  $this->noticia->getUrlTitul() ?>">
+                                           <span class="mapa-color-span"><img src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                                           <span>Cambiar en el Mapa</span>
+                                       </a>
+                                  </li>
+                                  <?php }else{ ?>
+                                  <li class="mapa-colocar">
+                                       <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/ver/<?php echo  $this->noticia->getUrlTitul() ?>">
+                                           <span class="mapa-color-span"><img src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                                           <span>Ver en el Mapa</span>
+                                       </a>
+                                   </li>
+                                   <?php } ?>
+                                  <?php }else{ ?>
+                                   <li class="mapa-colocar">
+                                       <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/ver/<?php echo  $this->noticia->getUrlTitul() ?>">
+                                           <span class="mapa-color-span"><img src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                                           <span>Ver en el Mapa</span>
+                                       </a>
+                                   </li>
+                                   <?php } ?>
+                               <?php } ?>
+                               <ul class="story-item-sharing-options group" style="background-color:#fff9da;border:1px solid #f0e9bc; margin-top:-8px;">
+                                <li><a class="sharing-facebook" href="http://www.facebook.com/sharer.php?u=www.newsup.es/noticia/<?php echo $this->noticia->getUrlTitul();?>"><span class="storylist-icon facebook"></span></a></li>
+                                <li><a  class="sharing-twitter" href="http://twitter.com/share?text=<?php echo strip_tags($this->noticia->getTitul200()); ?>&url=www.newsup.es/noticia/<?php echo $this->noticia->getUrlTitul() ;?>&via=NewsUP"><span class="storylist-icon twitter"></span></a></li>
+                                <li class="story-item-sharing-last"><a class="sharing-email" href="mailto:?subject=NewsUP Noticias: <?php echo strip_tags($this->noticia->getTitul200()); ?>&amp;body=<?php echo strip_tags($this->noticia->getDescripcio());?>&nbsp;Via NewsUP"><span class="storylist-icon email"></span></a></li>
+                            </ul>
+                        </ul>
+
+                        
+                        <div class="inline-comment-container"></div>
+                    </div>
+
+                    <?php if($this->noticia->getImatge() !=null){ ?>
+                        <div class="story-item-media">
+                            <div rel="nofollow" class="story-item-thumb">
+                                <div class="thumb-edges"></div>
+                                <img  src="<?php echo $this->baseUrl();?>/imgnotice/<?php echo $this->noticia->getImatge(); ?>">
+                            </div>
+                        </div>
+                    <?php } ?>
+                   <div id="inline-comment-container<?php echo $this->noticia->getId(); ?>" class="story-item-comment-form group" style="display:none; clear: both; padding-top: 15px;">
+                            <form name="formComentari<?php echo $this->noticia->getId(); ?>" id="formComentari<?php echo $this->noticia->getId(); ?>" class="post-comment-form inline-comment-form2 group active" method="post" action="<?php echo $this->baseUrl();?>/privat/afegircomentariok" >
+                                <img alt="" class="story-item-comment-form-thumb" src="http://cdn4.diggstatic.com/img/user/r.6835deeb.png">
+                                <input type="hidden" class="item_id" value="<?php echo $this->noticia->getId(); ?>" name="id">
+                                <a class="close-it cancel-inline-comment2" id="closeComent" rel="<?php echo $this->noticia->getId(); ?>"><span>x</span></a>
+                                <textarea class="post-comment-textarea elastic" name="text" id="text<?php echo $this->noticia->getId(); ?>" style="width: 95%; height: 47px; overflow: hidden;"></textarea>
+                                <button class="btn btn-secondary btn-small" name="button" rel="<?php echo $this->noticia->getId(); ?>" id="button" type="button">&nbsp;&nbsp;&nbsp;Enviar&nbsp;&nbsp;&nbsp;</button>
+                            </form>
+                    </div>
+                    
+                </div>
+                <ul id="comment-sorting" class="pillboxes filter-menu group" style="margin-top: 30px;">
+                    <li>
+                        <a id="filter-sortasc" class="sort" rel="<?php echo $this->noticia->getId(); ?>" >Más Antiguo</a>
+                    </li>
+                    <li>
+                        <a id="filter-sortdesc" class="sort active" rel="<?php echo $this->noticia->getId(); ?>">Más Nuevo</a>
+                    </li>
+                    <li>
+                        <a id="filter-sortpunts" class="sort" rel="<?php echo $this->noticia->getId(); ?>">Más Popular</a>
+                    </li>
+                </ul>
+                <?php if($this->noticia->getAllComentaris() == null){ ?>
+                    <div class="nothing-found topbar-spacer">
+                        <p class="title">Esta noticia no tiene comentarios. Realize usted el primero.</p>
+                    </div>
+                <?php }else{ ?>
+                    <div id="comentarisDiv">
+                <?php foreach($this->noticia->getAllComentaris() as $comentari){ ?>
+                    <?php $votat=0; ?>
+                    <?php if($this->loggedIn==true): ?>
+                    <?php foreach($comentari->getAllVotsPos() as $votPos){ ?>
+                    <?php if($votPos->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+                    <?php } ?>
+                    <?php foreach($comentari->getAllVotsNeg() as $votNeg){ ?>
+                    <?php if($votNeg->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+                    <?php } ?>
+                    <?php endif ?>
+                    <div class="comment group ">
+                        <a class="comment-owner-thumbnail">
+                            <?php if($comentari->getUsuari()->getImage()!=null){ ?>
+                            <img src="<?php echo $this->baseUrl();?>/img/<?php echo $comentari->getUsuari()->getImage(); ?>" width="24px" height="24px">
+                            <?php }else{ ?>
+                            <img class="comment-author"  src="<?php echo $this->baseUrl() ?>/images/defaultuser.png">
+                            <?php } ?>
+                        </a>
+                    <div class="comment-author group">
+                        <p>
+                            <a  class="comment-owner-name hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $comentari->getUsuari()->getUsername(); ?>">
+                                <?php echo $comentari->getUsuari()->getUsername(); ?>
+                            </a>
+                            <a class="comment-timestamp">
+                                <?php echo $comentari->getData(); ?>
+                            </a>
+                        </p>
+                    </div>
+                    <div id="puntuacio2<?php echo $comentari->getId(); ?>">
+                        <ul class="comment-digg-counts group" >
+                           <?php if($comentari->getAllVots()>=0){ ?>
+                                 <li class="digg-count-net" style="color:#669900">
+                                    +&nbsp;<?php echo $comentari->getAllVots(); ?>&nbsp;Puntos
+                                </li>
+                          <?php }else{ ?>
+                                <li class="digg-count-net" style="color:#A12A2A">
+                                    <?php echo $comentari->getAllVots(); ?>&nbsp;Puntos
+                                </li>
+                           <?php } ?>
+                        </ul>
+                        <?php if($votat==0){ ?>
+                        <ul class="comment-actions">
+                            <li>
+                                <a class="comment-digg has-tooltip" rel="<?php echo $comentari->getId(); ?>" id="votarComentUP">UP</a>
+                            </li>
+                            <li>
+                                <a class="comment-bury has-tooltip" rel="<?php echo $comentari->getId(); ?>" id="votarComentDOWN">DOWN</a>
+                            </li>
+                        </ul>
+                        <?php } ?>
+                    </div>
+                    <div class="comment-content group">  
+                        <p class="comment-body"><?php echo strip_tags($comentari->getText());?></p>
+                        <ul class="comment-reply-options group">
+                            <a class="has-tooltip commentReply" rel="<?php echo $comentari->getId(); ?>">
+                               <span class="storylist-icon comments"></span>
+                               Contestar
+                           </a>
+                        </ul>
+                    </div>
+                    </div>
+                    <div id="inline-comment-container2<?php echo $comentari->getId(); ?>" class="story-item-comment-form group" style="display:none;margin-left: 6%; clear: both;">
+                            <form name="formComentari<?php echo $comentari->getId(); ?>" id="formComentari<?php echo $comentari->getId(); ?>" class="post-comment-form inline-comment-form group active"  method="post" action="<?php echo $this->baseUrl();?>/privat/afegircomentariok">
+                                <img alt="" class="story-item-comment-form-thumb" src="<?php echo $this->baseUrl();?>/images/defaultuser.png" width="24px" height="24px">
+                                <input type="hidden" class="item_id" value="<?php echo $this->noticia->getId(); ?>" name="id">
+                                <input type="hidden" class="item_id" value="<?php echo $comentari->getId(); ?>" name="id_pare">
+                                <a class="close-it cancel-inline-comment" id="closeComentPare" rel="<?php echo $comentari->getId(); ?>"><span>x</span></a>
+                                <textarea class="post-comment-textarea elastic" id="text<?php echo $comentari->getId(); ?>" name="text" style="width: 93%; height: 47px; overflow: hidden;"></textarea>
+                                <button class="btn btn-secondary btn-small" rel="<?php echo $comentari->getId(); ?>" name="button" id="buttonComm" type="button">&nbsp;&nbsp;&nbsp;Enviar&nbsp;&nbsp;&nbsp;</button>
+                            </form>
+                    </div>
+                    <?php foreach($comentari->getAllFills() as $fill){ ?>
+                    <?php $votat=0; ?>
+                    <?php if($this->loggedIn==true): ?>
+                    <?php foreach($fill->getAllVotsPos() as $votPos){ ?>
+                    <?php if($votPos->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+                    <?php } ?>
+                    <?php foreach($fill->getAllVotsNeg() as $votNeg){ ?>
+                    <?php if($votNeg->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+                    <?php } ?>
+                    <?php endif ?>
+                    <div class="comment group " style="padding-left:70px;">
+                        <div style="margin-left:-60px; float:left;">
+                            <img src="<?php echo $this->baseUrl();?>/images/subcomment.png" alt="subcomment"/>
+                        </div>
+                        <a class="comment-owner-thumbnail" href="">
+                            <?php if($fill->getUsuari()->getImage()!=null){ ?>
+                            <img src="<?php echo $this->baseUrl();?>/img/<?php echo $fill->getUsuari()->getImage(); ?>" width="24px" height="24px">
+                            <?php }else{ ?>
+                            <img class="comment-author"  src="<?php echo $this->baseUrl() ?>/images/defaultuser.png">
+                            <?php } ?>
+                        </a>
+                    <div class="comment-author group">
+                        <p>
+                            <a  class="comment-owner-name hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $fill->getUsuari()->getUsername(); ?>">
+                                <?php echo $fill->getUsuari()->getUsername(); ?>
+                            </a>
+                            <a class="comment-timestamp">
+                                <?php echo $fill->getData(); ?>
+                            </a>
+                        </p>
+                    </div>
+                    <div id="puntuacio2<?php echo $fill->getId(); ?>">
+                        <ul class="comment-digg-counts group" >
+                           <?php if($fill->getAllVots()>=0){ ?>
+                                 <li class="digg-count-net" style="color:#669900">
+                                    +&nbsp;<?php echo $fill->getAllVots(); ?>&nbsp;Puntos
+                                </li>
+                          <?php }else{ ?>
+                                <li class="digg-count-net" style="color:#A12A2A">
+                                    <?php echo $fill->getAllVots(); ?>&nbsp;Puntos
+                                </li>
+                           <?php } ?>
+                        </ul>
+                        <?php if($votat==0){ ?>
+                        <ul class="comment-actions">
+                            <li>
+                                <a class="comment-digg has-tooltip" rel="<?php echo $fill->getId(); ?>" id="votarComentUP">UP</a>
+                            </li>
+                            <li>
+                                <a class="comment-bury has-tooltip" rel="<?php echo $fill->getId(); ?>" id="votarComentDOWN">DOWN</a>
+                            </li>
+                        </ul>
+                        <?php } ?>
+                    </div>
+                    <div class="comment-content group">
+                        <p class="comment-body"><?php echo strip_tags($fill->getText());?></p>
+                         <ul class="comment-reply-options group">
+                            <a class="has-tooltip commentReply" rel="<?php echo $fill->getId(); ?>">
+                               <span class="storylist-icon comments"></span>
+                               Contestar
+                           </a>
+                        </ul>
+                    </div>
+                    </div>
+                      <div id="inline-comment-container2<?php echo $fill->getId(); ?>" class="story-item-comment-form group" style="display:none;margin-left: 6%; clear: both;">
+                        <form name="formComentari<?php echo $fill->getId(); ?>" id="formComentari<?php echo $fill->getId(); ?>" class="post-comment-form inline-comment-form group active"  method="post" action="<?php echo $this->baseUrl();?>/privat/afegircomentariok">
+                            <img alt="" class="story-item-comment-form-thumb" src="<?php echo $this->baseUrl();?>/images/defaultuser.png" width="24px" height="24px">
+                            <input type="hidden" class="item_id" value="<?php echo $this->noticia->getId(); ?>" name="id">
+                            <input type="hidden" class="item_id" value="<?php echo $fill->getId(); ?>" name="id_pare">
+                            <a class="close-it cancel-inline-comment" id="closeComentPare" rel="<?php echo $fill->getId(); ?>"><span>x</span></a>
+                            <textarea class="post-comment-textarea elastic" id="text<?php echo $fill->getId(); ?>" name="text" style="width: 93%; height: 47px; overflow: hidden;"></textarea>
+                            <button class="btn btn-secondary btn-small" rel="<?php echo $fill->getId(); ?>" name="button" id="buttonComm" type="button">&nbsp;&nbsp;&nbsp;Enviar&nbsp;&nbsp;&nbsp;</button>
+                        </form>
+                    </div>
+                   <?php foreach($fill->getAllFills() as $fill2){ ?>
+                    <?php $votat=0; ?>
+                    <?php if($this->loggedIn==true): ?>
+                    <?php foreach($fill2->getAllVotsPos() as $votPos){ ?>
+                    <?php if($votPos->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+                    <?php } ?>
+                    <?php foreach($fill2->getAllVotsNeg() as $votNeg){ ?>
+                    <?php if($votNeg->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+                    <?php } ?>
+                    <?php endif ?>
+                    <div class="comment group " style="padding-left:100px;">
+                        <div style="margin-left:-60px; float:left;">
+                            <img src="<?php echo $this->baseUrl();?>/images/subcomment.png" alt="subcomment"/>
+                        </div>
+                        <a class="comment-owner-thumbnail" href="">
+                            <?php if($fill2->getUsuari()->getImage()!=null){ ?>
+                            <img src="<?php echo $this->baseUrl();?>/img/<?php echo $fill2->getUsuari()->getImage(); ?>" width="24px" height="24px">
+                            <?php }else{ ?>
+                            <img class="comment-author"  src="<?php echo $this->baseUrl() ?>/images/defaultuser.png">
+                            <?php } ?>
+                        </a>
+                    <div class="comment-author group">
+                        <p>
+                            <a  class="comment-owner-name hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $fill2->getUsuari()->getUsername(); ?>">
+                                <?php echo $fill2->getUsuari()->getUsername(); ?>
+                            </a>
+                            <a class="comment-timestamp">
+                                <?php echo $fill2->getData(); ?>
+                            </a>
+                        </p>
+                    </div>
+                    <div id="puntuacio2<?php echo $fill2->getId(); ?>">
+                        <ul class="comment-digg-counts group" >
+                           <?php if($fill2->getAllVots()>=0){ ?>
+                                 <li class="digg-count-net" style="color:#669900">
+                                    +&nbsp;<?php echo $fill2->getAllVots(); ?>&nbsp;Puntos
+                                </li>
+                          <?php }else{ ?>
+                                <li class="digg-count-net" style="color:#A12A2A">
+                                    <?php echo $fill2->getAllVots(); ?>&nbsp;Puntos
+                                </li>
+                           <?php } ?>
+                        </ul>
+                        <?php if($votat==0){ ?>
+                        <ul class="comment-actions">
+                            <li>
+                                <a class="comment-digg has-tooltip" rel="<?php echo $fill2->getId(); ?>" id="votarComentUP">UP</a>
+                            </li>
+                            <li>
+                                <a class="comment-bury has-tooltip" rel="<?php echo $fill2->getId(); ?>" id="votarComentDOWN">DOWN</a>
+                            </li>
+                        </ul>
+                        <?php } ?>
+                    </div>
+                    <div class="comment-content group">
+                        <p class="comment-body"><?php echo strip_tags($fill2->getText());?></p>
+                         <ul class="comment-reply-options group">
+                              <a class="has-tooltip commentReply" rel="<?php echo $fill2->getId(); ?>">
+                               <span class="storylist-icon comments"></span>
+                               Contestar
+                           </a>
+                        </ul>
+                    </div>
+                    </div>
+                    <div id="inline-comment-container2<?php echo $fill2->getId(); ?>" class="story-item-comment-form group" style="display:none;margin-left: 6%; clear: both;">
+                        <form name="formComentari<?php echo $fill2->getId(); ?>" id="formComentari<?php echo $fill2->getId(); ?>" class="post-comment-form inline-comment-form group active"  method="post" action="<?php echo $this->baseUrl();?>/privat/afegircomentariok">
+                            <img alt="" class="story-item-comment-form-thumb" src="<?php echo $this->baseUrl();?>/images/defaultuser.png" width="24px" height="24px">
+                            <input type="hidden" class="item_id" value="<?php echo $this->noticia->getId(); ?>" name="id">
+                            <input type="hidden" class="item_id" value="<?php echo $fill2->getId(); ?>" name="id_pare">
+                            <a class="close-it cancel-inline-comment" id="closeComentPare" rel="<?php echo $fill2->getId(); ?>"><span>x</span></a>
+                            <textarea class="post-comment-textarea elastic" id="text<?php echo $fill2->getId(); ?>" name="text" style="width: 93%; height: 47px; overflow: hidden;"></textarea>
+                            <button class="btn btn-secondary btn-small" rel="<?php echo $fill2->getId(); ?>" name="button" id="buttonComm" type="button">&nbsp;&nbsp;&nbsp;Enviar&nbsp;&nbsp;&nbsp;</button>
+                        </form>
+                    </div>
+                    <?php foreach($fill2->getAllFills() as $fill3){ ?>
+                    <?php $votat=0; ?>
+                    <?php if($this->loggedIn==true): ?>
+                    <?php foreach($fill3->getAllVotsPos() as $votPos){ ?>
+                    <?php if($votPos->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+                    <?php } ?>
+                    <?php foreach($fill3->getAllVotsNeg() as $votNeg){ ?>
+                    <?php if($votNeg->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+                    <?php } ?>
+                    <?php endif ?>
+                    <div class="comment group " style="padding-left:130px;">
+                        <div style="margin-left:-60px; float:left;">
+                            <img src="<?php echo $this->baseUrl();?>/images/subcomment.png" alt="subcomment"/>
+                        </div>
+                        <a class="comment-owner-thumbnail" href="">
+                            <?php if($fill3->getUsuari()->getImage()!=null){ ?>
+                            <img src="<?php echo $this->baseUrl();?>/img/<?php echo $fill3->getUsuari()->getImage(); ?>" width="24px" height="24px">
+                            <?php }else{ ?>
+                            <img class="comment-author"  src="<?php echo $this->baseUrl() ?>/images/defaultuser.png">
+                            <?php } ?>
+                        </a>
+                    <div class="comment-author group">
+                        <p>
+                            <a  class="comment-owner-name hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $fill3->getUsuari()->getUsername(); ?>">
+                                <?php echo $fill3->getUsuari()->getUsername(); ?>
+                            </a>
+                            <a class="comment-timestamp">
+                                <?php echo $fill3->getData(); ?>
+                            </a>
+                        </p>
+                    </div>
+                    <div id="puntuacio2<?php echo $fill3->getId(); ?>">
+                        <ul class="comment-digg-counts group" >
+                           <?php if($fill3->getAllVots()>=0){ ?>
+                                 <li class="digg-count-net" style="color:#669900">
+                                    +&nbsp;<?php echo $fill3->getAllVots(); ?>&nbsp;Puntos
+                                </li>
+                          <?php }else{ ?>
+                                <li class="digg-count-net" style="color:#A12A2A">
+                                    <?php echo $fill3->getAllVots(); ?>&nbsp;Puntos
+                                </li>
+                           <?php } ?>
+                        </ul>
+                        <?php if($votat==0){ ?>
+                        <ul class="comment-actions">
+                            <li>
+                                <a class="comment-digg has-tooltip" rel="<?php echo $fill3->getId(); ?>" id="votarComentUP">UP</a>
+                            </li>
+                            <li>
+                                <a class="comment-bury has-tooltip" rel="<?php echo $fill3->getId(); ?>" id="votarComentDOWN">DOWN</a>
+                            </li>
+                        </ul>
+                        <?php } ?>
+                    </div>
+                    <div class="comment-content group">
+                        <p class="comment-body"><?php echo strip_tags($fill3->getText());?></p>
+                         <ul class="comment-reply-options group">
+                        </ul>
+                    </div>
+                    </div>
+
+                    <?php }?>
+                    <?php }?>
+                    <?php }?>
+                <?php } ?>
+                  </div>
+                <?php } ?>
+                </div>
+            <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+     var id2 = <?php echo $this->noticia->getId(); ?>;
+     if(loggedIn == true){
+        jQuery("div#inline-comment-container"+id2).fadeIn(100);
+     }
+     jQuery("#filter-sortasc").live("click",function(){
+        
+        id = jQuery(this).attr("rel");
+        
+        jQuery.ajax({
+                        type: "POST",
+                        url: baseUrl+"/index/comentarisantic",
+                        async: true,
+                        data: "&id="+id,
+
+                        success: function(data){
+                            if(data){
+                               jQuery("div#comentarisDiv").html(data);
+                               jQuery("#filter-sortdesc").removeClass("active");
+                               jQuery("#filter-sortpunts").removeClass("active");
+                               jQuery("#filter-sortasc").addClass("active");
+                            }
+                        }
+            })
+        
+     });
+
+     jQuery("#filter-sortdesc").live("click",function(){
+
+        id = jQuery(this).attr("rel");
+
+        jQuery.ajax({
+                        type: "POST",
+                        url: baseUrl+"/index/comentarisnous",
+                        async: true,
+                        data: "&id="+id,
+
+                        success: function(data){
+                            if(data){
+                               jQuery("div#comentarisDiv").html(data);
+                               jQuery("#filter-sortasc").removeClass("active");
+                               jQuery("#filter-sortpunts").removeClass("active");
+                               jQuery("#filter-sortdesc").addClass("active");
+                            }
+                        }
+            })
+
+     });
+
+     jQuery("#filter-sortpunts").live("click",function(){
+
+        id = jQuery(this).attr("rel");
+
+        jQuery.ajax({
+                        type: "POST",
+                        url: baseUrl+"/index/comentarispunts",
+                        async: true,
+                        data: "&id="+id,
+
+                        success: function(data){
+                            if(data){
+                               jQuery("div#comentarisDiv").html(data);
+                               jQuery("#filter-sortdesc").removeClass("active");
+                               jQuery("#filter-sortasc").removeClass("active");
+                               jQuery("#filter-sortpunts").addClass("active");
+                            }
+                        }
+            })
+
+     });
+
+
+     jQuery("#votarComentUP").live("click",function(){
+
+        error=0;
+        id = jQuery(this).attr("rel");
+
+        if(loggedIn==false){
+            jQuery("div#no-login-dock-punts").fadeIn(300);
+            setTimeout("tancarFinestreNoLoginDockPunts()", 5000);
+            x=0;
+            error=1;
+        }
+
+        if(error==0){
+            jQuery.ajax({
+                        type: "POST",
+                        url: baseUrl+"/privat/votacomentariup",
+                        async: true,
+                        data: "&id="+id,
+
+                        success: function(data){
+                            if(data){
+                               jQuery("div#puntuacio2"+id).html(data);
+                            }
+                        }
+            })
+        }
+     });
+
+     jQuery("a#votarComentDOWN").live("click",function(){
+
+        error=0;
+        id = jQuery(this).attr("rel");
+
+        if(loggedIn==false){
+            jQuery("div#no-login-dock-punts").fadeIn(300);
+            setTimeout("tancarFinestreNoLoginDockPunts()", 5000);
+            x=0;
+            error=1;
+        }
+
+        if(error==0){
+            jQuery.ajax({
+                        type: "POST",
+                        url: baseUrl+"/privat/votacomentaridown",
+                        async: true,
+                        data: "&id="+id,
+
+                        success: function(data){
+                            if(data){
+                               jQuery("div#puntuacio2"+id).html(data);
+                            }
+                        }
+            })
+        }
+     });
+
+
+
+     jQuery("#closeComentPare").live("click",function(){
+
+        id = jQuery(this).attr("rel");
+        jQuery("div#inline-comment-container2"+id).fadeOut(0);
+
+     });
+
+    jQuery(".commentReply").live("click",function(){
+
+        id = jQuery(this).attr("rel");
+
+        if(loggedIn==false){
+            jQuery("div#no-login-dock-punts").fadeIn(300);
+            setTimeout("tancarFinestreNoLoginDockPunts()", 5000);
+        }else{
+            jQuery("div#inline-comment-container2"+id).fadeIn(100);
+        }
+
+     });
+
+     jQuery("button#buttonComm").live("click",function(){
+
+        id = jQuery(this).attr("rel");
+
+        if(jQuery("textarea#text"+id).val().replace(/^\s+|\s+$/g,"").length<4){
+           jQuery("div#message-dock").fadeIn(300);
+           setTimeout("tancarFinestreLogin2()", 5000);
+
+        }else{
+          //alert("si");
+          jQuery("textarea#text"+id).val(jQuery("textarea#text"+id).val().replace(/^\s+|\s+$/g,""));
+          jQuery("form#formComentari"+id).submit();
+          //alert(jQuery("form#formComentari").html());
+        }
+
+     });
+
+    </script>
+

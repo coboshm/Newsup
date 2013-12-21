@@ -1,0 +1,17 @@
+<?php if($this->responseLogin!=null){?>
+<div id="login-error-dock" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text"><?php echo $this->responseLogin; ?></span><a class="dismiss-login"></a></p>
+        </div>
+    </div>
+    <script>
+    jQuery("div#login-error-dock").fadeIn(300);
+    jQuery("div#modal-wrapper").fadeIn(0);
+    jQuery("div#login-dock").fadeIn(300);
+
+    jQuery("a.dismiss-login").live("click",function(){
+        jQuery("div#login-error-dock").fadeOut(50);
+    });
+
+</script>
+<?php } ?>

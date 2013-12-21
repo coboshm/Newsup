@@ -1,0 +1,51 @@
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+            
+            <div id="main-column-user" class="column attached-menu group">
+                <div id="titul-categorias" style="padding-left:4px; background:#f2f2f2; border-top:1px solid #e2e2e2; padding:4px 5px 4px 5px;">
+                  Historial Notificaciones
+               </div>
+                <div id="aquiNot">
+                 <?php echo $this->render("notificacionsllista.phtml"); ?>
+                </div>
+            </div>
+            <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+      jQuery("li#mesNotificacions").live("click",function(){
+
+        var error = 0;
+        cant = jQuery(this).attr("rel");
+        //id = jQuery(this).attr("idus");
+
+        if(error==0){
+
+        jQuery("li#mesNotificacions").html("<img src=\""+baseUrl+"/images/loading-ico.gif\">");
+
+        jQuery.ajax({
+                type: "POST",
+                url: baseUrl+"/privat/historialnotificacionnext",
+                async: true,
+                data: "&cantitat="+cant,
+
+                success: function(data){
+                    if(data){
+                       jQuery("div#aquiNot").html(data);
+                       
+                    }
+                }
+            })
+        }
+     });
+
+</script>

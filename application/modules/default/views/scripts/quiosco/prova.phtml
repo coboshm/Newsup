@@ -1,0 +1,20 @@
+<?php
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+foreach($this->feed2 as $feed){
+    echo Zend_Debug::dump($feed->title());
+    echo "<br>";
+    echo Zend_Debug::dump($feed->description());
+    @$resultImg = explode(" src=\"",$feed->description());
+                                $piece3 = array();
+                                //
+                                echo Zend_Debug::dump($resultImg);
+                                echo Zend_Debug::dump($feed->pubDate());
+                                echo Zend_Debug::dump($feed->link());
+    echo "<br>";
+    echo "<br>";
+}
+
+?>

@@ -1,0 +1,327 @@
+<script type="text/javascript">
+ var RecaptchaOptions = {
+    theme : 'clean',
+    custom_theme_widget: 'recaptcha_widget',
+    lang : 'es',
+    tabindex :8
+
+ };
+
+</script>
+<?php if($this->error==1){ ?>
+
+<script>
+
+    jQuery("div#same-email-dock").fadeIn(300);
+    setTimeout("tancarFinestreLoginEmail()", 5000);
+
+    jQuery("a.dismiss").live("click",function(){
+        jQuery("div#same-email-dock").fadeOut(50);
+    });
+
+    function tancarFinestreLoginEmail(){
+        jQuery("div#same-email-dock").slideUp(400);
+    }
+
+</script>
+<?php }
+        if($this->error==2){
+?>
+
+<script>
+
+    jQuery("div#capchaerror").fadeIn(300);
+    setTimeout("tancarFinestreLogincaptcha()", 5000);
+
+    function tancarFinestreLogincaptcha(){
+        jQuery("div#capchaerror").slideUp(400);
+    }
+
+    jQuery("a.dismiss-capchaerror").live("click",function(){
+        jQuery("div#capchaerror").fadeOut(50);
+    });
+
+</script>
+<?php }
+        if($this->error==3){
+?>
+
+<script>
+
+    jQuery("div#message-dock").fadeIn(300);
+    setTimeout("tancarFinestreDock()", 5000);
+
+
+</script>
+<?php }?>
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+            <div id="main-column-registre" class="column attached-menu group">
+                 <div id="titul-categorias" style="padding-left:4px; background:#f2f2f2; border-top:1px solid #e2e2e2; padding:4px 5px 4px 5px;">
+                  Registro de Usuarios
+               </div>
+                
+               <div id="ContenidorDades2" style="padding-top: 5px; padding-left: 30px; padding-right: 30px;">
+                <div id="escrit" style="margin-top:10px; margin-bottom: 20px; padding: 5px;font-size: 12px;text-align: justify">
+                 Está a punto de registrarse en NewsUP.
+                 Una página web donde podrá sentir las noticias de otra forma, donde podrá compartir con el resto del mundo sus noticias y su punto de vista.
+                 &nbsp;Podrá ver las noticias en el mapa y colocarlas en el mundo. Hága que una gran comunidad llege a sus noticias.<strong>NewsUP es totalmente gratuito. ¡Entra y disfruta!</strong>
+                </div>
+               <form name="registre" id="registre" method="post" action="<?php echo $this->baseUrl(); ?>/registrar/afegir">
+               <div id="cont4editars">
+                    <div style="float:left; width: 150px; font-weight: bold; padding-top:8px;">
+                            Nombre Usuario:
+                            <span style="color: rgb(153, 0, 0); font-size: 11px; font-style: italic;">
+                                *
+                            </span>
+                            
+                    </div>
+                   <div style="float:left;">
+                        <input type="text"  tabindex="1" class="text-input placeholder-input" style="width:200px; -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;" id="username" name="username">
+                    </div>
+                    <div style="float:left; padding-top:8px;">
+                        <span class="ejemplo" style="margin-left:20px;height: 25px; background: #ffffff;">
+                           Mínimo 4 Caracteres - Máximo 18 Caracteres
+                        </span>
+                    </div>
+                </div>
+                <div id="cont4editars" style="clear:both; padding-top: 10px;">
+                    <div style="float:left; width: 150px; font-weight: bold; padding-top:8px;">
+                            Nombre:
+                            <span style="color: rgb(153, 0, 0); font-size: 11px; font-style: italic;">
+                                *
+                            </span>
+                            
+                    </div>
+                    <div style="float:left;">
+                     
+                       <input type="text" tabindex="2" class="text-input placeholder-input" style="width:200px; -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;" id="nombre" name="nombre">
+                    </div>
+                    <div style="float:left;padding-top:8px;">
+                        <span class="ejemplo" style="margin-left:20px;height: 25px; background: #ffffff">
+                           Máximo 15 Caracteres
+                        </span>
+                    </div>
+                </div>
+                <div id="cont4editars" style="clear:both;padding-top: 10px;">
+                    <div style="float:left; width: 150px; font-weight: bold; padding-top:8px;">
+                            Primer Apellido:
+                            <span style="color: rgb(153, 0, 0); font-size: 11px; font-style: italic;">
+                                *
+                            </span>
+
+                    </div>
+                    <div style="float:left;">
+                        
+                        <input type="text" tabindex="3"  class="text-input placeholder-input" style="width:200px;-moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;" maxlength="30" id="apellido-primero" name="apellido-primero">
+                    </div>
+                    <div style="float:left;margin-top:8px;">
+                        <span class="ejemplo" style="margin-left:20px;height: 25px; background: #ffffff">
+                            Máximo 25 Caracteres
+                        </span>
+                    </div>
+                </div>
+                 <div id="cont4editars" style="clear:both;padding-top: 10px;">
+                     <div style="float:left; width: 150px; font-weight: bold; padding-top:8px;">
+                            Segundo Apellido:
+                            <span style="color: rgb(153, 0, 0); font-size: 11px; font-style: italic;">
+                                *
+                            </span>
+
+                    </div>
+                     <div style="float:left;">
+                        <input type="text"  tabindex="4" class="text-input placeholder-input"  style="width:200px;-moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;" id="apellido-segundo" name="apellido-segundo">
+                    </div>
+                </div>
+                <div id="cont4editars" style="clear:both;padding-top: 10px;">
+                    <div style="float:left; width: 150px; font-weight: bold; padding-top:8px;">
+                            E-mail:
+                            <span style="color: rgb(153, 0, 0); font-size: 11px; font-style: italic;">
+                                *
+                            </span>
+
+                    </div>
+                    <div style="float:left;">
+                        <input type="text" tabindex="5" class="text-input placeholder-input" style="width:200px;-moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;" id="email" name="email">
+                    </div>
+                    <div style="float:left;margin-top:8px;">
+                        <span class="ejemplo" style="margin-left:20px;height: 25px; background: #ffffff">
+                        </span>
+                    </div>
+                </div>
+                <div id="cont4editars" style="clear:both;padding-top: 10px;">
+                    <div style="float:left; width: 150px; font-weight: bold; padding-top:8px;">
+                            Contraseña:
+                            <span style="color: rgb(153, 0, 0); font-size: 11px; font-style: italic;">
+                                *
+                            </span>
+
+                    </div>
+                    <div style="float:left;">
+                        <input type="password" tabindex="6"  class="text-input placeholder-input" style="width:200px;-moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;" maxlength="30" id="password-register1" name="password-register1">
+                    </div>
+                    <div style="float:left;margin-top:8px;">
+                         <span class="ejemplo" style="margin-left:20px;height: 25px; background: #ffffff">
+                            Mínimo 6 Caracteres
+                        </span>
+                    </div>
+                    
+                </div>
+                 <div id="cont4editars" style="clear:both;padding-top: 10px;">
+                    <div style="float:left; width: 150px; font-weight: bold; padding-top:8px;">
+                            Repetir Contraseña:
+                            <span style="color: rgb(153, 0, 0); font-size: 11px; font-style: italic;">
+                                *
+                            </span>
+
+                    </div>
+                     <div style="float:left;">
+                        <input type="password"  tabindex="7" class="text-input placeholder-input" style="width:200px;-moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;" id="password-register2" name="password-register2">
+                    </div>
+
+                </div>
+                <div id="cont4editars" style="clear:both;padding-top: 20px;">
+                    <div style="float:left; width: 150px; font-weight: bold; padding-top:8px;">
+                            Copie los Caracteres:
+                            <span style="color: rgb(153, 0, 0); font-size: 11px; font-style: italic;">
+                                *
+                            </span>
+
+                    </div>
+                    <div style="float:left;">
+                        <?php
+                          require_once('recaptchalib.php');
+                          $publickey = "	6LeOu8ISAAAAAIrdn7BwgAkGGFUInIcmOaxlP_Vt"; // you got this from the signup page
+                          echo recaptcha_get_html($publickey);
+                        ?>
+                    </div>
+               </div>
+               </form>
+                </div>
+                <div id="div-registre-termes" style="clear:both;">
+                     En el momento de crear una cuenta en NewsUp acepta los <span style="font-weight:bold;">Términos de uso</span> y la <span style="font-weight:bold">Política de privacidad</span>
+                </div>
+                <div style="float:right;margin-right: 10%; padding-top: 30px;">
+                    <span style="color: rgb(153, 0, 0); font-size: 11px; font-style: italic;">
+                        * Campos Obligatorios
+                    </span>
+                </div>
+                <div id="enviarRegistroMail">
+                    <div style="margin-top:25px; margin-right: 10%;clear:both; float: right; height: 15px; text-align:center;" id="boto-registre2" class="btn btn-primary has-tooltip" tabindex="8">Finalizar Registro</div>
+                </div>
+               
+                <div id="missatjeError1"></div>
+        </div>
+        <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    jQuery("div#boto-registre2").live("click",function(){
+        var error=0;
+
+        if(jQuery("input#nombre").val().replace(/^\s+|\s+$/g,"").length<2 || jQuery("input#nombre").val().replace(/^\s+|\s+$/g,"").length>18 ){
+           jQuery("div#message-dock").fadeIn(300);
+           setTimeout("tancarFinestreDock()", 5000);
+           error=1;
+        }else{
+           jQuery("input#nombre").val(jQuery("input#nombre").val().replace(/^\s+|\s+$/g,""));
+        }
+
+        if(jQuery("input#username").val().replace(/^\s+|\s+$/g,"").length<4 || jQuery("input#username").val().replace(/^\s+|\s+$/g,"").length>12 ){
+           jQuery("div#message-dock").fadeIn(300);
+           if(error!=1){
+               setTimeout("tancarFinestreDock()", 5000);
+           }
+           error=1;
+        }else{
+            jQuery("input#username").val(jQuery("input#username").val().replace(/^\s+|\s+$/g,""));
+        }
+
+        if(jQuery("input#apellido-primero").val().replace(/^\s+|\s+$/g,"").length<2 || jQuery("input#apellido-primero").val().replace(/^\s+|\s+$/g,"").length>25 ){
+           jQuery("div#message-dock").fadeIn(300);
+           if(error!=1){
+               setTimeout("tancarFinestreDock()", 5000);
+           }
+           error=1;
+        }else{
+            jQuery("input#apellido-primero").val(jQuery("input#apellido-primero").val().replace(/^\s+|\s+$/g,""));
+        }
+
+        if(jQuery("input#apellido-segundo").val().replace(/^\s+|\s+$/g,"").length<2 || jQuery("input#apellido-segundo").val().replace(/^\s+|\s+$/g,"").length>25){
+           jQuery("div#message-dock").fadeIn(300);
+           if(error!=1){
+               setTimeout("tancarFinestreDock()", 5000);
+           }
+           error=1;
+        }else{
+           jQuery("input#apellido-segundo").val(jQuery("input#apellido-segundo").val().replace(/^\s+|\s+$/g,""));
+        }
+
+        if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(jQuery("input#email").val())){
+            email = jQuery("input#email").val();
+        }else{
+           jQuery("div#message-dock").fadeIn(300);
+           if(error!=1){
+               setTimeout("tancarFinestreDock()", 5000);
+           }
+           error=1;
+        }
+
+        if(jQuery("input#password-register2").val().replace(/^\s+|\s+$/g,"").length<6){
+           if(error==0){
+           jQuery("div#message-dock-password").fadeIn(300);
+           setTimeout("tancarFinestreDockPassword()", 5000);
+           error=1;
+           }
+        }
+
+         if(jQuery("input#password-register1").val().replace(/^\s+|\s+$/g,"").length<6){
+           if(error==0){
+           jQuery("div#message-dock-password").fadeIn(300);
+           setTimeout("tancarFinestreDockPassword()", 5000);
+           error=1;
+           }
+        }
+
+        
+        if(jQuery("input#password-register1").val().replace(/^\s+|\s+$/g,"")!=jQuery("input#password-register2").val().replace(/^\s+|\s+$/g,"")){
+            jQuery("div#same-password-dock").fadeIn(300);
+            setTimeout("tancarFinestreSamePassword()", 5000);
+            error=1;
+        }else{
+            jQuery("input#password-register1").val(jQuery("input#password-register1").val().replace(/^\s+|\s+$/g,""));
+            
+        }
+
+        if(error==0){
+            jQuery("form#registre").submit();
+        }
+    });
+
+    jQuery("a.dismiss-dock").live("click",function(){
+        jQuery("div#message-dock").fadeOut(50);
+    });
+
+     jQuery("a.dismiss").live("click",function(){
+        jQuery("div#same-password-dock").fadeOut(50);
+    });
+
+    function tancarFinestreDockPassword(){
+        jQuery("div#message-dock-password").slideUp(400);
+    }
+
+    function tancarFinestreSamePassword(){
+        jQuery("div#same-password-dock").slideUp(400);
+    }
+
+
+</script>

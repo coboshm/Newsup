@@ -1,0 +1,26 @@
+<div style="padding-top:50px;">
+       <img src="<?php echo $this->baseUrl(); ?>/images/newsupgran.png" width="200px" style="padding-left: 75px; padding-right: 75px"/>
+       <form name="loginform" style="position:relative; background:#669900; margin-left: 30px; width: 500px; padding:40px;padding-top:10px; -moz-border-radius:10px; border-radius:10px;" action="<?php echo $this->baseUrl();?>/administration/login" method="post">
+           <div style="float:left;">
+           <div style="clear:both; padding-top:10px;">
+               <div style="color:#fff;padding-right: 10px; padding-top:3px; width: 80px; float:left;">Administrador:</div>
+            <input type="text" style="width:250px;" name="name">
+           </div>
+           <div  style="clear:both; padding-top:10px;">
+            <div style="color:#fff;float:left;width: 80px; padding-top:3px; padding-right: 10px;">Password:</div>
+            <input type="password" style="width:250px;" name="password">
+           </div>
+           </div>
+           <div  style="padding-top:10px; padding-left: 30px; padding-left:400px;">
+               <input type="submit" style="padding-right: 15px;" class="btn btn-primary" name="submit" value="Entrar" />
+           </div>
+       </form>
+</div>
+
+<script>
+
+     mar = screen.width /2 -225;
+     jQuery("div#iniciarpass").css("margin","30px "+mar+"px")
+
+
+</script>

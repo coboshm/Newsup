@@ -1,0 +1,39 @@
+<script>
+
+    jQuery("div#okRegistre").fadeIn(300);
+    setTimeout("tancarFinestreOkRegistre()", 5000);
+     
+    jQuery("a.dismiss-okRegistre").live("click",function(){
+        jQuery("div#okRegistre").fadeOut(50);
+        
+    });
+
+     function tancarFinestreOkRegistre(){
+        jQuery("div#okRegistre").slideUp(300);
+    }
+
+</script>
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+            <div id="main-column-user" class="column attached-menu group">
+                <div id="titul-categorias" style="padding-left:4px; background:#f2f2f2; border-top:1px solid #e2e2e2; padding:4px 5px 4px 5px;">
+                  Bienvenido a NewsUP!
+               </div>
+               <div style="margin-top:30px; padding:10px;">
+                Bienvenido al mundo de la información, NewsUp pretende ser una herramienta para que la gente se informe de lo que pasa en cualquier parte del mundo, para tener acceso a las noticias de su entorno y del resto del mundo en solo unos clics.
+                <br/><br/>
+                Ahora solo le falta un paso para tener acceso a NewsUp. Le hemos enviado un correo en su email, (sinó está en su bandeja de entrada mire en su carpeta de correo no deseado) en el email encontrará un link con un código de verificación.
+                <br/><br/>
+                <img src="<?php echo $this->baseUrl(); ?>/images/feeds.jpg" alt="feed"/>
+               </div>
+            </div>
+            <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+              </div>
+        </div>
+    </div>
+</div>

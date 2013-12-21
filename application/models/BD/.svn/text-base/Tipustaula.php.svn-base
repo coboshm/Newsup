@@ -1,0 +1,53 @@
+<?php
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of Tipustaula
+ *
+ * Marc Cobos
+ */
+class Tipustaula extends Zend_Db_Table
+{
+    protected $_name = "tipus";
+    protected $_primary = "id_tipus";
+
+
+    public function getTipus($id)
+    {
+        $tipus = $this->find($id)->current();
+        return $tipus;
+    }
+
+    public function getAllTipus()
+    {
+        $tipus = array();
+        $tipus = $this->fetchAll();
+        return $tipus;
+    }
+
+    public function modtip($id,$nom)
+    {
+        $tipus = $this->find($id)->current();
+        $tipus->nom = $nom;
+        $tipus->save();
+    }
+
+    public function borrtip($id)
+    {
+        $cat = $this->find($id)->current();
+        $cat->delete();
+    }
+
+    public function afegirTipus($nom)
+    {
+        $tipus= $this->createRow();
+        $tipus->nom = $nom;
+        $tipus->save();
+
+    }
+
+}
+

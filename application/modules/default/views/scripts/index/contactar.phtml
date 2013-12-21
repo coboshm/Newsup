@@ -1,0 +1,173 @@
+<script type="text/javascript">
+ var RecaptchaOptions = {
+    theme : 'clean',
+    custom_theme_widget: 'recaptcha_widget',
+    lang : 'es',
+    tabindex :8
+
+ };
+
+</script>
+<?php
+        if($this->error==2){
+?>
+
+<script>
+
+    jQuery("div#capchaerror").fadeIn(300);
+
+    jQuery("a.dismiss-capchaerror").live("click",function(){
+        jQuery("div#capchaerror").fadeOut(50);
+    });
+
+</script>
+<?php }?>
+
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+
+         <div id="left-column" class="column narrow attached-menu group">
+             <ul class="sidebar-menu2">
+                        <li><a href="<?php echo $this->baseUrl();?>/index/newsup">Sobre NewsUP</a></li>
+                        <li><a class="active" href="<?php echo $this->baseUrl();?>/index/contactar">Contactar</a></li>
+                        <li><a href="http://blog.newsup.es">Blog</a></li>
+                        <li><a href="<?php echo $this->baseUrl();?>/index/faq">Ayuda &amp; FAQ</a></li>
+                        <li><a href="<?php echo $this->baseUrl();?>/index/terminos">Términos de servicio</a></li>
+                        <li><a href="<?php echo $this->baseUrl();?>/index/privacidad">Política de privacidad</a></li>
+                </ul>
+         </div>
+         <div id="main-column" class="column attached-menu group" style="border:0px solid #fff;">
+             <h1> Contactar</h1>
+             <div id="textCont" style=" text-align: justify;margin-bottom: 30px; padding-top: 10px;">
+NewsUP quiere mejorar día a día, NewsUP trabaja para hacer más fácil la integración de la web a los usuarios adaptar y facilitar su uso.
+                 Por esto <strong>NewsUP escucha todas y cada una de las opiniones</strong> con el objetivo final de mejorarse.
+
+                 <div style="padding-top:10px;">
+                     ¡NewsUP somos todos! ¡Todos hacemos NewsUP!</div>
+             </div>
+                <form id="fcontactar" method="post" action="<?php echo $this->baseUrl();?>/index/contactar2">
+                    <div class="content-section">
+                        <div id="edit-name-wrapper" class="form-item">
+                            <label for="edit-name">Nombre de usuario <span title="This field is required." class="form-required">*</span></label>
+                            <input type="text" class="form-text required" value="<?php echo $this->usernamepar; ?>" size="60" id="username" name="username" maxlength="255">
+                        </div>
+                        <div id="edit-name-wrapper" class="form-item">
+                            <label for="edit-name">Nombre y apellido</label>
+                            <input type="text" class="form-text" value="<?php echo $this->nompar; ?>" size="60" id="nom" name="nom" maxlength="255">
+                        </div>
+                        <div id="edit-mail-wrapper" class="form-item">
+                            <label for="edit-mail">Email <span title="This field is required." class="form-required">*</span></label>
+                            <input type="text" class="form-text required" value="<?php echo $this->emailpar; ?>" size="60" id="email" name="email" maxlength="255">
+                        </div>
+                        <div id="edit-cid-wrapper" class="form-item group">
+                            <label for="edit-cid">Razón:<span title="This field is required." class="form-required">*</span></label>
+                            <div style="background: -moz-linear-gradient(center top , rgb(255, 255, 255), rgb(227, 236, 246)) repeat scroll 0pt 0pt rgb(227, 236, 246); clear: both; min-width: 160px; text-align: left;" class="dropdown-container" id="topic-dropdown-list">
+                                    <a class="dropdown-label">
+                                        <span class="sprite menu-arrows"></span>- Seleccione -
+                                    </a>
+                                    <ul id="categorias-lista">
+                                        <li><a rel="1" class="dropdown-option">Sugerencia</a></li>
+                                        <li><a rel="2" class="dropdown-option">Queja</a></li>
+                                        <li><a rel="3" class="dropdown-option">Publicidad</a></li>
+                                        <li><a rel="4" class="dropdown-option">Otros</a></li>
+                                    </ul>
+                                </div>
+                        </div>
+                        <input type="hidden" id="option" name="option">
+                         <div id="edit-message-wrapper" class="form-item">
+                         <label for="edit-message">Mensaje <span title="This field is required." class="form-required">*</span></label>
+                         <div class="resizable-textarea">
+                             <span>
+                                 <textarea class="form-textarea resizable required textarea-processed" id="missatge" name="missatge" rows="5" cols="60"><?php echo $this->missatgepar; ?></textarea>
+                             </span>
+                         </div>
+
+                         <div style="float:left; width: 150px; font-weight: bold; padding-top:16px;">
+                            Copie los Caracteres:
+                            <span title="This field is required." class="form-required">*</span>
+
+                        </div>
+
+                         <div id="cont4editars" style="clear:both;padding-top: 10px;">
+
+                            <?php
+                              require_once('recaptchalib.php');
+                              $publickey = "	6LeOu8ISAAAAAIrdn7BwgAkGGFUInIcmOaxlP_Vt"; // you got this from the signup page
+                              echo recaptcha_get_html($publickey);
+                            ?>
+                        
+                        </div>
+
+                        </div>
+                        <input type="submit" class="btn btn-primary" value="Enviar mensaje" id="submit" name="submit">
+                    </div>
+                </form>
+        </div>
+            <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+            </div>
+        </div>
+</div>
+</div>
+
+<script>
+    var categoria_seleccionada=0;
+
+    jQuery("a.dropdown-option").live("click",function(){
+
+      jQuery("a.dropdown-label").html("<span class=\"sprite menu-arrows\"></span>"+jQuery(this).html());
+      jQuery("a.dropdown-option").removeClass("selected");
+      jQuery(this).addClass("selected");
+      jQuery("input#categoria-pujada").val(jQuery(this).attr("rel"));
+      categoria_seleccionada = jQuery(this).attr("rel");
+      jQuery("input#option").val(categoria_seleccionada);
+    });
+
+    jQuery("input#submit").live("click",function(){
+
+        //var nom2 = jQuery("input#nom").val();
+
+        //Email
+        if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(jQuery("input#email").val())){
+            //var email2 = jQuery("input#email").val();
+
+        }else{
+            jQuery("div#message-dock").fadeIn(300);
+            return false;
+        }
+
+        //Categoria
+        if(categoria_seleccionada==0){
+            jQuery("div#message-dock").fadeIn(300);
+            return false;
+            
+        }
+
+        if (/\S/.test(jQuery("input#username").val())) {
+
+        }
+        else{
+            jQuery("div#message-dock").fadeIn(300);
+            return false;
+        }
+
+        if (/\S/.test(jQuery("textarea#missatge").val())) {
+
+        }
+        else{
+            jQuery("div#message-dock").fadeIn(300);
+            return false;
+        }
+        return true;
+    });
+
+
+</script>
+
+
+
+

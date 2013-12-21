@@ -1,0 +1,65 @@
+
+
+<?php if($this->loggedIn==true): ?>
+<div style="margin-bottom:-5px; margin-top:24px;">
+    <div id="titul-categorias">
+        Bienvenido/a,<br/><span style="margin-top:5px;"><?php echo $this->usuario->getUsername(); ?></span>
+    </div>
+    <div class="settings-menu-top group" >
+    <?php if($this->usuario->getImage() !=null){ ?>
+    <?php
+        $nomImatge = $this->usuario->getImage();
+        $img = "img/$nomImatge";
+        //Zend_Debug::dump($img);
+        
+        list($amplada, $alt, $tipus, $atributs) = getimagesize($img);
+        if($amplada>$alt){
+            $ampladaNova = 120;
+            $altNou = floor($alt * $ampladaNova / $amplada);
+        }else{
+            $altNou = 120;
+            $ampladaNova = floor($amplada * $altNou / $alt);
+        }
+        
+        
+    ?>
+    <a style="width:<?php echo $ampladaNova; ?>px; margin-left:3.5%; height:<?php echo $altNou ?>px;" class="current-user-thumbnail" href="<?php echo $this->baseUrl();?>/privat/editar">
+        <img alt="usuari" src="<?php echo $this->baseUrl();?>/img/<?php echo $this->usuario->getImage(); ?>" width="<?php echo $ampladaNova; ?>px" height="<?php echo $altNou ?>px">
+    </a>
+    <?php }else{ ?>
+    <a style="background: url(images/perfil60.png) no-repeat center #E5ECF3;
+      margin-left: 40px; width:63px; height:63px;" class="current-user-thumbnail" href="<?php echo $this->baseUrl();?>/privat/editar"></a>
+    <?php }?>
+
+    </div>
+</div>
+
+<ul id="mynews-sidebar" class="sidebar-menu">
+<li id="saved-stories" class="group">
+    <a <?php if($this->actiu==3){ echo "class=\"active\""; } ?> href="<?php echo $this->baseUrl();?>/privat/editar" id="noticiesGuardades">
+        <span class="settings-icon"></span>
+        Editar mi Perfil
+    </a>
+</li>
+<li id="saved-stories" class="group">
+    <a <?php if($this->actiu==1){ echo "class=\"active\""; } ?> href="<?php echo $this->baseUrl() ;?>/privat/saved" id="noticiesGuardades">
+        <span class="sprite saved-stories-icon"></span>
+        Guardadas
+    </a>
+</li>
+<li>
+    <a <?php if($this->actiu==2){ echo "class=\"active\""; } ?>  href="<?php echo $this->baseUrl() ;?>/privat/perfils">
+        Seguidor/es
+        <span class="sprite find-profiles-icon"></span>
+    </a>
+</li>
+<li>
+    <a href="<?php echo $this->baseUrl()."/index/logout";?>" class="desconectar">
+        Desconectarse
+        <span class="settings-icon logout-icon" style="margin-right: 7px;"></span>
+    </a>
+</li>
+</ul>
+<div style="width:100%; height: 1px; background-color: #eeeeee; margin-right: 5px; margin-bottom: 20px; margin-top: 10px;"></div>
+
+<?php endif ?>

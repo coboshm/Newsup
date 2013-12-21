@@ -1,0 +1,76 @@
+<script>
+    jQuery("div#okCambis").fadeIn(300);
+</script>
+<div id="cont1editar" style="clear:both;height: 60px;">
+    <div style="float:left;">
+        <div style="height: 15px; background: #eeeeee">
+            Email:
+        </div>
+        <input type="text" id="email" class="text-input placeholder-input" style="width:225px;" value="<?php echo $this->dadesUser->email?>" />
+    </div>
+    <div style="float:left;margin-top:17px;">
+        <span class="ejemplo" style="background: #ffffff;margin-left:20px;">
+        </span>
+    </div>
+</div>
+    <div id="cont2editars" style="height: 60px; clear:both;">
+        <div style="float:left;">
+            <div style="height: 15px; background: #eeeeee">
+                Localidad:
+            </div>
+            <input type="text" class="text-input placeholder-input" style="width:225px;" id="localidad" name="localidad" value="<?php echo $this->dadesUser->Localidad ?>"/>
+        </div>
+        <div style="float:left;margin-top:17px;">
+            <span class="ejemplo" style="margin-left:20px;height: 25px; background: #ffffff">
+                Ejemplo: Barcelona,..
+            </span>
+        </div>
+    </div>
+
+    <div id="cont2editar" style="height: 60px">
+        <div style="float:left;">
+            <div style="height: 15px; background: #eeeeee">
+                Pàgina web:
+            </div>
+            <input type="text" style="width:225px;" class="text-input placeholder-input" id="aficiones" name="aficiones" value="<?php echo $this->dadesUser->Aficiones ?>"/>
+        </div>
+        <div style="float:left;margin-top:17px;">
+            <span class="ejemplo" style="margin-left:20px;height: 25px; background: #ffffff">
+                Ejemplo: http://www.prueba.blogspot.com,..
+            </span>
+        </div>
+    </div>
+    <div id="cont3editars" style="height: 60px">
+        <div style="float:left;">
+        <div style="height: 15px; background: #eeeeee">
+            Fecha Nacimiento:
+        </div>
+        <?php if($this->dadesUser->Data_neixament!=null){ ?>
+        <?php $dat = explode("-",$this->dadesUser->Data_neixament);?>
+        <?php $dataok = "$dat[2]".'-'."$dat[1]".'-'."$dat[0]"; ?>
+
+        <script>
+            dataPicker ="<?php echo $dataok;?>";
+        </script>
+        <?php } ?>
+        <input id="datepicker" class="text-input placeholder-input" style="width:225px;" type="text" name="data" value="<?php echo $dataok ?>" readonly="readonly"/>
+        </div>
+        <div style="float:left;margin-top:17px;">
+            <span  class="ejemplo" style="background: #ffffff; margin-left:20px;">
+                Ejemplo: 21-05-1981
+            </span>
+        </div>
+    </div>
+    <div id="cont1editar" style="height: 120px">
+        <div style="float:left;">
+            <div style="height: 15px; background: #eeeeee">
+                Sobre su vida:
+            </div>
+            <textarea id="tuVida" class="text-input placeholder-input" style="overflow: hidden;font-size:12px;" name="tuVida" rows="4" cols="65" ><?php echo $this->dadesUser->Tuvida ?></textarea>
+        </div>
+        <div style="float:left;margin-top:17px;">
+            <span class="ejemplo" style="background: #ffffff;margin-left:20px;">
+                Ejemplo: Yo soy una persona...
+            </span>
+        </div>
+    </div>

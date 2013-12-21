@@ -1,0 +1,65 @@
+<script>
+
+    var numNot = <?php echo count($this->notficacines); ?>
+
+</script>
+ <a class="notification-toggle group" id="notificacions" title="Notifications">
+        <span id="notification-count"><?php echo count($this->notficaciones); ?></span>
+        <span id="imatgeArrow" style="float:left;padding-top:4px;cursor:pointer;"><img src="<?php echo $this->baseUrl(); ?>/images/arrowdown.png"/></span>
+
+    </a>
+     <div class="flyout-container">
+        <ul class="flyout-list">
+                 <?php if($this->notficaciones == null){ ?>
+                     <li style="text-align:center;" id="notificacioLlista" tipus="6">
+                        <h6> Ver Historial De Notificaciones</h6>
+                     </li>
+                 <?php }else { ?>
+                 <?php foreach ($this->notficaciones as $notificacionRow):?>
+                    <li style="height:33px;" id="notificacioLlista" rel="<?php echo $notificacionRow->getIdNoticia(); ?>" tipus="<?php echo $notificacionRow->getIdTipus(); ?>" user="<?php echo $notificacionRow->getIdUsuariEnv()->getUsername() ?>" idNot="<?php echo $notificacionRow->getId() ?>" >
+                        <?php switch ($notificacionRow->getIdTipus()){
+                            case 1:
+                                ?>
+                                        <img src="<?php echo $this->baseUrl() ?>/images/markerico.png" style="vertical-align:-2px;"/>
+                                        <span><?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?></span>
+                                        <?php echo $notificacionRow->getTipus()?>
+                                    <?php
+                                break;
+                            case 2:
+                                ?>
+                                        <img src="<?php echo $this->baseUrl() ?>/images/markercambi.png" style="vertical-align:-2px;"/>
+                                        <span><?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?></span>
+                                        <?php echo $notificacionRow->getTipus()?>
+                                <?php
+                                break;
+                            case 3:
+                                ?>
+                                        <img src="<?php echo $this->baseUrl() ?>/images/groups.png" style="vertical-align:-2px;"/>
+                                        <span><?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?></span>
+                                        <?php echo $notificacionRow->getTipus()?>
+                                <?php
+                            break;
+                            case 4:
+                                ?>
+                                        <img src="<?php echo $this->baseUrl() ?>/images/comments.png" style="vertical-align:-5px;"/>
+                                        <span><?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?></span>
+                                        <?php echo $notificacionRow->getTipus()?>
+                                <?php
+                            break;
+                            case 5:
+                                ?>
+                                        <img src="<?php echo $this->baseUrl() ?>/images/contestarComment.png" style="vertical-align:-5px;"/>
+                                        <span><?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?></span>
+                                        <?php echo $notificacionRow->getTipus()?>
+                                <?php
+                            break;
+                       }?>
+                    </li>
+                    
+                <?php endforeach;?>
+                    <li style="text-align:center;" id="notificacioLlista" tipus="6">
+                        <h6> Ver Historial De Notificaciones</h6>
+                     </li>
+                <?php } ?>
+             </ul>
+    </div>

@@ -1,0 +1,294 @@
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+            <div id="main-column-user" class="column attached-menu group">
+                <ul id="comment-sorting" class="pillboxes filter-menu group" style="margin-top: 0px; margin-bottom: 10px; background: #eee;">
+                    <li>
+                        <a id="filter-diaris" class="sort" rel="1">Seleccionar Medio/s</a>
+                    </li>
+
+                    <li class="divider show-expanded">
+                        <a id="filter-orderdiari" class="active" rel="1">Ordenar por Medio</a>
+                    </li>
+                    <li>
+                        <a id="filter-data" class="sort" rel="2">Ordenar por Hora</a>
+                    </li>
+                </ul>
+                
+                
+
+                <div id="AquiNews" style="clear:both;">
+                    <div style="margin-top:5px; padding:10px 10px 20px 10px;  border-bottom: 1px solid #eee;">
+                        <div>
+                            <span style="font-weight: bold;">NewsUP le hace el trabajo más fácil, no estará nunca más desinformado! Todas las noticias del mundo al alcanze de su mano.<br/><br/></span>
+                            <span style="padding-top:30px;">Seleccione del apartado <strong>"Seleccionar Medio"</strong> los diarios que desea ver hoy.</span><br/><br/> A continuación se cargarán las noticias más recientes de los principales diarios, blogs y revistas de internet.
+                        </div>
+                    </div>
+                    <div id="aquiPrincipal" style="margin-top:7px;"></div>
+               </div>
+            </div>
+             <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+              </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    setTimeout("cargarPrincipal()",100);
+
+    function cargarPrincipal(){
+        var dia2 = Array();
+        dia2[dia2.length] =161;
+        dia2[dia2.length] = 6;
+        dia2[dia2.length] = 7;
+        jQuery("#aquiPrincipal").html("<center><img src=\""+baseUrl+"/images/loading2.gif\" alt=\"loading\"></center>");
+        jQuery.ajax({
+            type: "POST",
+            url: baseUrl+"/quiosco/getdiarisdata",
+            async: true,
+            data: "&dia="+dia2,
+
+            success: function(data){
+                jQuery("#aquiPrincipal").html(data);
+
+            }
+        })
+    }
+   /* jQuery.ajax({
+            type: "POST",
+            url: baseUrl+"/feed/getdiaris",
+            async: true,
+
+            success: function(data){
+
+                jQuery("#AquiNews").html(data);
+            }
+     });*/
+     var dia= Array();
+     var tipuis=0;
+     var tmporal = 0;
+     var ordre = 1;
+
+    jQuery("a#filter-diaris").live("click",function(){
+        jQuery("div#modal-wrapper3").fadeIn(0);
+        jQuery("div#feed-dock").fadeIn(150);
+    });
+
+    jQuery(".dismissFeed").live("click",function(){
+        jQuery("div#feed-dock").fadeOut(50);
+        jQuery("div#modal-wrapper3").fadeOut(0);
+    });
+
+    jQuery("span#acceptar-diaris").live("click",function(){
+        jQuery("div#feed-dock").fadeOut(50);
+        jQuery("div#modal-wrapper3").fadeOut(0);
+
+
+        if(dia.length!=0){
+            if(tmporal != 1){
+
+                jQuery("#AquiNews").html("<center><img src=\""+baseUrl+"/images/loading2.gif\" alt=\"loading\"></center>");
+
+                if(ordre==1){
+                    jQuery.ajax({
+                        type: "POST",
+                        url: baseUrl+"/quiosco/getdiaris",
+                        async: true,
+                        data: "&dia="+dia,
+
+                        success: function(data){
+                            jQuery("#filter-orderdiari").addClass("active");
+                            jQuery("#filter-data").removeClass("active");
+                            jQuery("#AquiNews").html(data);
+
+                        }
+                    })
+                }else{
+                    jQuery.ajax({
+                        type: "POST",
+                        url: baseUrl+"/quiosco/getdiarisdata",
+                        async: true,
+                        data: "&dia="+dia,
+
+                        success: function(data){
+                            jQuery("#filter-data").addClass("active");
+                            jQuery("#filter-orderdiari").removeClass("active");
+                            jQuery("#AquiNews").html(data);
+
+                        }
+                    })
+                }
+                tmporal = 1;
+
+           }
+      }
+        
+    });
+
+    jQuery("a#filter-orderdiari").live("click",function(){
+        ordre = 1;
+        jQuery("#filter-orderdiari").addClass("active");
+        jQuery("#filter-data").removeClass("active");
+        if(dia.length!=0){
+            if(tmporal != 1){
+                jQuery("#AquiNews").html("<center><img src=\""+baseUrl+"/images/loading2.gif\" alt=\"loading\"></center>");
+                jQuery.ajax({
+                    type: "POST",
+                    url: baseUrl+"/quiosco/getdiaris",
+                    async: true,
+                    data: "&dia="+dia,
+
+                    success: function(data){
+                        
+                        jQuery("#AquiNews").html(data);
+                    }
+                })
+            }
+      }
+    });
+
+    jQuery("a#filter-data").live("click",function(){
+        ordre = 2;
+        jQuery("#filter-data").addClass("active");
+        jQuery("#filter-orderdiari").removeClass("active");
+        if(dia.length!=0){
+            if(tmporal != 1){
+                jQuery("#AquiNews").html("<center><img src=\""+baseUrl+"/images/loading2.gif\" alt=\"loading\"></center>");
+                jQuery.ajax({
+                    type: "POST",
+                    url: baseUrl+"/quiosco/getdiarisdata",
+                    async: true,
+                    data: "&dia="+dia,
+
+                    success: function(data){
+                        
+                        jQuery("#AquiNews").html(data);
+                    }
+                })
+            }
+      }
+    });
+
+    jQuery("div.checkbox-marker-cat").live("click",function(){
+        id = jQuery(this).attr("rel");
+
+        if(search(id)){
+            //desactivem la categoria
+            jQuery(this).html("<img style=\"vertical-align: -3px;\" src=\""+baseUrl+"/images/checkbox0.png\"/>");
+            tmporal=0;
+        }else{
+            //activem la categoria
+            tmporal=0;
+            dia[dia.length] = id;
+            
+            jQuery(this).html("<img style=\"vertical-align: -3px;\" src=\""+baseUrl+"/images/checkbox1.png\"/>");
+        }
+    });
+
+     function search(id){
+        var p=0;
+        var aux = Array();
+
+        var si=false;
+        if(dia.length==0){
+            si=false;
+        }else{
+            for(p=0; p<dia.length; p++){
+                if(dia[p]!=id){
+
+                    aux[aux.length] = dia[p];
+                }else{
+
+                    si=true;
+                }
+            }
+        }
+
+        if(si){
+            dia=aux;
+            return true;
+        }else{
+
+            return false ;
+        }
+    }
+
+    jQuery("span.tipusDiari").live("click",function(){
+
+        id = jQuery(this).attr("rel");
+        medi = jQuery("span.activeIdioma").attr("rel");
+
+        jQuery("#AquiDiaris").html("<center><img src=\""+baseUrl+"/images/loading2.gif\" alt=\"loading\"></center>")
+        var conta = 1;
+
+        for(conta=1;conta<7;conta++){
+            if(conta!=id){
+                jQuery("#tipusdiari"+conta).removeClass("activeJa");
+            }
+        }
+            jQuery("#tipusdiari"+id).addClass("activeJa");
+
+            jQuery.ajax({
+                type: "POST",
+                url: baseUrl+"/quiosco/getdiaristipus",
+                async: true,
+                data: "&tipus="+id+"&medi="+medi,
+
+                success: function(data){
+
+                    jQuery("#AquiDiaris").html(data);
+                }
+            })
+
+    });
+
+    jQuery("span.tipusIdioma").live("click",function(){
+
+        medi = jQuery(this).attr("rel");
+        id = jQuery("span.activeJa").attr("rel");
+
+        jQuery("#AquiDiaris").html("<center><img src=\""+baseUrl+"/images/loading2.gif\" alt=\"loading\"></center>")
+        var conta = 1;
+
+        for(conta=1;conta<5;conta++){
+            if(conta!=medi){
+                jQuery("#tipusidioma"+conta).removeClass("activeIdioma");
+            }
+        }
+            jQuery("#tipusidioma"+medi).addClass("activeIdioma");
+
+            jQuery.ajax({
+                type: "POST",
+                url: baseUrl+"/quiosco/getdiaristipus",
+                async: true,
+                data: "&tipus="+id+"&medi="+medi,
+
+                success: function(data){
+
+                    jQuery("#AquiDiaris").html(data);
+                }
+            })
+
+    });
+
+    jQuery("span.ocultarFeed").live("click",function(){
+        id = jQuery(this).attr("rel");
+        tip = jQuery(this).attr("tip");
+        //alert(tip);
+        if(tip==0){
+            jQuery(this).html("Enseñar");
+            jQuery("div#noticiesDiari"+id).slideUp(320);
+            jQuery(this).attr("tip","1");
+        }else{
+            jQuery(this).html("Ocultar");
+            jQuery("div#noticiesDiari"+id).slideDown(820);
+            jQuery(this).attr("tip","0");
+        }
+        //jQuery("div#noticiaSave"+id).fadeOut();
+    });
+
+</script>

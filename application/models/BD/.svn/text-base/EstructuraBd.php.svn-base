@@ -1,0 +1,368 @@
+<?php
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+require_once 'BD/Cataccio.php';
+require_once 'BD/Tipustaula.php';
+require_once 'BD/Categoriestaula.php';
+require_once 'BD/Municipistaula.php';
+require_once 'BD/Municipiaccio.php';
+require_once 'BD/Estattaula.php';
+require_once 'Accio.php';
+require_once 'Categoria.php';
+
+class EstructuraBD extends Zend_Db_Table
+{
+    protected $_name = "accio";
+    protected $_primary = "id_accio";
+
+    private $_munaccio;
+    private $_cattaula;
+    private $_muntaula;
+    private $_tipustaula;
+    private $_estattuala;
+    private $_cataccio;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_cataccio = new Cataccio();
+        $this->_munaccio = new Municipiaccio();
+        $this->_tipustaula = new Tipustaula();
+        $this->_cattaula = new Categoriestaula();
+        $this->_muntaula = new Municipistaula();
+        $this->_estattaula = new Estattaula();
+    }
+
+    private function _conexio()
+    {
+        $con = mysql_connect('localhost', 'root', '');
+        $db = mysql_select_db('actuacions', $con);
+    }
+
+    public function getAllAccions()
+    {
+
+       // $this->_conexio();
+       // mysql_query('set names utf8');
+        //$res = mysql_query("SELECT * from accio order by id_estat,data desc ");
+        $res = array();
+        $select = $this->select();
+        $select->order("id_estat");
+        $select->order("data desc");
+
+        $res = $this->fetchAll($select);
+
+     $Acciollista = array();
+     foreach($res as $Accio) {
+
+            //$tipu = mysql_query("SELECT * from tipus where id_tipus = ".$Accio->id_tipus);
+            $tipu = $this->_tipustaula->getTipus($Accio->id_tipus);
+            $Accio1 = new Accio($Accio->id_accio,$Accio->data,$Accio->observacions);
+            $Accio1->SetTipus($tipu->id_tipus,$tipu->nom);
+            $est = $this->_estattaula->getEstat($Accio->id_estat);
+            $Accio1->SetEstat($est->id_estat,$est->nom);
+            //$Categori = mysql_query("SELECT * from cataccio where id_accio = ".$Accio['id_accio']);
+            $Categori = $this->_cataccio->getAllCategories($Accio->id_accio);
+            
+            if(count($Categori)>0){
+                foreach($Categori as $Cat){
+                    //$Categoris = mysql_query("SELECT * from categoria where id_categoria = ".$Cat['id_categoria']);
+                    $Categoris = $this->_cattaula->getCategoria($Cat->id_categoria);
+                    $Accio1->addCategoria($Categoris->id_categoria,$Categoris->nom);
+                }
+            }
+            //$Municipi = mysql_query("SELECT * from municipiaccio where id_accio = ".$Accio['id_accio']);
+            $Municipi = $this->_munaccio->getAllMunicipis($Accio->id_accio);
+
+            if(count($Municipi) >0){
+                foreach($Municipi as $Mun){
+                    //$Municipis = mysql_query("SELECT * from municipi where id_municipi = ".$Mun['id_municipi']);
+                    $Municipis = $this->_muntaula->getMunicipi($Mun->id_municipi);
+                    $Accio1->addMunicipi($Municipis->id_municipi,$Municipis->nom);
+                }
+            }
+            $Acciollista[]= $Accio1;
+
+        }
+
+        return $Acciollista;
+    }
+
+
+    public function getAllTipus()
+    {
+
+        //$this->_conexio();
+        //mysql_query('set names utf8');
+        //$res = mysql_query("SELECT * from tipus");
+
+        $res= $this->_tipustaula->getAllTipus();
+        $Tipusllista = array();
+        foreach($res as $Tipus){
+            $Tips = new Tipus($Tipus->id_tipus,$Tipus->nom);
+            $Tipusllista[] = $Tips;
+        }
+        return $Tipusllista;
+    }
+
+    public function afegirTipus($nom)
+    {
+        //$this->_conexio();
+        //mysql_query('set names utf8');
+        $res = $this->_tipustaula->afegirTipus($nom);
+
+    }
+
+    public function afegirCategoria($nom)
+    {
+        //$this->_conexio();
+        //mysql_query('set names utf8');
+        $res = $this->_cattaula->afegirCategoria($nom);
+
+    }
+
+    public function afegirCateg($id,$categories)
+    {
+        //$this->_conexio();
+        //mysql_query('set names utf8');
+        foreach ($categories as $cat){
+            //$res = mysql_query("INSERT INTO cataccio (id_accio,id_categoria) values ($id,$cat)");
+            $res = $this->_cataccio->afegircataccio($id,$cat);
+
+        }
+    }
+
+    public function afegirActuacio($tipus,$datas,$observacions)
+    {
+        
+        $actuacio = $this->createRow();
+        $actuacio->id_tipus = $tipus;
+        $actuacio->data = $datas;
+        $actuacio->observacions = $observacions;
+        $actuacio->id_estat = 1;
+        $actuacio->save();
+        return $actuacio->id_accio;
+    }
+
+    public function getAllcategoria()
+    {
+        //$this->_conexio();
+        //mysql_query('set names utf8');
+        $res = $this->_cattaula->getAllCategories();
+        $TipusCategoria = array();
+        
+        foreach($res as $Tipus){
+            $Tips = new Categoria($Tipus->id_categoria,$Tipus->nom);
+            $TipusCategoria[] = $Tips;
+        }
+        return $TipusCategoria;
+    }
+
+    public function getAllcerca($datade,$datafins,$text,$tipusok,$categoriaok,$municipiok)
+    {
+
+        $cataccio = new Cataccio();
+        $tipustaula = new Tipustaula();
+        $cat = new Categoriestaula();
+        $munaccio = new Municipiaccio();
+        $mcip = new Municipistaula();
+
+
+        $x=0;
+        if(count($tipusok)>0){
+        for($x=0;$x<count($tipusok);$x++)
+        {
+            if($x==0){
+            $texttipus="id_tipus=$tipusok[$x]";
+            }else{
+            $texttipus.=" OR id_tipus=$tipusok[$x]";
+            }
+        }
+        }else{
+            $texttipus='';
+        }
+        $x=0;
+        if(count($categoriaok)>0){
+        for($x=0;$x<count($categoriaok);$x++)
+        {
+            if($x==0){
+            $textcategoria=" id_categoria=$categoriaok[$x]";
+            }else{
+            $textcategoria.=" OR id_categoria=$categoriaok[$x]";
+            }
+        }
+        }else{
+            $textcategoria='';
+        }
+
+        $x=0;
+        if(count($municipiok)>0){
+        for($x=0;$x<count($municipiok);$x++)
+        {
+            if($x==0){
+            $textmunicipi=" id_municipi=$municipiok[$x]";
+            }else{
+            $textmunicipi.=" OR id_municipi=$municipiok[$x]";
+            }
+        }
+        }else{
+            $textmunicipi='';
+        }
+
+        $select = $this->select();
+        $select->where("data between \"$datade\" and \"$datafins\"")
+               ->where("observacions like '%$text%'");
+
+        if($texttipus!=''){
+         $select->where($texttipus);
+        }
+
+        $rescerca = $this->fetchAll($select);
+
+        $ResultCerca = NULL;
+        $ResultCerca = array();
+
+        if(count($tipusok)>0){
+        if(count($categoriaok)>0){
+        if(count($municipiok)>0){
+
+        foreach($rescerca as $cerca){
+
+            $Cerc = new Accio($cerca['id_accio'],$cerca['data'],$cerca['observacions'],$cerca['id_estat']);
+            $nom = $this->_tipustaula->getTipus($cerca['id_tipus']);
+            $Cerc->SetTipus($cerca['id_tipus'],$nom->nom);
+            
+            $categories = $cataccio->getCategories($cerca['id_accio'],$textcategoria);
+            $x=1;
+
+                if($categories==TRUE){
+                    $categori = $cataccio->getAllCategories($cerca['id_accio']);
+
+                    foreach($categori as $cate){
+                    $nomcategoria = $cat->getNomCategoria($cate['id_categoria']);
+                    $Cerc->addCategoria($x,$nomcategoria);
+                    $x++;
+                    }
+
+                    $municipis = $munaccio->getMunicipis($cerca['id_accio'],$textmunicipi);
+
+                    if($municipis == 1){
+
+                        $munici = $munaccio->getAllMunicipis($cerca['id_accio']);
+
+                        foreach($munici as $municipibo){
+
+                            $nommunicipi = $mcip->getNomMunicipi($municipibo['id_municipi']);
+                            $Cerc->addMunicipi($x,$nommunicipi);
+                            $x++;
+
+                        }
+
+                        $ResultCerca[] = $Cerc;
+                        
+                    }
+
+                
+                }
+            }
+        }
+        }
+      }
+      return $ResultCerca;
+    }
+
+
+    public function getAllestats()
+    {
+
+        //$this->_conexio();
+        //mysql_query('set names utf8');
+        $res = $this->_estattaula->getAllEstat();
+
+        $Estatllista = array();
+        foreach($res as $Estat){
+            $Tips = new Tipus($Estat->id_estat,$Estat->nom);
+            $Estatllista[] = $Tips;
+        }
+        return $Estatllista;
+    }
+
+    public function canviarEstat($idaccio,$idestat)
+    {
+        $estat = $this->find($idaccio)->current();
+        $estat->id_estat = $idestat;
+        $estat->save();
+    }
+
+    public function borrtip($id)
+    {
+        $where = $this->getAdapter()->quoteInto("id_tipus = $id");
+        $this->delete($where);
+    }
+
+    public function borraccio($id)
+    {
+        $where = $this->find($id)->current();
+        $where->delete();
+    }
+
+    public function getAccio($id)
+    {
+        //$this->_conexio();
+        //mysql_query('set names utf8');
+        //$res = mysql_query("SELECT * from accio where id_accio = $id ");
+        $res = $this->find($id)->current();
+        $Acciollista = array();
+
+        
+            //$tipu = mysql_query("SELECT * from tipus where id_tipus = ".$Accio['id_tipus']);
+            //$tip = mysql_fetch_assoc($tipu);
+            $tipu = $this->_tipustaula->getTipus($res->id_tipus);
+            $Accio1 = new Accio($res->id_accio,$res->data,$res->observacions);
+            $Accio1->SetTipus($tipu->id_tipus,$tipu->nom);
+            //$est = mysql_query("SELECT * from estat where id_estat = ".$Accio['id_estat']);
+            //$estat = mysql_fetch_assoc($est);
+            $est = $this->_estattaula->getEstat($res->id_estat);
+            $Accio1->SetEstat($est->id_estat,$est->nom);
+            //$Categori = mysql_query("SELECT * from cataccio where id_accio = ".$Accio['id_accio']);
+            //$numcategori = mysql_num_rows($Categori);
+            //if($numcategori >0){
+            $Categori = $this->_cataccio->getAllCategories($res->id_accio);
+            
+            if(count($Categori)>0){
+                 foreach($Categori as $Cat){
+                    //$Categoris = mysql_query("SELECT * from categoria where id_categoria = ".$Cat['id_categoria']);
+                    $Categoris = $this->_cattaula->getCategoria($Cat->id_categoria);
+                    $Accio1->addCategoria($Categoris->id_categoria,$Categoris->nom);
+                }
+            }
+            //$Municipi = mysql_query("SELECT * from municipiaccio where id_accio = ".$Accio['id_accio']);
+            $Municipi = $this->_munaccio->getAllMunicipis($res->id_accio);
+
+            if(count($Municipi) >0){
+                foreach($Municipi as $Mun){
+                    //$Municipis = mysql_query("SELECT * from municipi where id_municipi = ".$Mun['id_municipi']);
+                    $Municipis = $this->_muntaula->getMunicipi($Mun->id_municipi);
+                    $Accio1->addMunicipi($Municipis->id_municipi,$Municipis->nom);
+                }
+            }
+            $Acciollista[]= $Accio1;
+
+        
+          
+        return $Acciollista;
+    }
+
+    public function modificaraccio($id,$dataok,$observacions)
+    {
+
+        $accio = $this->find($id)->current();
+        $accio->data = $dataok;
+        $accio->observacions = $observacions;
+        $accio->save();
+
+    }
+
+}

@@ -1,0 +1,148 @@
+<?php if($this->usuaris2 == null){ ?>
+        <div class="nothing-found topbar-spacer" style="margin-top:12px;">
+            <p class="title">No Le Sigue Nadie.</p>
+        </div>
+   <?php }else{ ?>
+   <?php foreach($this->usuaris2 as $usuari2){ ?>
+        <div class="group" style="margin-top: 17px; margin-bottom: 14px;" id="usuarioPetit<?php echo $usuari2->getId(); ?>">
+            <div style="float:left;">
+                <?php if($usuari2->getImage() !=null){ ?>
+                <a style="width:60px; height:60px;" class="current-user-thumbnail" href="/">
+                    <img src="<?php echo $this->baseUrl();?>/img/<?php echo $usuari2->getImage(); ?>" width="60px" height="60px">
+                </a>
+                <?php }else{ ?>
+                <a style="background: url(images/perfil60.png) no-repeat center #E5ECF3;
+                   width:60px; height:60px;" class="current-user-thumbnail" href="/"></a>
+                <?php }?>
+            </div>
+            <?php if($this->loggedIn==true){ ?>
+            <?php if($this->user->id_user != $usuari2->getId()){ ?>
+            <div class="contingutSegueix" style="width:65%;">
+                <div style="float:left">
+                    <span style="font-weight:bold; font-size: 1em;">Nombre de Usuario:</span>
+                    <span style="padding-left:10px;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $usuari2->getUsername(); ?>"><?php echo $usuari2->getUsername(); ?></a></span>
+                </div>
+                 <div style="float:left; padding-left: 35px;">
+                     <span style="font-weight:bold; font-size: 1em;">Localidad:</span>
+                     <span style="padding-left:10px;">
+                         <span style="color:#669900;font-weight:bold;">
+                            <?php if($usuari2->getPoblacio()!=null){ ?>
+                                <?php echo $usuari2->getPoblacio(); ?>
+                            <?php }else{ ?>
+                                Ns/Nc
+                            <?php } ?>
+                         </span></span>
+                 </div>
+                <div style="clear:both; float:left; padding-top:15px;">
+                    <span style="font-weight:bold; font-size: 1em;">Ha subido <span style="color:#669900;font-weight:bold;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $usuari2->getUsername(); ?>"><?php echo $usuari2->getNumNoticies(); ?></a></span> noticias</span>
+                 </div>
+                <div style="float:left; padding-left: 15px;padding-top:15px;">
+                     <span style="font-weight:bold; font-size: 1em;">Le siguen <span style="color:#669900;font-weight:bold;"><?php echo $usuari2->getNumSeguidors(); ?></span> Usuarios</span>
+                 </div>
+                <div style="float:left; padding-left: 15px;padding-top:15px;">
+                     <span style="font-weight:bold; font-size: 1em;">El sigue a <span style="color:#669900;font-weight:bold;"><?php echo $usuari2->getNumSegueix(); ?></span> Usuarios</span>
+                 </div>
+            </div>
+            <?php $segueixo = false; ?>
+            <?php foreach($this->seguiments as $seguiment){ ?>
+                <?php if($seguiment == $usuari2->getId()){ ?>
+                <?php  $segueixo = true;?>
+                <?php }?>
+            <?php } ?>
+            <?php if($segueixo == true){ ?>
+            <div style="float:right; padding-right:24px; padding-top: 16px;" id="seguidornou2<?php echo $usuari2->getId(); ?>">
+                  <span style="height: 15px; text-align:center; width: 75px;" id="seguidorDownPetit" class="btn btn-special4 has-tooltip" rel="<?php echo $usuari2->getId(); ?>">
+                     No Seguir
+                  </span>
+            </div>
+            <?php }else{ ?>
+            <div style="float:right; padding-right:20px; padding-top: 16px;" id="seguidornou2<?php echo $usuari2->getId(); ?>">
+                <span style="height: 15px; text-align:center; width: 75px;" id="seguidorOkPetit" class="btn btn-follow btn-primary has-tooltip" rel="<?php echo $usuari2->getId(); ?>">Seguirlo</span>
+            </div>
+            <?php } ?>
+            <?php }else{ ?>
+            <div style="float:left; padding-left: 20px; padding-top:16px; width: 90%;">
+                <div style="float:left">
+                    <span style="font-weight:bold; font-size: 1em;">Nombre de Usuario:</span>
+                    <span style="padding-left:10px;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $usuari2->getUsername(); ?>"><?php echo $usuari2->getUsername(); ?></a></span>
+                </div>
+                 <div style="float:left; padding-left: 35px;">
+                     <span style="font-weight:bold; font-size: 1em;">Localidad:</span>
+                     <span style="padding-left:10px;">
+                         <span style="color:#669900;font-weight:bold;">
+                            <?php if($usuari2->getPoblacio()!=null){ ?>
+                                <?php echo $usuari2->getPoblacio(); ?>
+                            <?php }else{ ?>
+                                Ns/Nc
+                            <?php } ?>
+                         </span></span>
+                 </div>
+                <div style="clear:both; float:left; padding-top:15px;">
+                    <span style="font-weight:bold; font-size: 1em;">Ha subido <span style="color:#669900;font-weight:bold;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $usuari2->getUsername(); ?>"><?php echo $usuari2->getNumNoticies(); ?></a></span> noticias</span>
+                 </div>
+                <div style="float:left; padding-left: 15px;padding-top:15px;">
+                     <span style="font-weight:bold; font-size: 1em;">Le siguen <span style="color:#669900;font-weight:bold;"><?php echo $usuari2->getNumSeguidors(); ?></span> Usuarios</span>
+                 </div>
+                <div style="float:left; padding-left: 15px;padding-top:15px;">
+                     <span style="font-weight:bold; font-size: 1em;">El sigue a <span style="color:#669900;font-weight:bold;"><?php echo $usuari2->getNumSegueix(); ?></span> Usuarios</span>
+                 </div>
+            </div>
+            <?php } ?>
+            <?php }else{ ?>
+             <div style="float:left; padding-left: 20px; padding-top:16px; width: 90%;">
+                <div style="float:left">
+                    <span style="font-weight:bold; font-size: 1em;">Nombre de Usuario:</span>
+                    <span style="padding-left:10px;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $usuari2->getUsername(); ?>"><?php echo $usuari2->getUsername(); ?></a></span>
+                </div>
+                 <div style="float:left; padding-left: 35px;">
+                     <span style="font-weight:bold; font-size: 1em;">Localidad:</span>
+                     <span style="padding-left:10px;">
+                         <span style="color:#669900;font-weight:bold;">
+                            <?php if($usuari2->getPoblacio()!=null){ ?>
+                                <?php echo $usuari2->getPoblacio(); ?>
+                            <?php }else{ ?>
+                                Ns/Nc
+                            <?php } ?>
+                         </span></span>
+                 </div>
+
+                <div style="clear:both; float:left; padding-top:15px;">
+                    <span style="font-weight:bold; font-size: 1em;">Ha subido <span style="color:#669900;font-weight:bold;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $usuari2->getUsername(); ?>"><?php echo $usuari2->getNumNoticies(); ?></a></span> noticias</span>
+                 </div>
+                <div style="float:left; padding-left: 15px;padding-top:15px;">
+                     <span style="font-weight:bold; font-size: 1em;">Le siguen <span style="color:#669900;font-weight:bold;"><?php echo $usuari2->getNumSeguidors(); ?></span> Usuarios</span>
+                 </div>
+                <div style="float:left; padding-left: 15px;padding-top:15px;">
+                     <span style="font-weight:bold; font-size: 1em;">El sigue a <span style="color:#669900;font-weight:bold;"><?php echo $usuari2->getNumSegueix(); ?></span> Usuarios</span>
+                 </div>
+            </div>
+            <?php } ?>
+        </div>
+   <?php } ?>
+ <?php if($this->cantitat >15){ ?>
+      <script>
+
+        var cantitat = <?php echo $this->cantitat; ?>;
+
+      </script>
+        <ul class="pagination group btn-loader btn-loader-bottom no-prev no-next story-list-container" role="navigation"aria-labelledby="paginglabel">
+            <li class="prev" >
+                <a class="btn btn-default btn-small" id="prev-segperf" rel="<?php echo $this->pagina; ?>" idus="<?php echo $this->id; ?>">
+                    <span class="uitext" id="prev">Anterior</span>
+                </a>
+            </li>
+            <li class="page-num" style="padding-top:7px;">
+                Página
+                <span class="pagination-current"><?php echo $this->pagina; ?></span>
+            </li>
+            <li class="next">
+                <a class="btn btn-default btn-small" id="next-segperf" rel="<?php echo $this->pagina; ?>" idus="<?php echo $this->id; ?>">
+                    <span class="uitext" id="next">Siguiente</span>
+                </a>
+            </li>
+        </ul>
+     <?php } ?>
+<?php } ?>
+<script>
+    var paginaSegueixen = false;
+</script>

@@ -1,0 +1,219 @@
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+            
+         <div id="left-column" class="column narrow attached-menu group">
+            <?php
+                //aqui fem un include
+                echo $this->render("opcionsperfil.phtml"); ?>
+
+            <div id="sidebar-sources">
+            </div>
+        </div>
+        <div id="main-column" class="column attached-menu group">
+           <div id="carregador-url">
+               <div id="titul-categorias" style="padding-left:4px; background:#f2f2f2; border-top:1px solid #e2e2e2; padding:4px 5px 4px 5px;">
+                  Noticias Guardadas
+               </div>
+           </div>
+            <div id="aquiNews">
+          <?php if($this->noticiesFinals == null){ ?>
+                <div class="nothing-found topbar-spacer" style="margin-top:12px;">
+                    <p class="title">No ha guardado ninguna noticia</p>
+                </div>
+           <?php }else{ ?>
+           <?php foreach($this->noticiesFinals as $noticia){ ?>
+                <?php $votat=0; ?>
+                <?php foreach($noticia->getAllVots() as $vot){ ?>
+                <?php if($vot->getidUsuari()==$this->user->id_user){ $votat=$noticia->getId();; }?>
+                <?php } ?>
+            <div class="story-item-gutters group" style="margin-top: 17px; margin-bottom: 14px;" id="noticiaSave<?php echo $noticia->getId(); ?>">
+                <div class="story-item-diggbtn" id="puntuacio<?php echo $noticia->getId();?>">
+                    <div class="newsup-btn has-tooltip newsup-dugg">
+                        
+                        <a class="newsup-count-wrapper" href="">
+                            <span class="newsup-count"><span><?php echo $noticia->getNumVots();?></span></span>
+                        </a>
+                        <?php if($votat!=0){?>
+                        <span class="btnpunts-votat btn-special-javotat has-tooltip" rel="<?php echo $noticia->getId(); ?>" votat="<?php echo $votat; ?>"  id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>
+                        <?php }else{?>
+                        <span class="btnpunts btn-special-punts has-tooltip" rel="<?php echo $noticia->getId(); ?>" votat="<?php echo $votat; ?>"  id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>
+                        <?php } ?>
+                    </div>
+                </div>
+                <?php if($noticia->getImatge() !=null){ ?>
+                    <div class="story-item-media" style="padding-top:10px;">
+                        <div class="story-item-thumb" href="">
+                            <div class="thumb-edges"></div>
+                            <img src="<?php echo $this->baseUrl();?>/imgnotice/<?php echo $noticia->getImatge(); ?>" width="58px" height="62px">
+                        </div>
+                    </div>
+                <?php } ?>
+                <?php if($noticia->getImatge() !=null){ ?>
+                <div class="story-item-content group" style="width:97%;">
+                <?php }else{ ?>
+                <div class="story-item-content group" style="width:110%;">
+                <?php } ?>
+                    <div class="story-item-details">
+                        <h3 class="story-item-title">
+                             <a target="_blank" href="<?php echo $noticia->getUrl(); ?>"><?php echo stripslashes($noticia->getTitul200()); ?></a>
+                        </h3>
+                        <p class="story-item-description">
+                            <a class="story-item-source" href=""><!aqui va la url que ve ex: marca.com-></a>
+                            <a class="story-item-teaser" href="<?php echo $noticia->getUrl(); ?>">
+                                <?php echo stripslashes($noticia->getDescripcio180());?>
+                                <span class="timestamp" style="color:#82AB4D;">&nbsp;Enviado el:&nbsp;<?php echo $noticia->getData(); ?></span>
+                            </a>
+                        </p>
+                    </div>
+                    <ul class="story-item-meta group">
+                        <li class="story-item-submitter">Enviado por:&nbsp;&nbsp;<a class="hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $noticia->getUsuari()->getUsername(); ?>"><?php echo $noticia->getUsuari()->getUsername();?></a></li>
+                       <li class="story-item-comments">
+                           <a href="<?php echo $this->baseUrl(); ?>/noticia/<?php echo $noticia->getUrlTitul(); ?>">
+                               <span class="storylist-icon comments dib"></span>
+                               <span class="storylist-item-comment-count"><?php echo $noticia->getNumComentaris();?></span>&nbsp;Comentarios
+                           </a>
+                       </li>
+                       <li class="story-item-newcomment" rel="<?php echo $noticia->getId(); ?>">
+                            <a class="story-item-action-post-comment">Comentar</a>
+                            <span class="story-item-newcomment-nub"></span>
+                       </li>
+                       <?php $guardada = 1; ?>
+                       <?php foreach($this->guardadas as $idNoticia){ ?>
+                            <?php if($idNoticia==$noticia->getId()){ ?>
+                                <?php $guardada = 2; ?>
+                            <?php }?>
+                       <?php } ?>
+                       <li class="story-item-save">
+                           <?php if($guardada==2){ ?>
+                           <a title="Save" class="action-save2 has-tooltip is-saved" id="guardarNoticia2<?php echo $noticia->getId(); ?>" rel="<?php echo $noticia->getId(); ?>" tipus="2">
+                               <span class="storylist-icon save dib"></span>
+                               <span id="guardaNoticia<?php echo $noticia->getId(); ?>" class="action-label">Quitar</span>
+                           </a>
+                           <?php }else{ ?>
+                           <a title="Save" class="action-save2 has-tooltip" id="guardarNoticia2<?php echo $noticia->getId(); ?>" rel="<?php echo $noticia->getId(); ?>" tipus="1">
+                               <span class="storylist-icon save dib"></span>
+                               <span id="guardaNoticia<?php echo $noticia->getId(); ?>" class="action-label">Guardar</span>
+                           </a>
+                           <?php } ?>
+                       </li>
+                       <li><a class="sharing-facebook" href="http://www.facebook.com/sharer.php?u=<?php echo $this->baseUrl()."/index/noticia/id/".$noticia->getId() ;?>"><span class="storylist-icon facebook"></span></a></li>
+                       <?php if($noticia->getLatitude() == null || $noticia->getLongitude() == null){ ?>
+                       <li class="mapa-colocar">
+                           <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/colocar/<?php echo $noticia->getUrlTitul() ?>">
+                               <span class="mapa-color-span"><img src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                               <span>Colocar en el Mapa</span>
+                           </a>
+                       </li>
+                       <?php }else{ ?>
+                          <?php if($this->loggedIn==true){ ?>
+                          <?php if($noticia->getUsuari()->getId()== $this->usuario->getId()){?>
+                           <li class="mapa-colocar">
+                               <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/cambiar/<?php echo $noticia->getUrlTitul() ?>">
+                                   <span class="mapa-color-span"><img src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                                   <span>Cambiar en el Mapa</span>
+                               </a>
+                          </li>
+                          <?php }else{ ?>
+                          <li class="mapa-colocar">
+                               <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/ver/<?php echo $noticia->getUrlTitul() ?>">
+                                   <span class="mapa-color-span"><img src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                                   <span>Ver en el Mapa</span>
+                               </a>
+                           </li>
+                           <?php } ?>
+                          <?php }else{ ?>
+                           <li class="mapa-colocar">
+                               <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/ver/<?php echo $noticia->getUrlTitul() ?>">
+                                   <span class="mapa-color-span"><img src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                                   <span>Ver en el Mapa</span>
+                               </a>
+                           </li>
+                           <?php } ?>
+                       <?php } ?>
+                   </ul>
+                   <div class="inline-comment-container"></div>
+                </div>
+        </div>
+            <!--fins aqui -->
+                <div id="inline-comment-container<?php echo $noticia->getId(); ?>" class="story-item-comment-form group" style="display:none;margin-left: 7%; clear: both;">
+                    <form name="formComentari<?php echo $noticia->getId(); ?>" id="formComentari<?php echo $noticia->getId(); ?>" class="post-comment-form inline-comment-form group active" method="post" action="<?php echo $this->baseUrl();?>/privat/afegircomentarisave">
+                        <img alt="" class="story-item-comment-form-thumb" src="http://cdn4.diggstatic.com/img/user/r.6835deeb.png">
+                        <input type="hidden" class="item_id" value="<?php echo $noticia->getId(); ?>" name="id">
+                        <a class="close-it cancel-inline-comment" id="closeComent" rel="<?php echo $noticia->getId(); ?>"><span>x</span></a>
+                        <textarea class="post-comment-textarea elastic" id="text<?php echo $noticia->getId(); ?>" name="text" style="height: 47px; overflow: hidden;"></textarea>
+                        <button class="btn btn-secondary btn-small" rel="<?php echo $noticia->getId(); ?>" name="button" id="button" type="button">&nbsp;&nbsp;&nbsp;Enviar&nbsp;&nbsp;&nbsp;</button>
+                    </form>
+                </div>
+               <div id="noticiaSaveBorder<?php echo $noticia->getId();?>" style="width:100%; height: 1px; background-color: #eeeeee; margin-right: 5px;"></div>
+
+            <?php } ?>
+    
+            <?php } ?>
+            </div>
+        </div>
+       <div id="right-column" class="column wide group">
+           <?php
+            //aqui fem un include
+            echo $this->render("rightsidebar.phtml");  
+            ?>
+       </div>
+     </div>
+    </div>
+</div>
+
+
+<script>
+
+  jQuery("a.action-save2").live("click",function(){
+      var error=0;
+
+        id = jQuery(this).attr("rel");
+        if(loggedIn==false){
+            jQuery("div#no-login-dock-punts").fadeIn(300);
+            setTimeout("tancarFinestreNoLoginDockPunts()", 5000);
+            x=0;
+            error=1;
+        }
+        if(error==0){
+            if(jQuery(this).attr("tipus")==1){
+                jQuery(this).attr("tipus","2");
+                jQuery.ajax({
+                            type: "POST",
+                            url: baseUrl+"/privat/guardarnews",
+                            async: true,
+                            data: "&id="+id,
+
+                            success: function(data){
+                                if(data){
+                                   jQuery("a#guardarNoticia2"+id).html(data);
+                                   jQuery("a#guardarNoticia2"+id).addClass("is-saved");
+
+                                }
+                            }
+                })
+            }else{
+                jQuery(this).attr("tipus","1");
+                jQuery.ajax({
+                            type: "POST",
+                            url: baseUrl+"/privat/borrarnews",
+                            async: true,
+                            data: "&id="+id,
+
+                            success: function(data){
+                                if(data){
+                                   jQuery("a#guardarNoticia2"+id).html(data);
+                                   jQuery("a#guardarNoticia2"+id).removeClass("is-saved");
+                                   jQuery("div#inline-comment-container"+id).fadeOut(0);
+                                   jQuery("div#noticiaSave"+id).slideUp(320);
+                                   jQuery("div#noticiaSave"+id).fadeOut();
+                                   jQuery("div#noticiaSaveBorder"+id).fadeOut();
+                                }
+                            }
+                })
+            }
+        }
+
+     });
+
+</script>

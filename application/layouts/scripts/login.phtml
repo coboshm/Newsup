@@ -1,0 +1,219 @@
+<?php
+if($this->loggedIn==true): ?>
+
+    <div id="notifications-container">
+<script>
+
+    var numNot = <?php echo count($this->notficacines); ?>
+
+</script>
+ <a class="notification-toggle group" id="notificacions" title="Notifications">
+        <span id="notification-count"><?php echo count($this->notficaciones); ?></span>
+        <span id="imatgeArrow" style="float:left;padding-top:4px;cursor:pointer;"><img src="<?php echo $this->baseUrl(); ?>/images/arrowdown.png"/></span>
+
+    </a>
+     <div class="flyout-container">
+
+        <ul class="flyout-list" style="">
+                 <?php if($this->notficaciones == null){ ?>
+                       <li style="text-align:center;" id="notificacioLlista" tipus="6">
+                        <h6> Ver Historial De Notificaciones</h6>
+                     </li>
+                 <?php }else { ?>
+                 <?php foreach ($this->notficaciones as $notificacionRow):?>
+                    <li style="height:33px;" id="notificacioLlista" rel="<?php echo $notificacionRow->getIdNoticia(); ?>" tipus="<?php echo $notificacionRow->getIdTipus(); ?>" user="<?php echo $notificacionRow->getIdUsuariEnv()->getUsername() ?>" idNot="<?php echo $notificacionRow->getId() ?>" >
+                        <?php switch ($notificacionRow->getIdTipus()){
+                            case 1:
+                                ?>
+                                        <img src="<?php echo $this->baseUrl() ?>/images/markerico.png" style="vertical-align:-2px;"/>
+                                        <span><?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?></span>
+                                        <?php echo $notificacionRow->getTipus()?>
+                                    <?php
+                                break;
+                            case 2:
+                                ?>
+                                        <img src="<?php echo $this->baseUrl() ?>/images/markercambi.png" style="vertical-align:-2px;"/>
+                                        <span><?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?></span>
+                                        <?php echo $notificacionRow->getTipus()?>
+                                <?php
+                                break;
+                            case 3:
+                                ?>
+                                        <img src="<?php echo $this->baseUrl() ?>/images/groups.png" style="vertical-align:-2px;"/>
+                                        <span><?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?></span>
+                                        <?php echo $notificacionRow->getTipus()?>
+                                <?php
+                            break;
+                            case 4:
+                                ?>
+                                        <img src="<?php echo $this->baseUrl() ?>/images/comments.png" style="vertical-align:-5px;"/>
+                                        <span><?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?></span>
+                                        <?php echo $notificacionRow->getTipus()?>
+                                <?php
+                            break;
+                            case 5:
+                                ?>
+                                        <img src="<?php echo $this->baseUrl() ?>/images/contestarComment.png" style="vertical-align:-5px;"/>
+                                        <span><?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?></span>
+                                        <?php echo $notificacionRow->getTipus()?>
+                                <?php
+                            break;
+                       }?>
+                    </li>
+                    
+                <?php endforeach;?>
+                    <li style="text-align:center;" id="notificacioLlista" tipus="6">
+                        <h6> Ver Historial De Notificaciones</h6>
+                     </li>
+                <?php } ?>
+             </ul>
+    </div>
+    </div>
+   <!--
+    <a id="logout-enllac" href="<?php echo $this->baseUrl()."/index/logout";?>">
+        <div  id="logoutdiv">
+            <span class="logout-icon" style="margin-right: 7px;"></span>Logout
+        </div>
+    </a>-->
+
+<?php else: ?>
+<?php if($this->mostra == "4") { ?>
+<a id="registro-enllac">
+    <div  id="registrediv">
+        Registrarse
+    </div>
+</a>
+<?php }else{ ?>
+<a id="registro-enllac">
+    <div  id="registrediv">
+        Registrarse
+    </div>
+</a>
+<?php } ?>
+<a id="login-enllac">
+    <div  id="logindiv">
+        Login
+    </div>
+</a>
+
+<?php endif ?>
+
+<script>
+
+ jQuery("a#registro-enllac").live("click",function(){
+        jQuery("div#modal-wrapper2").fadeIn(0);
+        jQuery("div#registro-dock").fadeIn(500);
+ });
+
+  jQuery("a.dismiss2").live("click",function(){
+        jQuery("div#modal-wrapper2").fadeOut(50);
+        jQuery("div#registro-dock").fadeOut(50);
+ });
+
+  jQuery("a.dismiss3").live("click",function(){
+        jQuery("div#modal-wrapper2").fadeOut(50);
+        jQuery("div#captcha-dock").fadeOut(50);
+ });
+
+ jQuery("#enviarRegistre").live("click",function(){
+     jQuery("form#registroform").submit();
+ });
+
+ jQuery("#ContinuarRegistre").live("click",function(){
+    var error=0;
+
+    if(jQuery("input#nombre").val().length==0 ){
+       jQuery("div#message-dock").fadeIn(300);
+       setTimeout("tancarFinestreDock()", 5000);
+       error=1;
+    }
+
+    if(jQuery("input#username").val().replace(/^\s+|\s+$/g,"").length==0|| jQuery("input#username").val().replace(/^\s+|\s+$/g,"").length>12 ){
+       jQuery("div#message-dock").fadeIn(300);
+       if(error!=1){
+           setTimeout("tancarFinestreDock()", 5000);
+       }
+       error=1;
+    }else{
+        jQuery("input#username").val(jQuery("input#username").val().replace(/^\s+|\s+$/g,""));
+    }
+
+    if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(jQuery("input#email").val())){
+        email = jQuery("input#email").val();
+    }else{
+       jQuery("div#message-dock").fadeIn(300);
+       if(error!=1){
+           setTimeout("tancarFinestreDock()", 5000);
+       }
+       error=1;
+    }
+
+     if(jQuery("input#password").val().replace(/^\s+|\s+$/g,"").length<6){
+       if(error==0){
+       jQuery("div#message-dock-password").fadeIn(300);
+       setTimeout("tancarFinestreDockPassword()", 5000);
+       error=1;
+       }
+    }else{
+       jQuery("input#password").val(jQuery("input#password").val().replace(/^\s+|\s+$/g,""));
+    }
+
+    if(error==0){
+         jQuery("div#registro-dock").fadeOut(50);
+         jQuery("div#captcha-dock").fadeIn(0);
+    }
+   
+ });
+
+
+ jQuery("a.dismiss").live("click",function(){
+        jQuery("div#modal-wrapper").fadeOut(50);
+        jQuery("div#login-dock").fadeOut(50);
+ });
+
+ jQuery("a#login-enllac").live("click",function(){
+        jQuery("div#modal-wrapper").fadeIn(0);
+        jQuery("div#login-dock").fadeIn(500);
+ });
+var obert = 0;
+ jQuery("a#notificacions").live("click",function(){
+        if(obert==0){
+         jQuery("div.flyout-container").fadeIn(0);
+         jQuery("div#notifications-container").addClass("open");
+         jQuery("span#imatgeArrow").html("<img src=\"<?php echo $this->baseUrl(); ?>/images/arrowup.jpg\"/>");
+         obert=1;
+        }else{
+          jQuery("div.flyout-container").fadeOut(0);
+         jQuery("div#notifications-container").removeClass("open");
+         jQuery("span#imatgeArrow").html("<img src=\"<?php echo $this->baseUrl(); ?>/images/arrowdown.jpg\"/>");
+         obert=0;
+        }
+ });
+
+ jQuery("#notificacioLlista").live("click",function(){
+ 
+    idNoticia = jQuery(this).attr("rel");
+    //alert(idNoticia);
+    tipus = jQuery(this).attr("tipus");
+    username = jQuery(this).attr("user");
+    idNot = jQuery(this).attr("idNot");
+    numNot--;
+    jQuery("notification-count").html(numNot);
+    if(tipus==1){
+        window.location.href=baseUrl+"/map/ver2/id/"+idNoticia+"/idNotificacion/"+idNot;
+    }else if(tipus==2){
+        window.location.href=baseUrl+"/map/cambiar2/id/"+idNoticia+"/idNotificacion/"+idNot;
+    }else if(tipus==3){
+        window.location.href=baseUrl+"/index/usuari/nomUser/"+username+"/idNotificacion/"+idNot;
+    }else if(tipus==4){
+        window.location.href=baseUrl+"/index/noticiasnotificacion/idNoticia/"+idNoticia+"/idNotificacion/"+idNot;
+    }else if(tipus==5){
+        window.location.href=baseUrl+"/index/noticiasnotificacion/idNoticia/"+idNoticia+"/idNotificacion/"+idNot;
+    }else if(tipus==6){
+        window.location.href=baseUrl+"/privat/historialnotificacion";
+    }
+    
+ });
+
+
+</script>

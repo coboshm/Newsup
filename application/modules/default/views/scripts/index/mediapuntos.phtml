@@ -1,0 +1,183 @@
+<ul id="comment-sorting" class="pillboxes filter-menu group" style="margin-bottom: 10px; background: #eee;">
+    <li>
+        <a id="filter-puntos" class="sort" rel="">Ranking puntos </a>
+    </li>
+    <li class="divider show-expanded">
+        <a id="filter-mediapuntos" class="sort active" rel="">Ranking media puntos/noticia</a>
+    </li>
+    <?php if($this->loggedIn==true): ?>
+    <li style="float: right;">
+         <a id="posicio-pag" fil="<?php echo $this->filtre; ?>" rel="<?php echo $this->posicioRanking ?>">Estás en la posición <?php echo $this->posicioRanking ?></a>
+    </li>
+    <?php endif ?>
+</ul>
+<div id="aquiNews">
+        <?php $posicio =1?>
+
+       <?php foreach($this->ranking as $rankingRow){?>
+
+            <div class="group usuariPer" style="margin-top: 17px; margin-bottom: 14px; -moz-border-radius:5px; padding:3px; " id="usuarioPetit<?php echo $rankingRow->getUser()->getId(); ?>">
+                <div style="float:left;margin-top: -5px; margin-right: -30px; font-weight: bold; position: relative; background: #669900; min-width: 30px; padding:5px; color:#fff; border:1px solid #000; -moz-border-radius:30px; text-align:center;"><?php echo $posicio; ?></div>
+                <div class="img-rankin">
+                    
+                    <?php if($rankingRow->getUser()->getImage() !=null){ ?>
+                         <?php
+                            $nomImatge = $rankingRow->getUser()->getImage();
+                            $img = "img/$nomImatge";
+                            //Zend_Debug::dump($img);
+
+                            list($amplada, $alt, $tipus, $atributs) = getimagesize($img);
+                            if($amplada>$alt){
+                                $ampladaNova = 150;
+                                $altNou = floor($alt * $ampladaNova / $amplada);
+                            }else{
+                                $altNou = 140;
+                                $ampladaNova = floor($amplada * $altNou / $alt);
+                            }
+                          ?>
+                       <?php } ?>
+                        <?php if($rankingRow->getUser()->getImage() !=null){ ?>
+                        <a  class="current-user-thumbnail-ranking" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $rankingRow->getUser()->getUsername(); ?>">
+                            <img src="<?php echo $this->baseUrl();?>/img/<?php echo $rankingRow->getUser()->getImage(); ?>" width="<?php echo $ampladaNova/2; ?>px" height="<?php echo $altNou/2; ?>px">
+                        </a>
+                    <?php }else{ ?>
+                    <a style="background: url(images/perfil60.png) no-repeat center #E5ECF3;
+                       width:60px; height:65px;" class="current-user-thumbnail-ranking" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $rankingRow->getUser()->getUsername(); ?>"></a>
+                    <?php }?>
+                </div>
+                <?php if($this->loggedIn==true){ ?>
+                <?php if($this->user->id_user != $rankingRow->getUser()->getId()){ ?>
+                <div class="contingutSegueix2">
+                    <div style="float:left">
+                        <span style="font-weight:bold; font-size: 1em;">Nombre de Usuario:</span>
+                        <span style="padding-left:10px;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $rankingRow->getUser()->getUsername(); ?>"><?php echo $rankingRow->getUser()->getUsername(); ?></a></span>
+                    </div>
+                     <div style="float:left; padding-left: 35px;">
+                         <span style="font-weight:bold; font-size: 1em;">Localidad:</span>
+                         <span style="padding-left:10px;">
+                             <span style="color:#669900;font-weight:bold;">
+                                <?php if($rankingRow->getUser()->getPoblacio()!=null){ ?>
+                                    <?php echo $rankingRow->getUser()->getPoblacio(); ?>
+                                <?php }else{ ?>
+                                    Ns/Nc
+                                <?php } ?>
+                             </span></span>
+                     </div>
+                     <div id="puntos-ranking">
+                        <?php echo round($rankingRow->getPuntos(),2) ?> Puntos/Noticias
+                    </div>
+                    <div style="clear:both; float:left; padding-top:15px;">
+                        <span style="font-weight:bold; font-size: 1em;">Ha subido <span style="color:#669900;font-weight:bold;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $rankingRow->getUser()->getUsername(); ?>"><?php echo $rankingRow->getUser()->getNumNoticies(); ?></a></span> noticias</span>
+                     </div>
+                    <div style="float:left; padding-left: 15px;padding-top:15px;">
+                         <span style="font-weight:bold; font-size: 1em;">Le siguen <span style="color:#669900;font-weight:bold;"><?php echo $rankingRow->getUser()->getNumSeguidors(); ?></span> Usuarios</span>
+                     </div>
+                    <div style="float:left; padding-left: 15px;padding-top:15px;">
+                         <span style="font-weight:bold; font-size: 1em;">Él sigue a <span style="color:#669900;font-weight:bold;"><?php echo $rankingRow->getUser()->getNumSegueix(); ?></span> Usuarios</span>
+                     </div>
+                   
+                </div>
+
+                <?php $segueixo = false; ?>
+                <?php foreach($this->seguiments as $seguiment){ ?>
+                    <?php if($seguiment == $rankingRow->getUser()->getId()){ ?>
+                    <?php  $segueixo = true;?>
+                    <?php }?>
+                <?php } ?>
+                <?php if($segueixo == true){ ?>
+                <div style="float:right; padding-top: 16px;" id="seguidornou2<?php echo $rankingRow->getUser()->getId(); ?>">
+                      <span style="height: 15px; text-align:center; width: 75px;" id="seguidorDownPetit" class="btn btn-special4 has-tooltip" rel="<?php echo $rankingRow->getUser()->getId(); ?>">
+                         No Seguir
+                      </span>
+                </div>
+                <?php }else{ ?>
+                <div style="float:right;padding-top: 16px;" id="seguidornou2<?php echo $rankingRow->getUser()->getId(); ?>">
+                    <span style="height: 15px; text-align:center; width: 75px;" id="seguidorOkPetit" class="btn btn-follow btn-primary has-tooltip" rel="<?php echo $rankingRow->getUser()->getId(); ?>">Seguirlo</span>
+                </div>
+                <?php } ?>
+                <?php }else{ ?>
+                <div style="float:left; padding-left: 20px; padding-top:16px;">
+                    <div style="float:left">
+                        <span style="font-weight:bold; font-size: 1em;">Nombre de Usuario:</span>
+                        <span style="padding-left:10px;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $rankingRow->getUser()->getUsername(); ?>"><?php echo $rankingRow->getUser()->getUsername(); ?></a></span>
+                    </div>
+                     <div style="float:left; padding-left: 35px;">
+                         <span style="font-weight:bold; font-size: 1em;">Localidad:</span>
+                         <span style="padding-left:10px;">
+                             <span style="color:#669900;font-weight:bold;">
+                                <?php if($rankingRow->getUser()->getPoblacio()!=null){ ?>
+                                    <?php echo $rankingRow->getUser()->getPoblacio(); ?>
+                                <?php }else{ ?>
+                                    Ns/Nc
+                                <?php } ?>
+                             </span></span>
+                     </div>
+                    <div id="puntos-ranking">
+                        <?php echo round($rankingRow->getPuntos(),2) ?> Puntos/Noticias
+                    </div>
+                    <div style="clear:both; float:left; padding-top:15px;">
+                        <span style="font-weight:bold; font-size: 1em;">Ha subido <span style="color:#669900;font-weight:bold;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $rankingRow->getUser()->getUsername(); ?>"><?php echo $rankingRow->getUser()->getNumNoticies(); ?></a></span> noticias</span>
+                     </div>
+                    <div style="float:left; padding-left: 15px;padding-top:15px;">
+                         <span style="font-weight:bold; font-size: 1em;">Le siguen <span style="color:#669900;font-weight:bold;"><?php echo $rankingRow->getUser()->getNumSeguidors(); ?></span> Usuarios</span>
+                     </div>
+                    <div style="float:left; padding-left: 15px;padding-top:15px;">
+                         <span style="font-weight:bold; font-size: 1em;">Él sigue a <span style="color:#669900;font-weight:bold;"><?php echo $rankingRow->getUser()->getNumSegueix(); ?></span> Usuarios</span>
+                     </div>
+                    
+                </div>
+                <?php } ?>
+                <?php }else{ ?>
+                 <div style="float:left; padding-left: 20px; padding-top:16px;">
+                    <div style="float:left">
+                        <span style="font-weight:bold; font-size: 1em;">Nombre de Usuario:</span>
+                        <span style="padding-left:10px;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $rankingRow->getUser()->getUsername(); ?>"><?php echo $rankingRow->getUser()->getUsername(); ?></a></span>
+                    </div>
+                     <div style="float:left; padding-left: 35px;">
+                         <span style="font-weight:bold; font-size: 1em;">Localidad:</span>
+                         <span style="padding-left:10px;">
+                             <span style="color:#669900;font-weight:bold;">
+                                <?php if($rankingRow->getUser()->getPoblacio()!=null){ ?>
+                                    <?php echo $rankingRow->getUser()->getPoblacio(); ?>
+                                <?php }else{ ?>
+                                    Ns/Nc
+                                <?php } ?>
+                             </span></span>
+                     </div>
+                    <div id="puntos-ranking">
+                        <?php echo round($rankingRow->getPuntos(),2) ?> Puntos/Noticias
+                    </div>
+                    <div style="clear:both; float:left; padding-top:15px;">
+                        <span style="font-weight:bold; font-size: 1em;">Ha subido <span style="color:#669900;font-weight:bold;"><a class="story-item-submitter" style="font-weight:bold;" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $rankingRow->getUser()->getUsername(); ?>"><?php echo $rankingRow->getUser()->getNumNoticies(); ?></a></span> noticias</span>
+                     </div>
+                    <div style="float:left; padding-left: 15px;padding-top:15px;">
+                         <span style="font-weight:bold; font-size: 1em;">Le siguen <span style="color:#669900;font-weight:bold;"><?php echo $rankingRow->getUser()->getNumSeguidors(); ?></span> Usuarios</span>
+                     </div>
+                    <div style="float:left; padding-left: 15px;padding-top:15px;">
+                         <span style="font-weight:bold; font-size: 1em;">El sigue a <span style="color:#669900;font-weight:bold;"><?php echo $rankingRow->getUser()->getNumSegueix(); ?></span> Usuarios</span>
+                     </div>
+                     
+                </div>
+                <?php } ?>
+            </div>
+                <?php $posicio++;?>
+       <?php } ?>
+       <?php if($this->cantitat > 15){ ?>
+            <ul class="pagination group btn-loader btn-loader-bottom no-prev no-next story-list-container" role="navigation"aria-labelledby="paginglabel">
+                <li class="prev" >
+                    <a class="btn btn-default btn-small" id="prev-rank" rel="<?php echo $this->pagina; ?>" fil="<?php echo $this->filtre; ?>" cat="1">
+                        <span class="uitext" id="prev-rank">Prev</span>
+                    </a>
+                </li>
+                <li class="page-num" style="padding-top:7px;">
+                    Pagina
+                    <span class="pagination-current"><?php echo $this->pagina; ?></span>
+                </li>
+                <li class="next">
+                    <a class="btn btn-default btn-small" id="next-rank" rel="<?php echo $this->pagina; ?>" fil="<?php echo $this->filtre; ?>" cat="1">
+                        <span class="uitext" id="next-rank">Next</span>
+                    </a>
+                </li>
+            </ul>
+        <?php } ?>
+</div>

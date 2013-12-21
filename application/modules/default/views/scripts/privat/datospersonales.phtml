@@ -1,0 +1,166 @@
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+            <div id="left-column" class="column narrow attached-menu  group">
+                 <?php
+                //aqui fem un include
+                echo $this->render("opcionsperfil.phtml"); ?>
+            <div id="titul-categorias" style="margin-top:35px;">
+               Gestionar Perfil:
+            </div>
+             <ul class="sidebar-menu" >
+                    <li>
+                        <a id="categoria"  href="<?php echo $this->baseUrl();?>/privat/editar">Imagen y Aficiones
+                        </a>
+                    </li>
+                    <li>
+                        <a id="categoria" href="<?php echo $this->baseUrl() ?>/privat/password">Cambiar Contraseña
+                        </a>
+                    </li>
+                    <li>
+                        <a id="categoria" class="active" href="<?php echo $this->baseUrl() ?>/privat/datospersonales">Datos Personales
+                        </a>
+                    </li>
+                    <li>
+                        <a id="categoria" href="<?php echo $this->baseUrl() ?>/privat/etiquetas">Gestionar Etiquetas
+                        </a>
+                    </li>
+            </ul>
+            </div>
+            <div id="main-column" class="column attached-menu group">
+                 <div id="titul-categorias" style="padding-left:4px; background:#f2f2f2; border-top:1px solid #e2e2e2; padding:4px 5px 4px 5px;">
+                      Datos Personales
+                   </div>
+                <div style="margin-top:15px;padding-left:5px;"><strong>Manten actualizados tus datos</strong></div>
+                <div style="clear:both;margin-top:10px; padding-left:5px;">Ten en cuenta que si cambias tu email recibiras las notificaciones en tu nueva email</div>
+                <div style="clear:both;margin-top:10px; padding-left:5px;">Si cambias el nombre de usuario, para acceder tendras que acceder con el nuevo.</div>
+                <div id="ContenidorDades3" style="margin-top:20px; padding-left: 20px;">
+                    <div id="cont1editar" style="clear:both;padding-top:20px;">
+                        <div style="float:left;">
+                            <div style="height: 15px; background: #eeeeee">
+                                Nombre de Usuario:
+                            </div>
+                            <input type="text" id="username" name="username" class="text-input placeholder-input" style="width:225px;" value="<?php echo $this->dades->username;?>" />
+                        </div>
+                        <div style="float:left;margin-top:17px;">
+                            <span class="ejemplo" style="background: #ffffff;margin-left:20px;">
+                            </span>
+                        </div>
+                    </div>
+                    <div id="cont1editar" style="clear:both;padding-top:20px;">
+                        <div style="float:left;">
+                            <div style="height: 15px; background: #eeeeee">
+                                Nombre:
+                            </div>
+                            <input type="text" id="nombre" class="text-input placeholder-input" style="width:225px;" value="<?php echo $this->dades->nombre?>" />
+                        </div>
+                        <div style="float:left;margin-top:17px;">
+                            <span class="ejemplo" style="background: #ffffff;margin-left:20px;">
+                            </span>
+                        </div>
+                    </div>
+                    <div id="cont1editar" style="clear:both;padding-top:20px; float:left;">
+                        <div>
+                            <div style="height: 15px; background: #eeeeee">
+                                Primer Apellido:
+                            </div>
+                            <input type="text" id="apellido1" class="text-input placeholder-input" style="width:225px;" value="<?php echo $this->dades->primer_apellido?>" />
+                        </div>
+                    </div>
+                    <div id="cont1editar" style="float:left;padding-top:20px; padding-left: 40px;">
+                        <div>
+                            <div style="height: 15px; background: #eeeeee">
+                                Segundo Apellido:
+                            </div>
+                            <input type="text" id="apellido2" class="text-input placeholder-input" style="width:225px;" value="<?php echo $this->dades->segundo_apellido?>" />
+                        </div>
+                    </div>
+                    <div id="cont1editar" style="clear:both;padding-top:20px;">
+                        <div style="float:left;">
+                            <div style="height: 15px; background: #eeeeee">
+                                Email:
+                            </div>
+                            <input type="text" id="email" class="text-input placeholder-input" style="width:225px;" value="<?php echo $this->dades->email?>" />
+                        </div>
+                        <div style="float:left;margin-top:17px;">
+                            <span class="ejemplo" style="background: #ffffff;margin-left:20px;">
+                            </span>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div style=" clear:both;float: left; padding-left:20px;padding-top:22px;" id="botoId">
+                        <input type="button" id="boto-dades" class="btn btn-primary has-tooltip" value="Realizar Cambios"/>
+                    </div>
+            </div>
+            <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    jQuery("#boto-dades").live("click",function(){
+        var error=0;
+
+        if(jQuery("input#nombre").val().length>2){
+            nombre = jQuery("input#nombre").val();
+        }else{
+            jQuery("div#message-dock").fadeIn(300);
+            error=1;
+        }
+
+        if(jQuery("input#username").val().length>4 || jQuery("input#username").val().length<12 ){
+            username = jQuery("input#username").val();
+        }else{
+            jQuery("div#message-dock").fadeIn(300);
+            error=1;
+        }
+
+        if(jQuery("input#apellido1").val().length<2){
+           jQuery("div#message-dock").fadeIn(300);
+           error=1;
+        }else{
+           apellido1 = jQuery("input#apellido1").val();
+        }
+
+        if(jQuery("input#apellido2").val().length<2){
+           jQuery("div#message-dock").fadeIn(300);
+           error=1;
+        }else{
+            apellido2 = jQuery("input#apellido2").val();
+        }
+
+        if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(jQuery("input#email").val())){
+            email = jQuery("input#email").val();
+        }else{
+           jQuery("div#message-dock").fadeIn(300);
+           error=1;
+        }
+        if(error==0){
+
+            jQuery("div#botoId").html("<img src=\""+baseUrl+"/images/loading.gif\">");
+
+            jQuery.ajax({
+                type: "POST",
+                url: baseUrl+"/privat/datospersonalesupdate",
+                async: true,
+                data: "&nombre="+nombre+"&apellido1="+apellido1+"&apellido2="+apellido2+"&email="+email+"&username="+username,
+
+                success: function(data){
+                  if(data){
+                       jQuery("div#ContenidorDades3").html(data);
+                       jQuery("div#botoId").html("<input type=\"button\" id=\"boto-dades\" class=\"btn btn-primary has-tooltip\" value=\"Realizar Cambios\"/>");
+
+                    }
+                }
+            })
+        }
+    });
+    
+</script>

@@ -1,0 +1,25 @@
+<?php if($this->noticiesFinals == null){ ?>
+     <div  class="story-item-gutters group" style="margin-top: 17px; margin-bottom: 14px;">
+            <div style="padding:5px;font-weight: bold;padding-left:10%;">¿Aún no sigue a nadie? ¡Házte fan de la gente que sube las noticias que le interesan!<br/></div>
+        </div>
+<?php }else{ ?>
+<?php echo $this->render("foreachnoticiesperfil.phtml"); ?>
+<?php if($this->cantitat >15){ ?>
+<ul class="pagination group btn-loader btn-loader-bottom no-prev no-next story-list-container" role="navigation"aria-labelledby="paginglabel">
+    <li class="prev" >
+        <a class="btn btn-default btn-small" id="prevSegits" rel="<?php echo $this->pagina; ?>" tip="3" cat="<?php echo $this->idCategoria; ?>">
+            <span class="uitext">Anterior</span>
+        </a>
+    </li>
+    <li class="page-num" style="padding-top:7px;">
+        Página
+        <span class="pagination-current"><?php echo $this->pagina; ?></span>
+    </li>
+    <li class="next">
+        <a class="btn btn-default btn-small" id="nextSegits" rel="<?php echo $this->pagina; ?>" tip="3" cat="<?php echo $this->idCategoria; ?>">
+            <span class="uitext">Siguiente</span>
+        </a>
+    </li>
+</ul>
+<?php } ?>
+<?php } ?>

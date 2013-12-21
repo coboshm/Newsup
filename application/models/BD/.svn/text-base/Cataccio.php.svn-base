@@ -1,0 +1,64 @@
+<?php
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of Cataccio
+ *
+ * Marc Cobos
+ */
+class Cataccio extends Zend_Db_Table
+{
+        protected $_name = "cataccio";
+        protected $_primary = "id_traspas";
+
+        public function getCategories($id,$textcategoria)
+        {
+
+            $select = $this->select();
+            $select->where("id_accio = $id");
+            $select->where($textcategoria);
+            $categories = $this->fetchAll($select);
+            if($categories->count()>0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        public function getAllCategories($id)
+        {
+            $select = $this->select();
+            $select->where("id_accio = $id");
+            $cate = $this->fetchAll($select);
+            return $cate;
+        }
+
+        public function borrcat($id)
+        {
+
+            $where = $this->getAdapter()->quoteInto("id_categoria = $id");
+            $this->delete($where);
+        }
+
+        public function borraccio($id)
+        {
+
+            $where = $this->getAdapter()->quoteInto("id_accio = ?", $id);
+            $this->delete($where);
+        }
+
+        public function afegircataccio($id,$categoria)
+        {
+
+            $afegir = $this->createRow();
+            $afegir->id_accio = $id;
+            $afegir->id_categoria = $categoria;
+            $afegir->save();
+
+        }
+
+}
+

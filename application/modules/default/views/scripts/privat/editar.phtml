@@ -1,0 +1,269 @@
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+            <div id="left-column" class="column narrow attached-menu  group">
+                <?php
+                //aqui fem un include
+                echo $this->render("opcionsperfil.phtml"); ?>
+                <div id="titul-categorias" style="margin-top:35px;">
+                   Gestionar Perfil:
+                </div>
+             <ul class="sidebar-menu">
+                    <li>
+                        <a id="categoria" class="active" href="<?php echo $this->baseUrl();?>/privat/editar">Imagen y Aficiones
+                        </a>
+                    </li>
+                    <li>
+                        <a id="categoria" href="<?php echo $this->baseUrl() ?>/privat/password">Cambiar Contraseña
+                        </a>
+                    </li>
+            </ul>
+            </div>
+            <div id="main-column" class="column attached-menu group">
+                 <div id="titul-categorias" style="padding-left:4px; background:#f2f2f2; border-top:1px solid #e2e2e2; padding:4px 5px 4px 5px;">
+                      Mi Perfil
+                   </div>
+                <div style="margin-top:15px;padding-left:5px;"><strong>Mantén actualizados sus datos</strong></div>
+                <div style="clear:both;margin-top:10px; padding-left:5px;">Ten en cuenta que si cambia su email recibirá las notificaciones en su nuevo email</div>
+                <div class="form-fields float-left" id="photo-img" style="margin-top: 20px;float:left;">
+                   <?php if($this->usuario->getImage() !=null){ ?>
+                         <?php
+                            $nomImatge = $this->usuario->getImage();
+                            $img = "img/$nomImatge";
+                            //Zend_Debug::dump($img);
+
+                            list($amplada, $alt, $tipus, $atributs) = getimagesize($img);
+                            if($amplada>$alt){
+                                $ampladaNova = 150;
+                                $altNou = floor($alt * $ampladaNova / $amplada);
+                            }else{
+                                $altNou = 140;
+                                $ampladaNova = floor($amplada * $altNou / $alt);
+                            }
+                          ?>
+                   <?php } ?>
+                    <div style="float:left;" id="imatgePerfil">
+                        <?php if($this->usuario->getImage() !=null){ ?>
+                        <img class="profile-photo" src="<?php echo $this->baseUrl();?>/img/<?php echo $this->usuario->getImage(); ?>" width="<?php echo $ampladaNova; ?>px" height="<?php echo $altNou; ?>px">
+                        <?php }else{ ?>
+                        <img class="profile-photo" src="<?php echo $this->baseUrl();?>/images/perfil2.png" width="140px" height="140px">
+                        <?php }?>
+                    </div>
+                    <div style="float:left;">
+                    <table id="files" style="margin-top:20px;margin-left:15px; height: 50px;"></table>
+                    <div class="flexible-input"  style="padding-top:35px; padding-left: 15px;">
+                         <?php echo $this->form ?>
+                        
+                    </div>
+                    
+                    </div>
+                </div>
+                
+                <!-- Alex --> 
+                
+                <div id="ContenidorDades">
+                    <div id="cont1editar" style="clear:both;height: 60px;">
+                        <div style="float:left;">
+                            <div style="height: 15px; background: #eeeeee">
+                                Email:
+                            </div>
+                            <input type="text" id="email" class="text-input placeholder-input" style="width:225px;" value="<?php echo $this->dadesUser->email?>" />
+                        </div>
+                        <div style="float:left;margin-top:17px;">
+                            <span class="ejemplo" style="background: #ffffff;margin-left:20px;">
+                            </span>
+                        </div>
+                    </div>
+                        <div id="cont2editars" style="height: 60px; clear:both;">
+                            <div style="float:left;">
+                                <div style="height: 15px; background: #eeeeee">
+                                    Localidad:
+                                </div>
+                                <input type="text" class="text-input placeholder-input" style="width:225px;" id="localidad" name="localidad" value="<?php echo $this->dadesUser->Localidad ?>"/>
+                            </div>
+                            <div style="float:left;margin-top:17px;">
+                                <span class="ejemplo" style="margin-left:20px;height: 25px; background: #ffffff">
+                                    Ejemplo: Barcelona,..
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div id="cont2editar" style="height: 60px">
+                            <div style="float:left;">
+                                <div style="height: 15px; background: #eeeeee">
+                                    Página web:
+                                </div>
+                                <input type="text" style="width:225px;" class="text-input placeholder-input" id="aficiones" name="aficiones" value="<?php echo $this->dadesUser->Aficiones ?>"/>
+                            </div>
+                            <div style="float:left;margin-top:17px;">
+                                <span class="ejemplo" style="margin-left:20px;height: 25px; background: #ffffff">
+                                    Ejemplo: http://www.prueba.blogspot.com,..
+                                </span>
+                            </div>
+                        </div>
+                        <div id="cont3editars" style="height: 60px">
+                            <div style="float:left;">
+                            <div style="height: 15px; background: #eeeeee">
+                                Fecha nacimiento:
+                            </div>
+                            <?php if($this->dadesUser->Data_neixament!=null){ ?>
+                            <?php $dat = explode("-",$this->dadesUser->Data_neixament);?>
+                            <?php $dataok = "$dat[2]".'-'."$dat[1]".'-'."$dat[0]"; ?>
+                            
+                            <script>
+                                var dataPicker ="<?php echo $dataok;?>";
+                            </script>
+                            <?php }else{ ?>
+                            <script>
+                                var dataPicker =null;
+                            </script>
+                            <?php } ?>
+                            <input id="datepicker" class="text-input placeholder-input" style="width:225px;" type="text" name="data" value="<?php echo $dataok ?>" readonly="readonly"/>
+                            </div>
+                            <div style="float:left;margin-top:17px;">
+                                <span  class="ejemplo" style="background: #ffffff; margin-left:20px;">
+                                    Ejemplo: 21-05-1981
+                                </span>
+                            </div>
+                        </div>
+                        <div id="cont1editar" style="height: 120px">
+                            <div style="float:left;">
+                                <div style="height: 15px; background: #eeeeee">
+                                    Sobre su vida:
+                                </div>
+                                <textarea id="tuVida"  class="text-input placeholder-input" style="resize: none; overflow: hidden;font-size:12px;" name="tuVida" rows="4" cols="65" ><?php echo $this->dadesUser->Tuvida ?></textarea>
+                            </div>
+                            <div style="float:left;margin-top:17px;">
+                                <span class="ejemplo" style="background: #ffffff;margin-left:20px;">
+                                    Máximo 200 caracteres
+                                </span>
+                            </div>
+                        </div>
+                        <!--<input type="hidden" id="id" name="id" value="<?php //echo $this->usuario->getId(); ?>"/>-->
+                        
+                </div>
+                <div style="text-align: left;">
+                           <div id="enviarCambios">
+                                <div  id="boto-dades" style="float:left; text-align:center;" class="btn btn-primary has-tooltip">Realizar Cambios</div>
+                            </div>
+                        </div>
+            </div>
+            <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+     jQuery("div.edit-input").live("click",function(){
+     
+        jQuery("div.flexible-input").fadeIn(300);
+
+     });
+
+        $(function() {
+		$( "#datepicker" ).datepicker();
+	});
+
+        jQuery(function() {
+            jQuery("#datepicker").datepicker('option','changeYear',true);
+            jQuery("#datepicker").datepicker('option', 'monthNames', ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']);
+            jQuery("#datepicker").datepicker('option', 'dayNamesMin', ['do','lu', 'ma', 'mie', 'jue', 'vie', 'sa' ]);
+            jQuery("#datepicker").datepicker('option', 'dateFormat', 'dd-mm-yy');
+            jQuery("#datepicker").datepicker('option', 'flat', false);
+            if(dataPicker!=null){
+                $("#datepicker").val(dataPicker);
+            }
+        });
+
+    jQuery("#boto-dades").live("click",function(){
+        var error=0;
+
+        
+        localidad = jQuery("input#localidad").val();
+        
+
+        if(jQuery("textarea#tuVida").val().length>200){
+           jQuery("div#message-dock").fadeIn(300);
+           if(error!=1){
+               setTimeout("tancarFinestreDock()", 5000);
+           }
+        }else{
+            tuVida = jQuery("textarea#tuVida").val();
+        }
+
+        if(jQuery("input#aficiones").val().length>200){
+           jQuery("div#aficiones").fadeIn(300);
+           error=1;
+        }else{
+            aficiones = jQuery("input#aficiones").val();
+        }
+        
+        if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(jQuery("input#email").val())){
+            email = jQuery("input#email").val();
+        }else{
+           jQuery("div#message-dock").fadeIn(300);
+           if(error!=1){
+               setTimeout("tancarFinestreDock()", 5000);
+           }
+           error=1;
+        }
+        
+        date = jQuery("input#datepicker").val();
+        id = jQuery("input#id").val();
+        if(error==0){
+
+            jQuery("div#enviarCambios").html("<img src=\""+baseUrl+"/images/loading.gif\">");
+            jQuery.ajax({
+                type: "POST",
+                url: baseUrl+"/privat/formdades",
+                async: true,
+                data: "&localidad="+localidad+"&tuVida="+tuVida+"&aficiones="+aficiones+"&data="+date+"&email="+email,
+
+                success: function(data){
+                  if(data){
+
+                       jQuery("div#ContenidorDades").html(data);
+                       jQuery("div#enviarCambios").html("<input type=\"button\" id=\"boto-dades\" style=\"float:left;text-align:center;\" class=\"btn btn-primary has-tooltip\" value=\"Realizar Cambios\"/>");
+
+                       //alert('Error1');
+                   }
+                }
+            })
+        }
+    });
+
+
+/*global $ */
+
+        $(function () {
+        
+            $('#file_upload').fileUploadUI({
+                
+                uploadTable: $('#files'),
+                downloadTable: $('#imatgePerfil'),
+                buildUploadRow: function (files, index) {
+                    return $('<tr><td>' + files[index].name + '<\/td>'+
+                            '<td class="file_upload_progress" style="padding-left:5px;"><div><\/div><\/td>' +
+                            '<td class="file_upload_cancel">' +
+                            '<button class="ui-state-default ui-corner-all" title="Cancel">' +
+                            '<span class="ui-icon ui-icon-cancel">Cancel<\/span>' +
+                            '<\/button><\/td><\/tr>');
+                },
+                buildDownloadRow: function(file){
+                    jQuery("#imatgePerfil").html('<img class="profile-photo" src="'+baseUrl+'/img/'+file.name+'" width="140px" height="140px">');
+                    return $('');
+                }
+
+            });
+          
+        });
+
+
+
+
+</script>

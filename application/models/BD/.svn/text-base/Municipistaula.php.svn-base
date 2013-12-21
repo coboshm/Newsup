@@ -1,0 +1,42 @@
+<?php
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of Categoriestaula
+ *
+ * Marc Cobos
+ */
+class Municipistaula extends Zend_Db_Table
+{
+    protected $_name = "municipi";
+    protected $_primary = "id_municipi";
+
+    public function getNomMunicipi($id)
+    {
+        $categoria1 = $this->find($id)->current();
+        return $categoria1->nom;
+    }
+
+    public function getMunicipi($id)
+    {
+        $municipi = $this->find($id)->current();
+        return $municipi;
+    }
+
+    public function getallMunicipi()
+    {
+        $municipi = array();
+        $municipi = $this->fetchAll();
+        $llistamunicipis = array();
+        foreach($municipi as $mun){
+            $muni = new Municipi($mun['id_municipi'], $mun['nom']);
+            $llistamunicipis[] = $muni;
+        }
+        return $llistamunicipis;
+    }
+
+}
+

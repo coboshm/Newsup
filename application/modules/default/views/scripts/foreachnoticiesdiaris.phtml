@@ -1,0 +1,83 @@
+<?php foreach($this->noticiesFinals as $diari){ ?>
+    <ul id="comment-sorting" class="pillboxes filter-menu group" style="margin-top: 10px; margin-bottom: 10px; background: #eee;">
+        <li>
+           <img src="<?php echo $this->baseUrl(); ?>/favicons/<?php echo $diari->getFavicon(); ?>" width="16px" height="16px" alt="favicon"/>
+           <span style="padding-left:10px;"><?php echo $diari->getNom(); ?></span>
+        </li>
+        <li style="float:right; margin-top: 3px;">
+            <span class="ocultarFeed" tip="0" rel="<?php echo $diari->getId(); ?>">Ocultar</span>
+        </li>
+    </ul>
+<?php $x=0; ?>
+   <?php if($diari->getAllNoticies()==null){ ?>
+   <div id="noticiesDiari<?php echo $diari->getId(); ?>">
+     <div  class="story-item-gutters2 group" style="margin-top: 17px; margin-bottom: 14px;">
+        <div style="padding:5px;font-weight: bold;padding-left:10%;">Este diario no tiene noticias actualmente.<br/></div>
+    </div>
+   </div>
+   <?php }else{ ?>
+   <div id="noticiesDiari<?php echo $diari->getId(); ?>">
+   <?php foreach($diari->getAllNoticies() as $noticia){ ?>
+   <?php if($x!=0){ ?>
+    <div style="width:100%; height: 1px; background-color: #eeeeee; margin-right: 5px;"></div>
+   <?php } ?>
+    <?php $x++; ?>
+    <div class="story-item-gutters2 group" style="margin-top: 17px; margin-bottom: 14px;">
+        <?php if($noticia->getImatge() !=null){ ?>
+        <?php  if(!eregi("chrome", $_SERVER['HTTP_USER_AGENT'])){ ?>
+            <div class="story-item-media" style="padding-top:10px;">
+                <div class="story-item-thumb">
+                    <div class="thumb-edges"></div>
+                    <img alt="noticia<?php echo $noticia->getImatge(); ?>" src="http://rir.li/<?php echo $noticia->getImatge(); ?>" width="58px" height="62px">
+                </div>
+            </div>
+          <?php } ?>
+        <?php } ?>
+        <?php if($noticia->getImatge() !=null){ ?>
+        <div class="story-item-content group" style="width:97%;">
+        <?php }else{ ?>
+        <div class="story-item-content group" style="width:100%;">
+        <?php } ?>
+            <div class="story-item-details">
+                <h3 class="story-item-title">
+                     <a target="_blank" href="<?php echo $noticia->getUrl(); ?>"><?php echo $noticia->getTitul200(); ?></a>
+                </h3>
+                <p class="story-item-description">
+                    <a class="story-item-source" href=""><!aqui va la url que ve ex: marca.com-></a>
+                    <a class="story-item-teaser" href="<?php echo $noticia->getUrl(); ?>">
+                        <?php echo $noticia->getDescripcio180();?>
+                        
+                    </a>
+                </p>
+            </div>
+        </div>
+</div>
+
+<?php } ?>
+    </div>
+<?php } ?>
+<?php } ?>
+
+<?php if($this->cantitat != null){?>
+<script>
+
+    var cantitat = <?php echo $this->cantitat; ?>;
+
+</script>
+<?php } ?>
+<script>
+    //alert(dia);
+    var contaremArray = 0;
+   // alert(dia);
+    //alert(dia.length);
+    for(contaremArray=0;contaremArray<dia.length;contaremArray++){
+
+        jQuery("#categoriesMarkers"+dia[contaremArray]).html("<img style=\"vertical-align: -3px;\" src=\""+baseUrl+"/images/checkbox0.png\"/>");
+    }
+    dia = null;
+    dia = Array();
+
+
+
+    
+</script>

@@ -1,0 +1,292 @@
+<?php if($this->comentaris == null){ ?>
+    <div class="nothing-found topbar-spacer">
+        <p class="title">Esta noticia, no tiene comentarios, realize usted el primero.</p>
+    </div>
+<?php }else{ ?>
+    <div id="comentarisDiv">
+<?php foreach($this->comentaris as $comentari){ ?>
+    <?php $votat=0; ?>
+    <?php if($this->loggedIn==true): ?>
+    <?php foreach($comentari->getAllVotsPos() as $votPos){ ?>
+    <?php if($votPos->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+    <?php } ?>
+    <?php foreach($comentari->getAllVotsNeg() as $votNeg){ ?>
+    <?php if($votNeg->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+    <?php } ?>
+    <?php endif ?>
+    <div class="comment group ">
+        <a class="comment-owner-thumbnail">
+            <?php if($comentari->getUsuari()->getImage()!=null){ ?>
+            <img src="<?php echo $this->baseUrl();?>/img/<?php echo $comentari->getUsuari()->getImage(); ?>" width="24px" height="24px">
+            <?php }else{ ?>
+            <img class="comment-author"  src="<?php echo $this->baseUrl() ?>/images/defaultuser.png">
+            <?php } ?>
+        </a>
+    <div class="comment-author group">
+        <p>
+            <a  class="comment-owner-name hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $comentari->getUsuari()->getUsername(); ?>">
+                <?php echo $comentari->getUsuari()->getUsername(); ?>
+            </a>
+            <a class="comment-timestamp">
+                <?php echo $comentari->getData(); ?>
+            </a>
+        </p>
+    </div>
+    <div id="puntuacio2<?php echo $comentari->getId(); ?>">
+        <ul class="comment-digg-counts group" >
+           <?php if($comentari->getAllVots()>=0){ ?>
+                 <li class="digg-count-net" style="color:#669900">
+                    +&nbsp;<?php echo $comentari->getAllVots(); ?>&nbsp;Puntos
+                </li>
+          <?php }else{ ?>
+                <li class="digg-count-net" style="color:#A12A2A">
+                    <?php echo $comentari->getAllVots(); ?>&nbsp;Puntos
+                </li>
+           <?php } ?>
+        </ul>
+        <?php if($votat==0){ ?>
+        <ul class="comment-actions">
+            <li>
+                <a class="comment-digg has-tooltip" rel="<?php echo $comentari->getId(); ?>" id="votarComentUP">UP</a>
+            </li>
+            <li>
+                <a class="comment-bury has-tooltip" rel="<?php echo $comentari->getId(); ?>" id="votarComentDOWN">DOWN</a>
+            </li>
+        </ul>
+        <?php } ?>
+    </div>
+    <div class="comment-content group">
+        <p class="comment-body"><?php echo $comentari->getText();?></p>
+        <ul class="comment-reply-options group">
+            <a class="has-tooltip commentReply" rel="<?php echo $comentari->getId(); ?>">
+               <span class="storylist-icon comments"></span>
+               Contestar
+           </a>
+        </ul>
+    </div>
+    </div>
+    <div id="inline-comment-container<?php echo $comentari->getId(); ?>" class="story-item-comment-form group" style="display:none;margin-left: 6%; clear: both;">
+            <form name="formComentari<?php echo $comentari->getId(); ?>" id="formComentari<?php echo $comentari->getId(); ?>" class="post-comment-form inline-comment-form group active"  method="post" action="<?php echo $this->baseUrl();?>/privat/afegircomentariok">
+                <img alt="" class="story-item-comment-form-thumb" src="<?php echo $this->baseUrl();?>/images/defaultuser.png" width="24px" height="24px">
+                <input type="hidden" class="item_id" value="<?php echo $this->noticia; ?>" name="id">
+                <input type="hidden" class="item_id" value="<?php echo $comentari->getId(); ?>" name="id_pare">
+                <a class="close-it cancel-inline-comment" id="closeComentPare" rel="<?php echo $comentari->getId(); ?>"><span>x</span></a>
+                <textarea class="post-comment-textarea elastic" id="text<?php echo $comentari->getId(); ?>" name="text" style="width: 93%; height: 47px; overflow: hidden;"></textarea>
+                <button class="btn btn-secondary btn-small" rel="<?php echo $comentari->getId(); ?>" name="button" id="buttonComm" type="button">&nbsp;&nbsp;&nbsp;Enviar&nbsp;&nbsp;&nbsp;</button>
+            </form>
+    </div>
+    <?php foreach($comentari->getAllFills() as $fill){ ?>
+    <?php $votat=0; ?>
+    <?php if($this->loggedIn==true): ?>
+    <?php foreach($fill->getAllVotsPos() as $votPos){ ?>
+    <?php if($votPos->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+    <?php } ?>
+    <?php foreach($fill->getAllVotsNeg() as $votNeg){ ?>
+    <?php if($votNeg->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+    <?php } ?>
+    <?php endif ?>
+    <div class="comment group " style="padding-left:70px;">
+        <div style="margin-left:-60px; float:left;">
+            <img src="<?php echo $this->baseUrl();?>/images/subcomment.png" alt="subcomment"/>
+        </div>
+        <a class="comment-owner-thumbnail" href="">
+            <?php if($fill->getUsuari()->getImage()!=null){ ?>
+            <img src="<?php echo $this->baseUrl();?>/img/<?php echo $fill->getUsuari()->getImage(); ?>" width="24px" height="24px">
+            <?php }else{ ?>
+            <img class="comment-author"  src="<?php echo $this->baseUrl() ?>/images/defaultuser.png">
+            <?php } ?>
+        </a>
+    <div class="comment-author group">
+        <p>
+            <a  class="comment-owner-name hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $fill->getUsuari()->getUsername(); ?>">
+                <?php echo $fill->getUsuari()->getUsername(); ?>
+            </a>
+            <a class="comment-timestamp">
+                <?php echo $fill->getData(); ?>
+            </a>
+        </p>
+    </div>
+    <div id="puntuacio2<?php echo $fill->getId(); ?>">
+        <ul class="comment-digg-counts group" >
+           <?php if($fill->getAllVots()>=0){ ?>
+                 <li class="digg-count-net" style="color:#669900">
+                    +&nbsp;<?php echo $fill->getAllVots(); ?>&nbsp;Puntos
+                </li>
+          <?php }else{ ?>
+                <li class="digg-count-net" style="color:#A12A2A">
+                    <?php echo $fill->getAllVots(); ?>&nbsp;Puntos
+                </li>
+           <?php } ?>
+        </ul>
+        <?php if($votat==0){ ?>
+        <ul class="comment-actions">
+            <li>
+                <a class="comment-digg has-tooltip" rel="<?php echo $fill->getId(); ?>" id="votarComentUP">UP</a>
+            </li>
+            <li>
+                <a class="comment-bury has-tooltip" rel="<?php echo $fill->getId(); ?>" id="votarComentDOWN">DOWN</a>
+            </li>
+        </ul>
+        <?php } ?>
+    </div>
+    <div class="comment-content group">
+        <p class="comment-body"><?php echo $fill->getText();?></p>
+         <ul class="comment-reply-options group">
+            <a class="has-tooltip commentReply" rel="<?php echo $fill->getId(); ?>">
+               <span class="storylist-icon comments"></span>
+               Contestar
+           </a>
+        </ul>
+    </div>
+    </div>
+      <div id="inline-comment-container<?php echo $fill->getId(); ?>" class="story-item-comment-form group" style="display:none;margin-left: 6%; clear: both;">
+        <form name="formComentari<?php echo $fill->getId(); ?>" id="formComentari<?php echo $fill->getId(); ?>" class="post-comment-form inline-comment-form group active"  method="post" action="<?php echo $this->baseUrl();?>/privat/afegircomentariok">
+            <img alt="" class="story-item-comment-form-thumb" src="<?php echo $this->baseUrl();?>/images/defaultuser.png" width="24px" height="24px">
+            <input type="hidden" class="item_id" value="<?php echo $this->noticia; ?>" name="id">
+            <input type="hidden" class="item_id" value="<?php echo $fill->getId(); ?>" name="id_pare">
+            <a class="close-it cancel-inline-comment" id="closeComentPare" rel="<?php echo $fill->getId(); ?>"><span>x</span></a>
+            <textarea class="post-comment-textarea elastic" id="text<?php echo $fill->getId(); ?>" name="text" style="width: 93%; height: 47px; overflow: hidden;"></textarea>
+            <button class="btn btn-secondary btn-small" rel="<?php echo $fill->getId(); ?>" name="button" id="buttonComm" type="button">&nbsp;&nbsp;&nbsp;Enviar&nbsp;&nbsp;&nbsp;</button>
+        </form>
+    </div>
+   <?php foreach($fill->getAllFills() as $fill2){ ?>
+    <?php $votat=0; ?>
+    <?php if($this->loggedIn==true): ?>
+    <?php foreach($fill2->getAllVotsPos() as $votPos){ ?>
+    <?php if($votPos->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+    <?php } ?>
+    <?php foreach($fill2->getAllVotsNeg() as $votNeg){ ?>
+    <?php if($votNeg->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+    <?php } ?>
+    <?php endif ?>
+    <div class="comment group " style="padding-left:100px;">
+        <div style="margin-left:-60px; float:left;">
+            <img src="<?php echo $this->baseUrl();?>/images/subcomment.png" alt="subcomment"/>
+        </div>
+        <a class="comment-owner-thumbnail" href="">
+            <?php if($fill2->getUsuari()->getImage()!=null){ ?>
+            <img src="<?php echo $this->baseUrl();?>/img/<?php echo $fill2->getUsuari()->getImage(); ?>" width="24px" height="24px">
+            <?php }else{ ?>
+            <img class="comment-author"  src="<?php echo $this->baseUrl() ?>/images/defaultuser.png">
+            <?php } ?>
+        </a>
+    <div class="comment-author group">
+        <p>
+            <a  class="comment-owner-name hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $fill2->getUsuari()->getUsername(); ?>">
+                <?php echo $fill2->getUsuari()->getUsername(); ?>
+            </a>
+            <a class="comment-timestamp">
+                <?php echo $fill2->getData(); ?>
+            </a>
+        </p>
+    </div>
+    <div id="puntuacio2<?php echo $fill2->getId(); ?>">
+        <ul class="comment-digg-counts group" >
+           <?php if($fill2->getAllVots()>=0){ ?>
+                 <li class="digg-count-net" style="color:#669900">
+                    +&nbsp;<?php echo $fill2->getAllVots(); ?>&nbsp;Puntos
+                </li>
+          <?php }else{ ?>
+                <li class="digg-count-net" style="color:#A12A2A">
+                    <?php echo $fill2->getAllVots(); ?>&nbsp;Puntos
+                </li>
+           <?php } ?>
+        </ul>
+        <?php if($votat==0){ ?>
+        <ul class="comment-actions">
+            <li>
+                <a class="comment-digg has-tooltip" rel="<?php echo $fill2->getId(); ?>" id="votarComentUP">UP</a>
+            </li>
+            <li>
+                <a class="comment-bury has-tooltip" rel="<?php echo $fill2->getId(); ?>" id="votarComentDOWN">DOWN</a>
+            </li>
+        </ul>
+        <?php } ?>
+    </div>
+    <div class="comment-content group">
+        <p class="comment-body"><?php echo $fill2->getText();?></p>
+         <ul class="comment-reply-options group">
+              <a class="has-tooltip commentReply" rel="<?php echo $fill2->getId(); ?>">
+               <span class="storylist-icon comments"></span>
+               Contestar
+           </a>
+        </ul>
+    </div>
+    </div>
+    <div id="inline-comment-container<?php echo $fill2->getId(); ?>" class="story-item-comment-form group" style="display:none;margin-left: 6%; clear: both;">
+        <form name="formComentari<?php echo $fill2->getId(); ?>" id="formComentari<?php echo $fill2->getId(); ?>" class="post-comment-form inline-comment-form group active"  method="post" action="<?php echo $this->baseUrl();?>/privat/afegircomentariok">
+            <img alt="" class="story-item-comment-form-thumb" src="<?php echo $this->baseUrl();?>/images/defaultuser.png" width="24px" height="24px">
+            <input type="hidden" class="item_id" value="<?php echo $this->noticia; ?>" name="id">
+            <input type="hidden" class="item_id" value="<?php echo $fill2->getId(); ?>" name="id_pare">
+            <a class="close-it cancel-inline-comment" id="closeComentPare" rel="<?php echo $fill2->getId(); ?>"><span>x</span></a>
+            <textarea class="post-comment-textarea elastic" id="text<?php echo $fill2->getId(); ?>" name="text" style="width: 93%; height: 47px; overflow: hidden;"></textarea>
+            <button class="btn btn-secondary btn-small" rel="<?php echo $fill2->getId(); ?>" name="button" id="buttonComm" type="button">&nbsp;&nbsp;&nbsp;Enviar&nbsp;&nbsp;&nbsp;</button>
+        </form>
+    </div>
+    <?php foreach($fill2->getAllFills() as $fill3){ ?>
+    <?php $votat=0; ?>
+    <?php if($this->loggedIn==true): ?>
+    <?php foreach($fill3->getAllVotsPos() as $votPos){ ?>
+    <?php if($votPos->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+    <?php } ?>
+    <?php foreach($fill3->getAllVotsNeg() as $votNeg){ ?>
+    <?php if($votNeg->getidUsuari()==$this->user->id_user){ $votat=1; }?>
+    <?php } ?>
+    <?php endif ?>
+    <div class="comment group " style="padding-left:130px;">
+        <div style="margin-left:-60px; float:left;">
+            <img src="<?php echo $this->baseUrl();?>/images/subcomment.png" alt="subcomment"/>
+        </div>
+        <a class="comment-owner-thumbnail" href="">
+            <?php if($fill3->getUsuari()->getImage()!=null){ ?>
+            <img src="<?php echo $this->baseUrl();?>/img/<?php echo $fill3->getUsuari()->getImage(); ?>" width="24px" height="24px">
+            <?php }else{ ?>
+            <img class="comment-author"  src="<?php echo $this->baseUrl() ?>/images/defaultuser.png">
+            <?php } ?>
+        </a>
+    <div class="comment-author group">
+        <p>
+            <a  class="comment-owner-name hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $fill3->getUsuari()->getUsername(); ?>">
+                <?php echo $fill3->getUsuari()->getUsername(); ?>
+            </a>
+            <a class="comment-timestamp">
+                <?php echo $fill3->getData(); ?>
+            </a>
+        </p>
+    </div>
+    <div id="puntuacio2<?php echo $fill3->getId(); ?>">
+        <ul class="comment-digg-counts group" >
+           <?php if($fill3->getAllVots()>=0){ ?>
+                 <li class="digg-count-net" style="color:#669900">
+                    +&nbsp;<?php echo $fill3->getAllVots(); ?>&nbsp;Puntos
+                </li>
+          <?php }else{ ?>
+                <li class="digg-count-net" style="color:#A12A2A">
+                    <?php echo $fill3->getAllVots(); ?>&nbsp;Puntos
+                </li>
+           <?php } ?>
+        </ul>
+        <?php if($votat==0){ ?>
+        <ul class="comment-actions">
+            <li>
+                <a class="comment-digg has-tooltip" rel="<?php echo $fill3->getId(); ?>" id="votarComentUP">UP</a>
+            </li>
+            <li>
+                <a class="comment-bury has-tooltip" rel="<?php echo $fill3->getId(); ?>" id="votarComentDOWN">DOWN</a>
+            </li>
+        </ul>
+        <?php } ?>
+    </div>
+    <div class="comment-content group">
+        <p class="comment-body"><?php echo $fill3->getText();?></p>
+         <ul class="comment-reply-options group">
+        </ul>
+    </div>
+    </div>
+
+    <?php }?>
+    <?php }?>
+    <?php }?>
+<?php } ?>
+  </div>
+<?php } ?>

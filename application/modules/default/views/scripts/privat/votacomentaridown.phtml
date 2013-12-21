@@ -1,0 +1,11 @@
+ <ul class="comment-digg-counts group" >
+     <?php if($this->comentari->getAllVots()>=0){?>
+     <li class="digg-count-net" style="color:#669900">
+        +&nbsp;<?php echo $this->comentari->getAllVots(); ?>&nbsp;Puntos
+    </li>
+    <?php }else{ ?>
+    <li class="digg-count-net" style="color:#A12A2A">
+        <?php echo $this->comentari->getAllVots(); ?>&nbsp;Puntos
+    </li>
+    <?php } ?>
+</ul>

@@ -1,0 +1,13 @@
+<?php
+if($this->loggedIn==true): ?>
+   
+    <a id="logout-enllac" href="<?php echo $this->baseUrl()."/administration/logout";?>">
+        <div  id="logoutdiv">
+            <span class="logout-icon" style="margin-right: 7px;"></span>Logout
+        </div>
+    </a>
+
+<?php else: ?>
+
+
+<?php endif ?>

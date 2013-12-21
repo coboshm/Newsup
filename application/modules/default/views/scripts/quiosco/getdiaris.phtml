@@ -1,0 +1,18 @@
+<?php
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+if($this->noticiesFinals == null){
+?>
+    <div style="margin-top:40px; padding:10px;">
+    <h3> No Se han Encontrado Noticias </h3>
+    <span style="font-weight: bold;">Seleccione de nuevo el apartado "Seleccionar Diarios" los Diarios que desea ver hoy<br/><br/></span>
+    <span style="font-weight: bold;padding-top:30px;">Puede Ordenar las Noticias por hora o bien por el diarios de precedencia.</span><br/><br/> Newsup te hace el trabajo mas facil, no estaras nunca mas desinformado! Todas las Noticias del Mundo al alcanze de tu mano.
+    </div>
+
+<?php }else{
+
+ echo $this->render("foreachnoticiesdiaris.phtml");
+}
+?>

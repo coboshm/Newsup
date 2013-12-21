@@ -1,0 +1,163 @@
+<?php $contadorPubli=0; ?>
+<?php foreach($this->noticiesFinals as $noticia){ ?>
+    <?php if($contadorPubli == 8){?>
+    <div class="story-item-gutters group" style="margin-top: 17px; margin-bottom: 14px;">
+       <script type="text/javascript">
+        google_ad_client = "ca-pub-4111996023407712";
+        /* Anuncis Noticies */
+        google_ad_slot = "3201162322";
+        google_ad_width = 468;
+        google_ad_height = 60;
+        //-->
+        </script>
+        <script type="text/javascript"
+        src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+        </script>
+    </div>
+<div style="width:100%; height: 1px; background-color: #eeeeee; margin-right: 5px;"></div>
+    <?php $contadorPubli=0; ?>
+    <? }?>
+    <?php $contadorPubli++; ?>
+    <?php $votat=0; ?>
+    <?php if($this->loggedIn==true): ?>
+    <?php foreach($noticia->getAllVots() as $vot){ ?>
+    <?php if($vot->getidUsuari()==$this->user->id_user){ $votat=$noticia->getId(); }?>
+    <?php } ?>
+    <?php endif ?>
+    <div class="story-item-gutters group" style="margin-top: 17px; margin-bottom: 14px;">
+        <div class="story-item-diggbtn" id="puntuacio<?php echo $noticia->getId();?>">
+            <div class="newsup-btn has-tooltip newsup-dugg">
+
+                <a class="newsup-count-wrapper" id="numVots<?php echo $noticia->getId(); ?>">
+                    <span class="newsup-count"><span><?php echo $noticia->getNumVots();?></span></span>
+                </a>
+                <?php if($votat!=0){?>
+                <span class="btnpunts-votat btn-special-javotat has-tooltip" rel="<?php echo $noticia->getId(); ?>" votat="<?php echo $votat; ?>"  id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>
+                <?php }else{?>
+                <span class="btnpunts btn-special-punts has-tooltip" rel="<?php echo $noticia->getId(); ?>" votat="<?php echo $votat; ?>" id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>
+                <?php } ?>
+            </div>
+        </div>
+        <?php if($noticia->getImatge() !=null){ ?>
+            <div class="story-item-media" style="padding-top:10px;">
+                <div class="story-item-thumb">
+                    <div class="thumb-edges"></div>
+                    <img alt="noticia<?php echo $noticia->getImatge(); ?>" src="<?php echo $this->baseUrl();?>/imgnotice/<?php echo $noticia->getImatge(); ?>" width="58px" height="62px">
+                </div>
+            </div>
+        <?php } ?>
+        <?php if($noticia->getImatge() !=null){ ?>
+        <div class="story-item-content group" style="width:97%;">
+        <?php }else{ ?>
+        <div class="story-item-content group" style="width:110%;">
+        <?php } ?>
+            <div class="story-item-details">
+                <h3 class="story-item-title">
+                     <a target="_blank" href="<?php echo $noticia->getUrl(); ?>"><?php echo stripslashes($noticia->getTitul200()); ?></a>
+                </h3>
+                <p class="story-item-description">
+                    <a class="story-item-source" href=""><!aqui va la url que ve ex: marca.com-></a>
+                    <a class="story-item-teaser" href="<?php echo $noticia->getUrl(); ?>">
+                        <?php echo stripslashes($noticia->getDescripcio180());?>
+                        <span class="timestamp" style="color:#82AB4D;">&nbsp;Fecha:&nbsp;<?php echo $noticia->getData(); ?></span>
+                    </a>
+                </p>
+            </div>
+            <ul class="story-item-meta group">
+               <li class="story-item-submitter">Enviado por:&nbsp;&nbsp;<a class="hcard-trigger" href="<?php echo $this->baseUrl(); ?>/usuario/<?php echo $noticia->getUsuari()->getUsername(); ?>"><?php echo $noticia->getUsuari()->getUsername();?></a></li>
+               <li class="story-item-comments">
+                   <a href="<?php echo $this->baseUrl(); ?>/noticia/<?php echo $noticia->getUrlTitul(); ?>">
+                       <span class="storylist-icon comments dib"></span>
+                       <span class="storylist-item-comment-count"><?php echo $noticia->getNumComentaris();?></span>&nbsp;Comentarios
+                   </a>
+               </li>
+               <?php $guardada = 1; ?>
+               <?php if($this->loggedIn==true): ?>
+               <?php foreach($this->guardadas as $idNoticia){ ?>
+                    <?php if($idNoticia==$noticia->getId()){ ?>
+                        <?php $guardada = 2; ?>
+                    <?php }?>
+               <?php } ?>
+               <?php endif ?>
+               <li class="story-item-newcomment" rel="<?php echo $noticia->getId(); ?>">
+                    <a class="story-item-action-post-comment">Comentar</a>
+                    <span class="story-item-newcomment-nub"></span>
+               </li>
+               <li class="story-item-save">
+                   <?php if($guardada==2){ ?>
+                   <a title="Save" class="action-save has-tooltip is-saved" id="guardarNoticia<?php echo $noticia->getId(); ?>" rel="<?php echo $noticia->getId(); ?>" tipus="2">
+                       <span class="storylist-icon save dib"></span>
+                       <span id="guardaNoticia<?php echo $noticia->getId(); ?>" class="action-label">Quitar</span>
+                   </a>
+                   <?php }else{ ?>
+                   <a title="Save" class="action-save has-tooltip" id="guardarNoticia<?php echo $noticia->getId(); ?>" rel="<?php echo $noticia->getId(); ?>" tipus="1">
+                       <span class="storylist-icon save dib"></span>
+                       <span id="guardaNoticia<?php echo $noticia->getId(); ?>" class="action-label">Guardar</span>
+                   </a>
+                   <?php } ?>
+               </li>
+              <?php if($noticia->getLatitude() == null || $noticia->getLongitude() == null){ ?>
+               <li class="mapa-colocar">
+                   <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/colocar/<?php echo $noticia->getUrlTitul() ?>">
+                       <span class="mapa-color-span"><img alt="map" src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                       <span>Colocar en el Mapa</span>
+                   </a>
+               </li>
+               <?php }else{ ?>
+                  <?php if($this->loggedIn==true){ ?>
+                  <?php if($noticia->getUsuari()->getId()== $this->usuario->getId()){?>
+                   <li class="mapa-colocar">
+                       <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/cambiar/<?php echo $noticia->getUrlTitul() ?>">
+                           <span class="mapa-color-span"><img alt="map" src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                           <span>Cambiar en el Mapa</span>
+                       </a>
+                  </li>
+                  <?php }else{ ?>
+                  <li class="mapa-colocar">
+                       <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/ver/<?php echo $noticia->getUrlTitul() ?>">
+                           <span class="mapa-color-span"><img alt="map" src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                           <span>Ver en el Mapa</span>
+                       </a>
+                   </li>
+                   <?php } ?>
+                  <?php }else{ ?>
+                   <li class="mapa-colocar">
+                       <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/ver/<?php echo $noticia->getUrlTitul() ?>">
+                           <span class="mapa-color-span"><img alt="map" src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="15px" height="15px"></span>
+                           <span>Ver en el Mapa</span>
+                       </a>
+                   </li>
+                   <?php } ?>
+               <?php } ?>
+           </ul>
+           <div class="inline-comment-container"></div>
+        </div>
+</div>
+<!--fins aqui -->
+
+        <div id="inline-comment-container<?php echo $noticia->getId(); ?>" class="story-item-comment-form group" style="display:none;margin-left: 6%; clear: both;">
+                <form name="formComentari<?php echo $noticia->getId(); ?>" id="formComentari<?php echo $noticia->getId(); ?>" class="post-comment-form inline-comment-form group active"  method="post" action="<?php echo $this->baseUrl();?>/privat/afegircomentari">
+                    <img alt="comment" class="story-item-comment-form-thumb" src="<?php echo $this->baseUrl();?>/images/defaultuser.png" width="24px" height="24px">
+                    <input type="hidden" class="item_id" value="<?php echo $noticia->getId(); ?>" name="id">
+                    <input type="hidden" class="item_id" value="<?php echo $this->pagina; ?>" name="pagina">
+                    <?php if($this->tipus != null){ ?>
+                    <input type="hidden" class="item_id" value="<?php echo $this->tipus; ?>" name="tipus">
+                    <?php } else{ ?>
+                    <input type="hidden" class="item_id" value="1" name="tipus">
+                    <?php } ?>
+                    <a class="close-it cancel-inline-comment" id="closeComent" rel="<?php echo $noticia->getId(); ?>"><span>x</span></a>
+                    <textarea class="post-comment-textarea elastic" id="text<?php echo $noticia->getId(); ?>" name="text" style="width: 93%; height: 47px; overflow: hidden;"></textarea>
+                    <button class="btn btn-secondary btn-small" rel="<?php echo $noticia->getId(); ?>" name="button" id="button" type="button">&nbsp;&nbsp;&nbsp;Enviar&nbsp;&nbsp;&nbsp;</button>
+                </form>
+        </div>
+    <div style="width:100%; height: 1px; background-color: #eeeeee; margin-right: 5px;"></div>
+
+<?php } ?>
+
+<?php if($this->cantitat != null){?>
+<script>
+
+    var cantitat = <?php echo $this->cantitat; ?>;
+
+</script>
+<?php } ?>

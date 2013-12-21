@@ -1,0 +1,123 @@
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+
+            <div id="left-column" class="column narrow attached-menu  group">
+              <?php
+                //aqui fem un include
+                //echo $this->render("opcionsperfil.phtml"); ?>
+               <div id="titul-categorias" style="margin-top:25px;">
+                   Categorias:
+               </div>
+               <ul class="sidebar-menu">
+                    <?php foreach($this->llistaCategories as $categoria){ ?>
+                        <?php if($categoria->getNom()=="Todas"){ ?>
+                        <li>
+                            <a id="categoria" class="active" href="<?php echo $this->baseUrl(); ?>/categoria/<?php echo $categoria->getNom(); ?>"><?php echo $categoria->getNom(); ?>
+                            </a>
+                        </li>
+                        <?php }else{?>
+                        <li>
+                            <a id="categoria" href="<?php echo $this->baseUrl(); ?>/categoria/<?php echo $categoria->getNom(); ?>"><?php echo $categoria->getNom(); ?>
+                            </a>
+                        </li>
+                        <?php } ?>
+                    <?php } ?>
+                </ul>
+             <div style="width:100%; height: 1px; background-color: #eeeeee; margin-right: 5px; margin-bottom: 20px; margin-top: 10px;"></div>
+
+            </div>
+            <div id="main-column" class="column attached-menu group">
+                <div id="carregador-url">
+                    <form id="submit-form" class="group">
+                        <input type="text" value="Envia tu Link!" tabindex="1" id="url-submit-url" class="text-input text-input1">
+                        <button id="url-submit-button" tabindex="2" class="btn2 btn-special2 has-tooltip" name="button" type="button">Subir URL</button>
+                    </form>
+                </div>
+                <ul id="comment-sorting" class="pillboxes filter-menu group" style="margin-top: 10px; margin-bottom: 10px; background: #eee;">
+                    <?php if($this->tipus== 2){ ?>
+                    <li>
+                        <a id="filter-24h" class="sort active" rel="1">Top del Dia</a>
+                    </li>
+                    <?php }else{ ?>
+                    <li>
+                        <a id="filter-24h" class="sort" rel="1">Top del Dia</a>
+                    </li>
+                    <?php } ?>
+                    <?php if($this->tipus==3){ ?>
+                    <li>
+                        <a id="filter-7d" class="sort active" rel="1">Top de la Semana</a>
+                    </li>
+                    <?php }else{ ?>
+                    <li>
+                        <a id="filter-7d" class="sort" rel="1">Top de la Semana</a>
+                    </li>
+                    <?php } ?>
+                    <?php if($this->tipus==1){ ?>
+                    <li>
+                        <a id="filter-31d" class="sort active" rel="1">Top Del Mes</a>
+                    </li>
+                    <?php }else{ ?>
+                    <li>
+                        <a id="filter-31d" class="sort" rel="1">Top Del Mes</a>
+                    </li>
+                    <?php } ?>
+                    <?php if($this->tipus==4){ ?>
+                    <li>
+                        <a id="filter-tot" class="sort active" rel="1">Top Historico</a>
+                    </li>
+                    <?php }else{ ?>
+                    <li>
+                        <a id="filter-tot" class="sort" rel="1">Top Historico</a>
+                    </li>
+                    <?php } ?>
+                    <?php if($this->tipus==5){ ?>
+                    <li class="divider show-expanded">
+                        <a id="filter-recientes" class="active" rel="1">Recientes</a>
+                    </li>
+                    <?php }else{ ?>
+                    <li class="divider show-expanded">
+                        <a id="filter-recientes" rel="1">Recientes</a>
+                    </li>
+                    <?php } ?>
+                </ul>
+                <div id="aquiNews">
+                <?php if($this->noticiesFinals == null){ ?>
+                    <div class="nothing-found topbar-spacer">
+                        <p class="title">No hay noticias con estas caracteristicas.</p>
+                    </div>
+                <?php }else{ ?>
+                <?php
+                //aqui fem un include
+                echo $this->render("foreachnoticies.phtml"); ?>
+                <?php } ?>
+                <?php if($this->cantitat >15){ ?>
+                <ul class="pagination group btn-loader btn-loader-bottom no-prev no-next story-list-container" role="navigation"aria-labelledby="paginglabel">
+                    <li class="prev" >
+                        <a class="btn btn-default btn-small" id="prev" rel="<?php echo $this->pagina; ?>" tip="1" cat="1">
+                            <span class="uitext" id="prev">Prev</span>
+                        </a>
+                    </li>
+                    <li class="page-num" style="padding-top:7px;">
+                        Pagina
+                        <span class="pagination-current"><?php echo $this->pagina; ?></span>
+                    </li>
+                    <li class="next">
+                        <a class="btn btn-default btn-small" id="next" rel="<?php echo $this->pagina; ?>" tip="1" cat="1">
+                            <span class="uitext" id="next">Next</span>
+                        </a>
+                    </li>
+                </ul>
+                <?php } ?>
+            </div>
+           </div>
+            <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+
+AQUET ES EL CODI PER VEURE ELS ERRORS!!!
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Zend Framework Default Application</title>
+</head>
+<body>
+  <h1>An error occurred</h1>
+  <h2><?php // echo $this->message ?></h2>
+
+  <?php //if ('development' == APPLICATION_ENV): ?>
+
+  <h3>Exception information:</h3>
+  <p>
+      <b>Message:</b> <?php //echo $this->exception->getMessage() ?>
+  </p>
+
+  <h3>Stack trace:</h3>
+  <pre><?php // echo $this->exception->getTraceAsString() ?>
+  </pre>
+
+  <h3>Request Parameters:</h3>
+  <pre><?php // echo var_export($this->request->getParams(), true) ?>
+  </pre>
+  <?php //endif ?>
+
+</body>
+</html>
+
+-->
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+            <div id="main-column-user" class="column attached-menu group">
+                <div id="aquiNews">
+                    <div id="aquiBuscar" style="padding-top:40px; margin:0 auto;">
+                        <h3>Ups, esto es embarazoso!</h3>
+                        <div style="padding:10px;text-align: justify; font-weight: bold;">Lo sentimos pero esta página o no exsiste o está temporalmente fuera de servicio!</div>
+                        <img style="clear:both; padding-left: 30px;" src="<?php echo $this->baseUrl(); ?>/images/NoDisponible.jpg"/>
+                    </div>
+                </div>
+           </div>
+            <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

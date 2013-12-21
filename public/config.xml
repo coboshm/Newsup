@@ -1,0 +1,8 @@
+<windowslivelogin>
+  <appid>0000000044045B29</appid>
+  <secret>BjdtP5U9IGgVdZcwTvesSWeGqTyS1vPc</secret>
+  <securityalgorithm>wsignin1.0</securityalgorithm>
+
+  <returnurl>http://www.newsup.es/email/mostrarmsn</returnurl>
+  <policyurl>http://www.newsup.es/policy.html</policyurl>
+</windowslivelogin>

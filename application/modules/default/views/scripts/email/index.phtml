@@ -1,0 +1,60 @@
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+
+            <div id="left-column" class="column narrow attached-menu  group">
+                 <?php
+                //aqui fem un include
+                echo $this->render("opcionsperfil.phtml"); ?>
+            </div>
+            <div id="main-column" class="column attached-menu group">
+                <div id="titul-categorias" style="padding-left:4px; background:#f2f2f2; border-top:1px solid #e2e2e2; padding:4px 5px 4px 5px;">
+                  Buscar a mis Amigos!
+               </div>
+                <div style="margin-top:10px; padding:30px; text-align: justify;"><strong>Ahora con NewsUp,</strong> no sólo te informas, verás las noticias en el mapa o seguirás a usuarios sinó que también sabrás que <strong>noticias les gustan a sus amigos, que noticias suben, incluso que usuarios siguen.</strong></div>
+                <div id="aquiBuscar">
+                     <div style="margin-top:10px;">
+                         <div class="float-left" id="photo-img">
+                             <a href="<?php echo $this->auth_url; ?>">
+                                <img alt="gmail" class="profile-photo" src="<?php echo $this->baseUrl();?>/images/gmail.png">
+                             </a>
+                         </div>
+                         <div  style="padding-top:17px;">
+                             <span style="font-weight:bold; font-size: 13px; padding-left: 25px;">Encuentra a sus contactos de Gmail</span>
+                             <a href="<?php echo $this->auth_url; ?>" style="padding-left: 10px;" class="story-item-submitter">Buscar ahora en Gmail</a>
+                         </div>
+                     </div>
+                       <div style="margin-top:32px;">
+                         <div class="float-left" id="photo-img">
+                             <a href="<?php echo $this->url; ?>">
+                                 <img alt="windowslive" class="profile-photo" src="<?php echo $this->baseUrl();?>/images/windowslive.png">
+                             </a>
+                         </div>
+                         <div  style="padding-top:13px;">
+                             <span style="font-weight:bold; font-size: 13px; padding-left: 25px;">Encuentra a sus contactos de Hotmail</span>
+                             <a href="<?php echo $this->url; ?>" style="padding-left: 11px;" class="story-item-submitter">Buscar ahora en Msn, Hotmail</a>
+                         </div>
+                     </div>
+                     <div  style="margin-top:40px;">
+                         <div class="float-left" id="photo-img">
+                             <a href="<?php echo $this->urlFacebook; ?>">
+                                <img alt="facebook" class="profile-photo" src="<?php echo $this->baseUrl();?>/images/facebookIco.png">
+                             </a>
+                         </div>
+                         <div  style="padding-top:12px;">
+                             <span style="font-weight:bold; font-size: 13px; padding-left: 25px;"> Encuentra a sus amigos de Facebook</span>
+                              <a href="<?php echo $this->urlFacebook; ?>" style="padding-left: 14px;" class="story-item-submitter">Buscar ahora en Facebook</a>
+                         </div>
+                     </div>
+                </div>
+           </div>
+            <div id="right-column" class="column wide group">
+                <?php
+                //aqui fem un include
+                echo $this->render("rightsidebar.phtml");
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+

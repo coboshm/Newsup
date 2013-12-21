@@ -1,0 +1,617 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <meta http-equiv="expires" content="-1" />
+        <meta name="Description" content="NewsUP es un servicio web de noticias que permite compartir contenido con carácter informativo con el resto del mundo." />
+
+        <title>NewsUp Mapa</title>
+
+        <?php echo $this->headTitle() ?>
+
+
+<!-- Meta Images -->
+         <base href="http://<?php echo $this->escape($_SERVER['HTTP_HOST']) . $this->escape($this->baseUrl()); ?>/" />
+
+	 <link rel="shortcut icon" href="<?php echo $this->baseUrl();?>/images/favicon.ico" type="image/x-icon" />
+         <script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/jquery-1.3.2.min.js"></script>
+         <script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/jquery-ui-1.7.2.custom.min.js"></script>
+         <script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/funcionsTempsNext.js"></script>
+
+<!-- Title and External Script Integration -->
+	 <title>NewsUp</title>
+
+
+         <script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-21991981-1']);
+          _gaq.push(['_setDomainName', '.newsup.es']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
+        </script>
+
+<!-- Stylesheets -->
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/style3.css',      'screen, projection') ?>
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/styleSearch.css',      'screen, projection') ?>
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/style2.css',      'screen, projection') ?>
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/style.css',      'screen, projection') ?>
+	 <?php echo $this->headLink() ?>
+         <?php echo $this->headScript() ?>
+
+         <script type="text/javascript">
+             var baseUrl = "<?php echo $this->baseUrl() ?>";
+             var loggedIn = false;
+             var cat= new Array();
+             var noticies = new Array();
+             var noticiesFinals = new Array();
+             var votat = false;
+             var imatge = false;
+             var usuariCon = false;
+         </script>
+
+       <?php if($this->loggedIn==true){ ?>
+            <script>
+                usuariCon = "<?php echo $this->user->username; ?>";
+                loggedIn= true;
+            </script>
+        <?php } ?>
+
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <script src="http://www.google.com/jsapi?autoload={'modules':[{'name':'maps','version':'3','other_params':'libraries=adsense%26sensor=false'}]}"></script>
+        <script type="text/javascript">
+
+        var shadow;
+        var map;
+        var primera = 0;
+
+          function initialize() {
+
+            geocoder = new google.maps.Geocoder();
+            
+            var latlng = new google.maps.LatLng(40, -3);
+            var myOptions = {
+              zoom: 3,
+              center: latlng,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+           var adUnitDiv = document.createElement('div');
+           var adUnitOptions = {
+                format: google.maps.adsense.AdFormat.HALF_BANNER,
+                position: google.maps.ControlPosition.BOTTOM_LEFT,
+                map: map,
+                visible: true,
+                publisherId: 'pub-4111996023407712'
+           }
+           adUnit = new google.maps.adsense.AdUnit(adUnitDiv, adUnitOptions);
+
+            shadow = new google.maps.MarkerImage(baseUrl+'/images/shadow.png',
+              new google.maps.Size(25,18),
+              new google.maps.Point(0,0),
+              new google.maps.Point(0,18));
+
+            colocarMarkers();
+
+         }
+
+          function addMarker(noticia,open){
+
+          //alert(baseUrl);
+          //alert(usuariCon);
+              var image = new google.maps.MarkerImage(baseUrl+'/images/'+noticia[8]+'.png',
+              new google.maps.Size(32, 32),
+              new google.maps.Point(0,0),
+              new google.maps.Point(12,32));
+
+              
+
+             var latLng = new google.maps.LatLng(noticia[2],noticia[10]);
+
+
+             marker[open] = new google.maps.Marker({
+                    position: latLng,
+                    //shadow: shadow,
+                    icon: image,
+                    title: noticia[3],
+                    draggable:false
+             });
+
+             marker[open].setMap(map);
+
+             var contentString = '<div id="content" style="height:90px;">'+
+                                    '<div id="siteNotice">'+
+                                    '</div>'+
+                                    '<div id="bodyContent">'+
+                                    '<div class="story-item-gutters group">'+
+                                    '<div class="story-item-diggbtn" id="puntuacio'+noticia[1]+'">'+
+                                    '<div class="newsup-btn has-tooltip newsup-dugg">'+
+                                    '<a class="newsup-count-wrapper">'+
+                                    '<span class="newsup-count"><span>'+noticia[6]+'</span></span>'+
+                                    '</a>';
+
+               if(noticia[11]==true){
+                   contentString+= '<span class="btnpunts-votat btn-special-javotat has-tooltip" rel="'+noticia[1]+'" votat="'+noticia[1]+'"  id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>';
+               }else{
+                   contentString += '<span class="btnpunts btn-special-punts has-tooltip" rel="'+noticia[1]+'" votat="0"   id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>';
+               }
+
+                   contentString+= '</div>'+
+                                    '</div>'+
+                                    '<div class="story-item-content group" style="width:92%;">'+
+                                    '<div class="story-item-details">'+
+                                    '<h3 class="story-item-title">'+
+                                    '<a target="_blank" href="'+noticia[13]+'">'+noticia[3]+'</a>'+
+                                    '</h3>'+
+                                    '</div>'+
+                                    '<ul class="story-item-meta group">'+
+                                         '<li class="story-item-submitter">Por: <a  class="hcard-trigger" href="'+baseUrl+'/usuario/'+noticia[4]+'">'+noticia[4]+'</a></li>'+
+                                         '<li class="story-item-comments">'+
+                                           '<a href="'+baseUrl+'/noticia/'+noticia[18]+'">'+
+                                               '<span class="storylist-icon comments dib"></span>'+
+                                               '<span class="storylist-item-comment-count">'+noticia[14]+'</span>&nbsp;Comentarios'+
+                                          '</a>'+
+                                          '</li>';
+              if(noticia[4]==usuariCon){
+                  //alert("si");
+                  contentString+=  '<li class="mapa-colocar">'+
+                                       '<a class="mapa-color-a" href="'+baseUrl+'/cambiar/'+noticia[18]+'">'+
+                                           '<span class="mapa-color-span"><img src="'+baseUrl+'/images/map.jpeg" width="15px" height="15px"></span>'+
+                                           '<span>Cambiar en el Mapa</span>'+
+                                       '</a>'+
+                                  '</li>';
+              }else{
+                 //alert(usuariCon);
+                  contentString+=  '<li class="story-item-denunciarcambio" rel="'+noticia[1]+'" >'+
+                                         '<span style="vertical-align:-1px;" class="storylist-icon2 flag"></span>Sugerir Cambio'+
+                                   '</li>';
+              }
+                                         
+                  contentString +=  '<li class="story-item-submitter">Enviado el&nbsp;'+noticia[9]+'</li>'+
+                                    '</ul>'+
+                                    '</div>';
+
+               if(noticia[12]==true){
+                   contentString+= '<div class="story-item-media" style="margin-top:15px;">'+
+                                    '<div rel="nofollow" class="story-item-thumb">'+
+                                        '<div class="thumb-edges"></div>'+
+                                        '<img  src="'+baseUrl+'/imgnotice/'+noticia[5]+'">'+
+                                    '</div>'+
+                                    '</div>';
+               }
+
+                 contentString +=   '</div>'+
+                                    '</div>'+
+                                    '</div>';
+
+                
+                infowindow[open] = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
+                google.maps.event.addListener(marker[open], 'click', function() {
+                  infowindow[open].open(map,marker[open]);
+                });
+
+                if(primera==0){
+                    if(noticia[17]==1){
+                        infowindow[open].open(map,marker[open]);
+                        map.setCenter(latLng);
+                        primera++;
+                    }
+                }
+                
+        }
+
+
+
+
+       function codeAddress() {
+        var address = document.getElementById("address").value;
+        geocoder.geocode( { 'address': address}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            map.setZoom(8);
+          }
+        });
+      }
+
+        </script>
+    </head>
+    <body style="min-width:992px;" onload="initialize()">
+    <div id="preloadImages"></div>
+    <?php echo $this->render("missatjes.phtml"); ?>
+    <div style="height: 93%; width: 100%; position: absolute; background:#fff; min-width:960px;">
+        
+        <div class="header-wrapper">
+        <div class="header group">
+            <a id="header-logo" class="sprite1 newsup-logo" href="<?php echo $this->baseUrl();?>">NewsUP</a>
+            <ul class="main-navigation tabbed-navigation group">
+                <?php if($this->loggedIn==true): ?>
+                <li>
+                    <a id="header-mynews" <?php if($this->mostra == "1") { echo "class='active'"; } ?> href="<?php echo $this->baseUrl(); ?>/privat"><span class="elbow-left"></span><span class="elbow-right"></span>Mis Noticias</a>
+                </li>
+                <?php endif ?>
+                <li>
+                    <a id="header-topnews" <?php if($this->mostra == "2") { echo "class='active'"; } ?> href="<?php echo $this->baseUrl(); ?>"><span class="elbow-left"></span><span class="elbow-right"></span>Noticias Top</a>
+                </li>
+                <li>
+                    <a id="header-upcoming"  <?php if($this->mostra == "3") { echo "class='active'"; } ?>href="<?php echo $this->baseUrl(); ?>/map"><span class="elbow-left"></span><span class="elbow-right"></span>El Mapa</a>
+                </li>
+                <li>
+                    <a id="header-upcoming"  <?php if($this->mostra == "5") { echo "class='active'"; } ?>href="<?php echo $this->baseUrl(); ?>/quiosco"><span class="elbow-left"></span><span class="elbow-right"></span>Quiosco</a>
+                </li>
+            </ul>
+        <?php if($this->loggedIn==true): ?>
+        <div class="float-right-login group">
+        <?php else: ?>
+        <div class="float-right group">
+        <?php endif ?>
+            <?php echo $this->render("login.phtml"); ?>
+
+            <form id="header-search-form" class="header-search" method="get" action="<?php echo $this->baseUrl(); ?>/search">
+                <input type="text" value="Buscar usuarios y noticias" id="q" name="buscador"/>
+                <input type="submit" value="" id="search-button" name="submit"/>
+            </form>
+        </div>
+        </div>
+        </div>
+        <div class="" style="background:#fff; height: 39px; width: 100%; margin-top:10px; margin-bottom:10px;">
+                 <ul id="comment-sorting" class="pillboxes filter-menu group" style="margin-top: 0px; margin-bottom: 10px; background: #eee; width:388px; margin-left: 20px; float:left;">
+                    <li>
+                        <a id="filter-24map" class="sort" rel="1">24h</a>
+                    </li>
+                    <li>
+                        <a id="filter-7map" class="sort" rel="1">7 Días</a>
+                    </li>
+                    <li>
+                        <a id="filter-31map" class="sort active" rel="1">31 Días</a>
+                    </li>
+                    <li>
+                        <a id="filter-totmap" class="sort" rel="1">Histórico</a>
+                    </li>
+                    <li class="divider show-expanded">
+                        <a id="filter-categorias">Categorías</a>
+                    </li>
+                </ul>
+                <div style="float:left; padding-top: 10px; padding-left: 25px;">
+                        <h5 style="float:left; padding-top:6px;">Buscar Localidad:</h5><input style="float:left; margin-left:10px;" id="address" type="textbox" value="" onchange="codeAddress()"/>
+                        <div id="posicionar" style="float:left; margin-left: 5px; margin-top: 4px; cursor:pointer;"><img src="<?php echo $this->baseUrl();?>/images/arrow2.jpeg"/></div>
+                </div>
+
+        </div>
+        <div id="categories-div" style="width:390px; height:355px; background: #fff; margin:4px 330px; z-index:3; -moz-border-radius:5px; -moz-box-shadow: 0 0 10px rgba(0,0,0,0.5); position:absolute; padding:15px 8px 10px 10px;display:none;">
+            <a class="dismissMap"></a>
+            <h3 style="margin-bottom:10px;">Selecionar<span style="color:#336600;">   Categorias</span></h3>
+            <div style="margin-bottom:15px;">Seleccione las que deseas ver en el mapa.</div>
+            <?php  $y=320; ?>
+            <?php foreach($this->llistaCategories as $categoria){ ?>
+                <?php if($categoria->getId()!=1){ ?>
+                <div class="categoria-tic">
+                    <div class="checkbox-marker-cat" id="categoriesMarkers" rel="<?php echo $categoria->getId(); ?>"><img style="vertical-align: -3px;" src="<?php echo $this->baseUrl(); ?>/images/checkbox1.png"/></div>
+                    <span class="categoria-marker" style="background-position:<?php echo $y;?>px 0px; width:20px;height:32px;margin-bottom:3px; display:block; float:left;"></span>
+                    <span style="padding-left:15px;padding-top:3px;"><?php echo $categoria->getNom(); ?></span>
+                </div>
+                <script>
+                    cat[cat.length] = <?php echo $categoria->getId(); ?>
+                </script>
+                <?php } ?>
+                <?php $y=$y-20; ?>
+             <?php } ?>
+            <span class="acceptar-categories">Aceptar</span>
+        </div>
+        <?php echo $this->layout()->content ?>
+    
+        <div class="footer">
+            <?php echo $this->render("footer.phtml"); ?>
+        </div>
+    </div>
+    <script>
+        var mapa = 80;
+        //alert(screen.height);
+        if(screen.height>770){
+            mapa = 81;
+            h = screen.height - 770;
+            z = (h/12)*0.3;
+            mapa = mapa + z;
+            jQuery("div#map_canvas").css("height",mapa+"%")
+        }else if(screen.height == 750){
+        
+        }else{
+            mapa = mapa -0.5;
+            jQuery("div#map_canvas").css("height",mapa+"%")
+        }
+
+        mar = screen.width /2 -195;
+        jQuery("div#categories-div").css("margin","30px "+mar+"px")
+
+    jQuery("a#filter-categorias").live("click",function(){
+        jQuery("div#categories-div").fadeIn(150);
+    });
+    jQuery("a.dismissMap").live("click",function(){
+        jQuery("div#categories-div").fadeOut(50);
+        categoriesMarkers();
+    });
+
+    jQuery("span.acceptar-categories").live("click",function(){
+        jQuery("div#categories-div").fadeOut(50);
+        //cridar funcio de colocar markers
+        categoriesMarkers();
+    });
+
+    jQuery("div#categoriesMarkers").live("click",function(){
+        id = jQuery(this).attr("rel");
+        
+        if(search(id)){
+            //desactivem la categoria
+            jQuery(this).html("<img style=\"vertical-align: -3px;\" src=\""+baseUrl+"/images/checkbox0.png\"/>");
+        }else{
+            //activem la categoria
+            cat[cat.length] = id;
+            jQuery(this).html("<img style=\"vertical-align: -3px;\" src=\""+baseUrl+"/images/checkbox1.png\"/>");
+        }
+    });
+
+     function search(id){
+        var p=0;
+        var aux = Array();
+
+        var si=false;
+        if(cat.length==0){
+            si=false;
+        }else{
+            for(p=0; p<cat.length; p++){
+                if(cat[p]!=id){
+
+                    aux[aux.length] = cat[p];
+                }else{
+
+                    si=true;
+                }
+            }
+        }
+
+        if(si){
+            cat=aux;
+            return true;
+        }else{
+
+            return false ;
+        }
+    }
+
+    </script>
+    <?php foreach($this->noticiesFinals as $noticia){ ?>
+    <script>
+        noticies[noticies.length] = false;
+        noticies[noticies.length] = <?php echo addslashes($noticia->getId()); ?>;
+        noticies[noticies.length] =<?php echo addslashes($noticia->getLatitude()); ?>;
+        noticies[noticies.length] ="<?php echo addslashes($noticia->getTitul200()); ?>";
+        noticies[noticies.length] ="<?php echo addslashes($noticia->getUsuari()->getUsername()); ?>";
+        noticies[noticies.length] ="<?php echo addslashes($noticia->getImatge()); ?>";
+        noticies[noticies.length] =<?php echo addslashes($noticia->getNumVots()); ?>;
+        noticies[noticies.length] ="<?php echo addslashes($noticia->getDescripcio180()); ?>";
+        noticies[noticies.length] = <?php echo addslashes($noticia->getCategoria()->getId()); ?>;
+        noticies[noticies.length] ="<?php echo addslashes($noticia->getData()); ?>";
+        noticies[noticies.length] =<?php echo addslashes($noticia->getLongitude()); ?>;
+        
+        
+    </script>
+        <?php if($this->loggedIn==true){?>
+            <?php foreach($noticia->getAllVots() as $vot){ ?>
+                <?php if($vot->getidUsuari()==$this->user->id_user){ ?>
+                <?php $votat =1; ?>
+                    <script>
+                        noticies[noticies.length] = true;
+                    </script>
+                <?php }?>
+            <?php } ?>
+            <?php if($votat!=1){ ?>
+              <script>
+                 noticies[noticies.length] = false;
+              </script>
+            <?php } ?>
+        <?php }else{ ?>
+             <script>
+                 noticies[noticies.length] = false;
+              </script>
+        <?php } ?>
+        <?php if($noticia->getImatge() !=null){ ?>
+            <script>
+                noticies[noticies.length] = true;
+            </script>
+        <?php }else{ ?>
+            <script>
+                noticies[noticies.length] = false;
+            </script>
+        <?php } ?>
+    <script>
+        noticies[noticies.length] ="<?php echo addslashes($noticia->getUrl()); ?>";
+        noticies[noticies.length] =<?php echo addslashes($noticia->getNumComentaris()); ?>;
+        noticies[noticies.length] =<?php echo addslashes($noticia->unDia()); ?>;
+        noticies[noticies.length] =<?php echo addslashes($noticia->unaSetmana()); ?>;
+        noticies[noticies.length] =<?php echo addslashes($noticia->unMes()); ?>;
+        noticies[noticies.length]="<?php echo addslashes($noticia->getUrlTitul()); ?>";
+        noticiesFinals[noticiesFinals.length] = noticies;
+        noticies = null
+        noticies = new Array();
+    </script>
+    <?php $votat=0; ?>
+    <?php } ?>
+    <script>
+        //alert(noticiesFinals[2][2]);
+        var marker = new Array();
+        var infowindow = new Array();
+        var filtre = 3;
+        function colocarMarkers(){
+            var contador=0;
+            var open=0;
+            for(contador=0;contador<noticiesFinals.length; contador++){
+                    addMarker(noticiesFinals[contador],open);
+                    if(noticiesFinals[contador][17]==0){
+                        marker[open].setVisible(false);
+                        infowindow[open].close();
+                    }
+                    open++;
+            }
+
+        }
+
+       function categoriesMarkers(){
+            var contador=0;
+            var aux=0;
+
+            switch(filtre){
+
+                case 1:
+                    for(contador=0;contador<cat.length;contador++){
+                        for(aux=0;aux<noticiesFinals.length;aux++){
+                          if(noticiesFinals[aux][15]==1){
+                            if(cat[contador]==noticiesFinals[aux][8]){
+                                noticiesFinals[aux][0] = true;
+                                marker[aux].setVisible(true);
+                            }else{
+                                if(noticiesFinals[aux][0]== false){
+                                    marker[aux].setVisible(false);
+                                }
+                            }
+                          }else{
+                              marker[aux].setVisible(false);
+                          }
+                        }
+                    }
+                     for(aux=0;aux<noticiesFinals.length;aux++){
+                         if(noticiesFinals[aux][0]== false){
+                             infowindow[aux].close();
+                         }
+                         noticiesFinals[aux][0] = false;
+                    }
+                break;
+
+                case 2:
+                    for(contador=0;contador<cat.length;contador++){
+                        for(aux=0;aux<noticiesFinals.length;aux++){
+                          if(noticiesFinals[aux][16]==1){
+                            if(cat[contador]==noticiesFinals[aux][8]){
+                                noticiesFinals[aux][0] = true;
+                                marker[aux].setVisible(true);
+                            }else{
+                                if(noticiesFinals[aux][0]== false){
+                                    marker[aux].setVisible(false);
+                                }
+                            }
+                          }else{
+                              marker[aux].setVisible(false);
+                          }
+                        }
+                    }
+                     for(aux=0;aux<noticiesFinals.length;aux++){
+                         if(noticiesFinals[aux][0]== false){
+                             infowindow[aux].close();
+                         }
+                         noticiesFinals[aux][0] = false;
+                    }
+                break;
+
+                case 3:
+                    for(contador=0;contador<cat.length;contador++){
+                        for(aux=0;aux<noticiesFinals.length;aux++){
+                          if(noticiesFinals[aux][17]==1){
+                            if(cat[contador]==noticiesFinals[aux][8]){
+                                noticiesFinals[aux][0] = true;
+                                marker[aux].setVisible(true);
+                            }else{
+                                if(noticiesFinals[aux][0]== false){
+                                    marker[aux].setVisible(false);
+                                }
+                            }
+                          }else{
+                              marker[aux].setVisible(false);
+                          }
+                        }
+                    }
+                     for(aux=0;aux<noticiesFinals.length;aux++){
+                         if(noticiesFinals[aux][0]== false){
+                             infowindow[aux].close();
+                         }
+                         noticiesFinals[aux][0] = false;
+                    }
+                break;
+
+                case 4:
+                    for(contador=0;contador<cat.length;contador++){
+                        for(aux=0;aux<noticiesFinals.length;aux++){
+                            if(cat[contador]==noticiesFinals[aux][8]){
+                                noticiesFinals[aux][0] = true;
+                                marker[aux].setVisible(true);
+                            }else{
+                                if(noticiesFinals[aux][0]== false){
+                                    marker[aux].setVisible(false);
+                                }
+                            }
+                        }
+                    }
+                     for(aux=0;aux<noticiesFinals.length;aux++){
+                         if(noticiesFinals[aux][0]== false){
+                             infowindow[aux].close();
+                         }
+                         noticiesFinals[aux][0] = false;
+                    }
+                break;
+
+            }
+            
+       }
+
+       jQuery("a#filter-totmap").live("click",function(){
+            filtre= 4;
+            categoriesMarkers();
+            jQuery("a#filter-7map").removeClass("active");
+            jQuery("a#filter-24map").removeClass("active");
+            jQuery("a#filter-31map").removeClass("active");
+            jQuery("a#filter-totmap").addClass("active");
+
+        });
+
+        jQuery("a#filter-31map").live("click",function(){
+            filtre= 3;
+            categoriesMarkers();
+            jQuery("a#filter-7map").removeClass("active");
+            jQuery("a#filter-24map").removeClass("active");
+            jQuery("a#filter-31map").addClass("active");
+            jQuery("a#filter-totmap").removeClass("active");
+
+        });
+
+        jQuery("a#filter-7map").live("click",function(){
+            filtre= 2;
+            categoriesMarkers();
+            jQuery("a#filter-7map").addClass("active");
+            jQuery("a#filter-24map").removeClass("active");
+            jQuery("a#filter-31map").removeClass("active");
+            jQuery("a#filter-totmap").removeClass("active");
+
+        });
+
+        jQuery("a#filter-24map").live("click",function(){
+            filtre= 1;
+            categoriesMarkers();
+            jQuery("a#filter-7map").removeClass("active");
+            jQuery("a#filter-24map").addClass("active");
+            jQuery("a#filter-31map").removeClass("active");
+            jQuery("a#filter-totmap").removeClass("active");
+
+        });
+
+    </script>
+    </body>
+</html>

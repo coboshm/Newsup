@@ -1,0 +1,96 @@
+<?php $dia = 0 ?>
+<?php $contador = 0 ?>
+<?php if($this->notificaciones == null){ ?>
+     <div class="nothing-found topbar-spacer">
+        <p class="title">Usted aún no tiene notificaciones.</p>
+    </div>
+<?php }else{ ?>
+<?php foreach ($this->notificaciones as $notificacionRow):?>
+    <?php $contador++; ?>
+    <?php if($notificacionRow->getData()->compare($this->data->toString("dd"),$notificacionRow->getData()->get(Zend_Date::DAY)) == -1 ): ?>
+        <div  style="border-bottom:1px solid #eee; background:#f2f2f2;padding:4px 5px 4px 5px;">
+          Hoy
+        </div>
+    <?php else: ?>
+
+
+        <?php if($dia != $notificacionRow->getData()->get('dd')): ?>
+            <?php $dia = $notificacionRow->getData()->get('dd') ?>
+            <div style="clear:both;margin-bottom: 10px; border-bottom:1px solid #eee; padding:18px 5px 4px 5px;">
+              <?php echo $notificacionRow->getData()->get('dd MMMM YYYY ')?>
+            </div>
+        <?php endif; ?>
+
+    <?php endif; ?>
+
+            <?php switch ($notificacionRow->getIdTipus()) :
+                 case 1:?>
+                    <div id="contenido2" style="clear:both; font-size: 14px; margin-left: 5px; margin-top: 15px;">
+                        <div style="min-width:50px;">
+                            <a style="color: black;" href="<?php echo $this->baseUrl();?>/map/ver2/id/<?php echo $notificacionRow->getIdNoticia() ?>/idNotificacion/<?php echo $notificacionRow->getId() ?>">                                                <img alt="contestar" src="<?php echo $this->baseUrl() ?>/images/contestarComment.png" style="vertical-align:-5px;"/>
+                                <?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?>
+                                <?php echo $notificacionRow->getTipus();?>
+                            </a>
+                       </div>
+                    </div>
+                    <?php break;
+                case 2:?>
+                    <div id="contenido2" style="clear:both; font-size: 14px; margin-left: 5px; margin-top: 15px;">
+                        <div style="min-width:50px;">
+                           <a style="color: black;" href="<?php echo $this->baseUrl(); ?>/index/noticiasnotificacion/idNoticia/<?php echo $notificacionRow->getIdNoticia()?>/idNotificacion/<?php echo $notificacionRow->getId() ?>">
+                                <img alt="contestar" src="<?php echo $this->baseUrl() ?>/images/contestarComment.png" style="vertical-align:-5px;"/>
+                                <?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?>
+                                <?php echo $notificacionRow->getTipus();?>
+                            </a>
+                       </div>
+                    </div>
+                    <?php break;
+                case 3:?>
+                    <div id="contenido2" style="clear:both; font-size: 14px; margin-left: 5px; margin-top: 15px;">
+                        <div style="min-width:50px;">
+                            <a style="color: black;" href="<?php echo $this->baseUrl(); ?>/index/usuari/nomUser/<?php echo $notificacionRow->getIdUsuariEnv()->getUsername() ?>/idNotificacion/<?php echo $notificacionRow->getId() ?>">
+                                <img alt="contestar" src="<?php echo $this->baseUrl() ?>/images/contestarComment.png" style="vertical-align:-5px;"/>
+                                <?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?>
+                                <?php echo $notificacionRow->getTipus();?>
+                            </a>
+                       </div>
+                    </div>
+                    <?php break;
+                case 4:?>
+                    <div id="contenido2" style=" clear:both;font-size: 14px; margin-left: 5px; margin-top: 15px;">
+                        <div style="min-width:50px;">
+                            <a style="color: black;" href="<?php echo $this->baseUrl(); ?>/index/noticiasnotificacion/idNoticia/<?php echo $notificacionRow->getIdNoticia()?>/idNotificacion/<?php echo $notificacionRow->getId() ?>">
+                                <img alt="contestar" src="<?php echo $this->baseUrl() ?>/images/contestarComment.png" style="vertical-align:-5px;"/>
+                                <?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?>
+                                <?php echo $notificacionRow->getTipus();?>
+                            </a>
+                        </div>
+                    </div>
+                    <?php break;
+                case 5:?>
+                    <div id="contenido2" style=" clear:both; font-size: 14px; margin-left: 5px; margin-top: 15px;">
+                        <div style="min-width:50px;">
+                            <a style="color: black;" href="<?php echo $this->baseUrl(); ?>/index/noticiasnotificacion/idNoticia/<?php echo $notificacionRow->getIdNoticia()?>/idNotificacion/<?php echo $notificacionRow->getId() ?>">
+                                <img alt="contestar" src="<?php echo $this->baseUrl() ?>/images/contestarComment.png" style="vertical-align:-5px;"/>
+                                <?php echo $notificacionRow->getIdUsuariEnv()->getUsername()?>
+                                <?php echo $notificacionRow->getTipus();?>
+                            </a>
+                        </div>
+                    </div>
+                    <?php break;
+             endswitch;?>
+
+
+<?php endforeach;?>
+<?php } ?>
+<?php if($this->cantitat > $contador){ ?>
+<div style="margin-top:10px;clear:both;">
+     <ul class="pagination group notificacionsMes" style="padding:10px 0px 10px 0px;" role="navigation"aria-labelledby="paginglabel">
+
+        <li id="mesNotificacions" rel="<?php echo $this->numMostrats; ?>">
+            Ver más notificaciones
+        </li>
+
+    </ul>
+</div>
+<?php } ?>

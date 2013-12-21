@@ -1,0 +1,113 @@
+<?php if($this->noticiesMevas == null){ ?>
+    <div class="nothing-found topbar-spacer">
+        <p class="title">Aun no has subido ninguna noticia. Subela ahora, es muy rapido y senzillo.</p>
+    </div>
+<?php }else{ ?>
+<?php foreach($this->noticiesMevas as $noticia){ ?>
+    <?php $votat=0; ?>
+    <?php if($this->loggedIn==true): ?>
+    <?php foreach($noticia->getAllVots() as $vot){ ?>
+    <?php if($vot->getidUsuari()==$this->user->id_user){ $votat=$noticia->getId();; }?>
+    <?php } ?>
+    <?php endif ?>
+<div class="story-item-gutters group" style="margin-top: 17px; margin-bottom: 14px;">
+    <div class="story-item-diggbtn" id="puntuacio<?php echo $noticia->getId();?>">
+        <div class="newsup-btn has-tooltip newsup-dugg">
+
+            <a class="newsup-count-wrapper" href="">
+                <span class="newsup-count"><span><?php echo $noticia->getNumVots();?></span></span>
+            </a>
+            <?php if($votat!=0){?>
+            <span class="btnpunts-votat btn-special-javotat has-tooltip" rel="<?php echo $noticia->getId(); ?>" votat="<?php echo $votat; ?>"  id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>
+            <?php }else{?>
+            <span class="btnpunts btn-special-punts has-tooltip" rel="<?php echo $noticia->getId(); ?>" votat="<?php echo $votat; ?>"  id="puntsNotice">UP&nbsp;<span class="puntuarNew puntuar-new"></span></span>
+            <?php } ?>
+        </div>
+    </div>
+    <?php if($noticia->getImatge() !=null){ ?>
+        <div class="story-item-media" style="padding-top:10px;">
+            <a class="story-item-thumb" href="">
+                <div class="thumb-edges"></div>
+                <img src="<?php echo $noticia->getImatge(); ?>" width="58px" height="62px">
+            </a>
+        </div>
+    <?php } ?>
+    <?php if($noticia->getImatge() !=null){ ?>
+    <div class="story-item-content group" style="width:97%;">
+    <?php }else{ ?>
+    <div class="story-item-content group" style="width:110%;">
+    <?php } ?>
+        <div class="story-item-details">
+            <h3 class="story-item-title">
+                 <a target="_blank" href="<?php echo $noticia->getUrl(); ?>"><?php echo $noticia->getTitul200(); ?></a>
+            </h3>
+            <p class="story-item-description">
+                <a class="story-item-source" href=""><!aqui va la url que ve ex: marca.com-></a>
+                <a class="story-item-teaser" href="<?php echo $noticia->getUrl(); ?>">
+                    <?php echo $noticia->getDescripcio180();?>
+                    <span class="timestamp" style="color:#82AB4D;">&nbsp;Enviado el:&nbsp;<?php echo $noticia->getData(); ?></span>
+                </a>
+            </p>
+        </div>
+        <ul class="story-item-meta group">
+            <li class="story-item-submitter">Enviado por:&nbsp;&nbsp;<a class="hcard-trigger" href="<?php echo $this->baseUrl(); ?>/index/user/id/<?php echo $noticia->getUsuari()->getId();?>"><?php echo $noticia->getUsuari()->getUsername();?></a></li>
+           <li class="story-item-comments">
+               <a href="<?php echo $this->baseUrl(); ?>/index/noticia/id/<?php echo $noticia->getId(); ?>">
+                   <span class="storylist-icon comments dib"></span>
+                   <span class="storylist-item-comment-count"><?php echo $noticia->getNumComentaris();?></span>&nbsp;Comentarios
+               </a>
+           </li>
+           <li class="story-item-newcomment" rel="<?php echo $noticia->getId(); ?>">
+                <a class="story-item-action-post-comment">Comentar</a>
+                <span class="story-item-newcomment-nub"></span>
+           </li>
+           <li><a class="sharing-facebook" href="http://www.facebook.com/sharer.php?u=<?php echo $this->baseUrl()."/index/noticia/id/".$noticia->getId() ;?>"><span class="storylist-icon facebook"></span></a></li>
+           <?php if($noticia->getLatitude() == null || $noticia->getLongitude() == null){ ?>
+           <li class="mapa-colocar">
+               <a class="mapa-color-a" href="<?php echo $this->baseUrl();?>/map/colocar/id/<?php echo $noticia->getId(); ?>">
+                   <span class="mapa-color-span"><img src="<?php echo $this->baseUrl();?>/images/map.jpeg" width="16px" height="16px"></span>
+                   <span>Colocar en el Mapa</span>
+               </a>
+           </li>
+           <?php } ?>
+       </ul>
+       <div class="inline-comment-container"></div>
+    </div>
+</div>
+<!--fins aqui -->
+    <div id="inline-comment-container<?php echo $noticia->getId(); ?>" class="story-item-comment-form group" style="display:none;margin-left: 7%; clear: both;">
+        <form class="post-comment-form inline-comment-form group active" method="post" action="<?php echo $this->baseUrl();?>/privat/afegircomentari">
+            <img alt="" class="story-item-comment-form-thumb" src="http://cdn4.diggstatic.com/img/user/r.6835deeb.png">
+            <input type="hidden" class="item_id" value="<?php echo $noticia->getId(); ?>" name="id">
+            <a class="close-it cancel-inline-comment" id="closeComent" rel="<?php echo $noticia->getId(); ?>"><span>x</span></a>
+            <textarea class="post-comment-textarea elastic" name="text" style="height: 47px; overflow: hidden;"></textarea>
+            <button class="btn btn-secondary btn-small" name="submit" type="submit">&nbsp;&nbsp;&nbsp;Enviar&nbsp;&nbsp;&nbsp;</button>
+        </form>
+    </div>
+   <div style="width:100%; height: 1px; background-color: #eeeeee; margin-right: 5px;"></div>
+
+<?php } ?>
+ <?php if($this->cantitat >15){ ?>
+  <script>
+
+    var cantitat = <?php echo $this->cantitat; ?>;
+
+  </script>
+    <ul class="pagination group btn-loader btn-loader-bottom no-prev no-next story-list-container" role="navigation"aria-labelledby="paginglabel">
+        <li class="prev" >
+            <a class="btn btn-default btn-small" id="prev-out" rel="<?php echo $this->pagina; ?>" idus="<?php echo $this->id; ?>">
+                <span class="uitext" id="prev">Anterior</span>
+            </a>
+        </li>
+        <li class="page-num" style="padding-top:7px;">
+            Página
+            <span class="pagination-current"><?php echo $this->pagina; ?></span>
+        </li>
+        <li class="next">
+            <a class="btn btn-default btn-small" id="next-out" rel="<?php echo $this->pagina; ?>" idus="<?php echo $this->id; ?>">
+                <span class="uitext" id="next">Siguiente</span>
+            </a>
+        </li>
+    </ul>
+    <?php } ?>
+<?php } ?>

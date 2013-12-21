@@ -1,0 +1,62 @@
+<?php
+
+
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of Cataccio
+ *
+ * Marc Cobos
+ */
+
+
+class Municipiaccio extends Zend_Db_Table
+{
+        protected $_name = "municipiaccio";
+        protected $_primary = "id_tras";
+
+        public function afegirMunicipi($id,$municipis){
+
+            foreach ($municipis as $mun){
+                
+                $muni = $this->createRow();
+                $muni->id_accio = $id;
+                $muni->id_municipi = $mun;
+                $muni->save();
+
+
+            }
+        }
+
+    public function getMunicipis($id,$textmunicipi)
+    {
+
+        $select = $this->select();
+        $select->where("id_accio = $id");
+        $select->where($textmunicipi);
+        $municipis = $this->fetchAll($select);
+        if($municipis->count()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+   public function getAllMunicipis($id)
+   {
+        $select = $this->select();
+        $select->where("id_accio = $id");
+        $mun = $this->fetchAll($select);
+        return $mun;
+   }
+
+    public function borraccio($id)
+    {
+        $where = $this->getAdapter()->quoteInto("id_accio = ?", $id);
+        $this->delete($where);
+    }
+
+}

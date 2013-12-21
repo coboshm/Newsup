@@ -1,0 +1,108 @@
+<?php
+
+require_once 'Municipi.php';
+require_once 'Categoria.php';
+require_once 'Tipus.php';
+require_once 'Estat.php';
+
+class Accio
+{
+
+        private $_id;
+        private $_tipus;
+        private $_data;
+        private $_estat;
+        private $_observacions;
+        private $_colCategoria = array();
+        private $_colMunicipi = array();
+
+        public function __construct($id, $data, $observacions)
+        {
+
+            $this->_id = $id;
+            //$this->_tipus = $tipus;
+            $this->_data = $data;
+            $this->_observacions = $observacions;
+
+        }
+
+
+        public function getId()
+        {
+            return $this->_id;
+        }
+
+        public function getData()
+        {
+            if($this->_data !=""){
+                $previsio=explode("-", $this->_data);
+                $previsiodataok = "$previsio[2]".'-'."$previsio[1]".'-'."$previsio[0]";
+                return $previsiodataok;
+            }else{
+                return $this->_data;
+            }
+        }
+
+        public function getAny()
+        {
+            $previsio=explode("-", $this->_data);
+            return $previsio[0];
+        }
+
+        public function getMes()
+        {
+            $previsio=explode("-", $this->_data);
+            return $previsio[1];
+        }
+
+        public function getDia()
+        {
+            $previsio=explode("-", $this->_data);
+            return $previsio[2];
+        }
+
+        public function addMunicipi($id, $nom)
+        {
+            $this->_colMunicipi[] = new Municipi($id ,$nom);
+        }
+
+        public function addCategoria($id, $nom)
+        {
+            $this->_colCategoria[] = new Categoria($id ,$nom);
+        }
+
+        public function getObservacions()
+        {
+            return $this->_observacions;
+        }
+
+        public function getAllCategoria()
+        {
+            return $this->_colCategoria;
+        }
+
+        public function getAllMunicipi()
+        {
+            return $this->_colMunicipi;
+        }
+
+        public function SetTipus($id, $nom)
+        {
+            $this->_tipus = new Tipus($id ,$nom);
+        }
+
+        public function SetEstat($id, $nom)
+        {
+            $this->_estat = new Estat($id ,$nom);
+        }
+
+        public function getTipus()
+        {
+            return $this->_tipus;
+        }
+
+        public function getEstat()
+        {
+            return $this->_estat;
+        }
+}

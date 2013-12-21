@@ -1,0 +1,366 @@
+
+
+    var x=0;
+    var y=0;
+    var d=0;
+    var f=0;
+    var g=0;
+    var h=0;
+    var l = 0;
+    var ob=0;
+    var dat=0;
+    var c = Array();
+    var blocktip=false;
+    var blockcat=false;
+    var tipus;
+    var categoria = Array();
+    var datas;
+    var observacions;
+
+
+    jQuery("div#tipus").live("click",function(){
+       id = jQuery(this).attr("rel");
+       nom = jQuery("span#text"+id).html();
+       if(id!=d){
+        jQuery("img#tipus"+ d).attr('src','img/checkbox0.png');
+        jQuery("img#tipus"+ id).attr('src','img/checkbox1.png');
+
+        jQuery("span#nom").html(" : " + nom);
+        d=id;
+       }else{
+        jQuery("img#tipus"+ id).attr('src','img/checkbox0.png');
+        jQuery("span#nom").html("");
+        d=-1;
+       }
+    });
+
+    jQuery("div#afegirtipus").live("click",function(){
+
+        if(blocktip==false){
+           jQuery("div#afegirtipus").html("<input class='tipusnom' style=\"display: block;float:left;width: 70px;\" type=\"text\" name=\"nom\" size=\"8\">\
+                                            <input class='desar_tipus' style=\"float:left;display: block; width: 25px;font-weight:bolder;\" type='button' name=\"sumbit\" size=\"2\" value=\"OK\">");
+        blocktip=true;
+        }
+    });
+
+    jQuery(".desar_tipus").live("click",function(){
+
+        nom_nou = jQuery(".tipusnom").val();
+
+        jQuery.ajax({
+            type: "POST",
+            url: baseUrl + "/gactuacions/index/mod-ajax",
+            async: true,
+            data: "nom="+nom_nou,
+
+            success: function(data){
+                if(data){
+                    jQuery("div#divTipus").html(data);
+                    blocktip = false;
+                } else{
+                    alert('Error');
+                }
+            }
+        })
+    });
+
+
+    jQuery("div#afegircategoria").live("click",function(){
+
+        if(blockcat==false){
+           jQuery("div#afegircategoria").html("<input class='categorianom' style=\"display: block;float:left;width: 70px;\" type=\"text\" name=\"categoria\" size=\"8\">\
+                                            <input class='desar_categoria' style=\"float:left;display: block; width: 25px;font-weight:bolder;\" type='button' name=\"sumbit\" size=\"2\" value=\"OK\">");
+        blockcat=true;
+        }
+    });
+
+    jQuery(".desar_categoria").live("click",function(){
+
+        nom_nou = jQuery(".categorianom").val();
+
+        jQuery.ajax({
+            type: "POST",
+            url: baseUrl + "/gactuacions/index/mod-ajaxcategoria",
+            async: true,
+            data: "nom="+nom_nou,
+
+            success: function(data){
+                if(data){
+                    jQuery("div#divCategoria").html(data);
+                    blocktip = false;
+                } else{
+                    alert('Error');
+                }
+            }
+        })
+    });
+
+    jQuery("div#categoria").live("click",function(){
+
+
+       id = jQuery(this).attr("rel");
+
+
+            if(search(id)){
+                jQuery("img#categoria"+ id).attr('src','img/checkbox0.png');
+
+                jQuery("span#num").html(" [" + c.length + "]");
+            }else{
+                c[c.length] = id;
+                jQuery("img#categoria"+ id).attr('src','img/checkbox1.png');
+
+                jQuery("span#num").html(" [" + c.length + "]");
+            }
+
+    });
+
+    function search(id){
+        var p=0;
+        var aux = Array();
+
+        var si=false;
+        if(c.length==0){
+            si=false;
+        }else{
+            for(p=0; p<c.length; p++){
+                if(c[p]!=id){
+
+                    aux[aux.length] = c[p];
+                }else{
+
+                    si=true;
+                }
+            }
+        }
+
+        if(si){
+            c=aux;
+            return true;
+        }else{
+
+            return false ;
+        }
+    }
+  /*  jQuery("div#novaReserva").click(function(){
+       // alert("ola");
+        jQuery("div#divNou").fadeIn(200);
+    });
+
+    jQuery("div.close").click(function(){
+       // alert("ola");
+       jQuery("div#divNou").fadeOut(300);
+    });
+
+    jQuery("div#novaReserva3").click(function(){
+       // alert("ola");
+        jQuery("div#divbusqueda").fadeIn(200);
+    });
+
+    jQuery("div.close").click(function(){
+       // alert("ola");
+       jQuery("div#divbusqueda").fadeOut(300);
+    });
+
+
+        $(function() {
+		$("#datepicker").datepicker();
+	});
+*/
+    function checkDia(element,e,jumpTo){
+        keycode = e.keyCode;
+        valor = element.value;
+        if((keycode>=48 && keycode <= 57) || (keycode>=96 && keycode <= 105)){
+            if(keycode>=48 && keycode <= 57){ val = keycode-48;}
+            if(keycode>=96 && keycode <= 105){ val = keycode-96;}
+
+            nouValor = valor + val.toString();
+            if(nouValor >31 || nouValor.toString().length >2){
+                element.value = valor;
+            } else{
+                element.value = nouValor;
+                if(nouValor.length ==2){
+                    document.getElementById(jumpTo).value='';
+                    document.getElementById(jumpTo).focus();
+                }
+            }
+        }
+        //botons suprimir i cursor i F5
+        if(!(keycode==8 || keycode==9 || keycode== 46|| keycode== 116|| (keycode>=37 && keycode<=40))){
+            return false;
+        }
+        else{ return true; }
+    }
+
+    function checkMes(element,e,jumpTo){
+        keycode = e.keyCode;
+        valor = element.value;
+        if((keycode>=48 && keycode <= 57) || (keycode>=96 && keycode <= 105)){
+            if(keycode>=48 && keycode <= 57){ val = keycode-48;}
+            if(keycode>=96 && keycode <= 105){ val = keycode-96;}
+
+            nouValor = valor + val.toString();
+            if(nouValor >12 || nouValor.toString().length >2){
+                element.value = valor;
+            } else{
+                element.value = nouValor;
+                if(nouValor.length ==2){
+                    document.getElementById(jumpTo).value='';
+                    document.getElementById(jumpTo).focus();
+                }
+            }
+        }
+        //botons suprimir i cursor i F5
+        if(!(keycode==8 || keycode==9 || keycode== 46|| keycode== 116|| (keycode>=37 && keycode<=40))){
+            return false;
+        }
+        else{ return true; }
+    }
+
+    function checkAny(element,e){
+        keycode = e.keyCode;
+        valor = element.value;
+        if((keycode>=48 && keycode <= 57) || (keycode>=96 && keycode <= 105)){
+            if(keycode>=48 && keycode <= 57){ val = keycode-48;}
+            if(keycode>=96 && keycode <= 105){ val = keycode-96;}
+
+            nouValor = valor + val.toString();
+            if(nouValor.toString().length >4){
+                element.value = valor;
+            } else{
+                element.value = nouValor;
+
+            }
+        }
+        //botons suprimir i cursor i F5
+        if(!(keycode==8 || keycode==9 || keycode== 46|| keycode== 116|| (keycode>=37 && keycode<=40))){
+            return false;
+        }
+        else{ return true; }
+    }
+
+
+    jQuery("div#novaReserva4").click(function(){
+
+       if(x==1){
+           x=0;
+           jQuery("div#divTipus").fadeOut(300);
+           jQuery("div#afegirtipus").html("<img src=\"img/new.png\">Afegir");
+           blocktip=false;
+       }else{
+           x=1;
+           jQuery("div#divTipus").fadeIn(200);
+       }
+
+    });
+
+
+    jQuery("div#novaReserva5").click(function(){
+       // alert("ola");
+        if(y==1){
+            y=0;
+            jQuery("div#divCategoria").fadeOut(300);
+            jQuery("div#afegircategoria").html("<img src=\"img/new.png\">Afegir");
+            blockcat=false;
+        }else{
+            y=1;
+            jQuery("div#divCategoria").fadeIn(200);
+        }
+    });
+
+     jQuery("div#novaReserva6").click(function(){
+       // alert("ola");
+        if(ob==1){
+            ob=0;
+            jQuery("div#divObservacions").fadeOut(300);
+        }else{
+            ob=1;
+            jQuery("div#divObservacions").fadeIn(200);
+        }
+    });
+
+    jQuery("div#novaReserva7").click(function(){
+
+       if(dat==1){
+           dat=0;
+           jQuery("div#divData").fadeOut(300);
+           jQuery("span#data").html(" " + jQuery("#datdia").val() + "/" +  jQuery("#datmes").val() + "/" + jQuery("#datany").val());
+
+       }else{
+           dat=1;
+           jQuery("div#divData").fadeIn(200);
+           jQuery("span#data").html('');
+       }
+
+    });
+
+    jQuery("div#novaReserva").click(function(){
+
+        var error = false;
+        var num=0;
+        var conta=0;
+
+        if(d!=0){
+            tipus = d;
+        }else{
+            error = true;
+            alert("No hi ha cap tipus introduit");
+        }
+        if(c!=0){
+            categoria = c;
+        }else{
+            error = true;
+            alert("No hi ha cap categoria introduida");
+        }
+
+        datas = jQuery("#datany").val() + "-" + jQuery("#datmes").val()+ "-" + jQuery("#datdia").val();
+        observacions = jQuery("#observacions").val();
+
+        if(error==false){
+         jQuery.ajax({
+            type: "POST",
+            url: baseUrl + "/gactuacions/index/afegir-ajax",
+
+            async: true,
+            data: "tipus="+tipus+"&categoria="+categoria+"&datas="+datas+"&observacions="+observacions,
+
+            success: function(data){
+                if(data){
+                    //alert("olaa");
+                    jQuery("div.staticPage").html(data);
+                    jQuery("div#divData").fadeOut(300);
+                    ob=0;
+                    jQuery("div#divObservacions").fadeOut(300);
+                    y=0;
+                    jQuery("div#divCategoria").fadeOut(300);
+                    x=0;
+                    jQuery("div#divTipus").fadeOut(300);
+                    d=0;
+                    num = c.length;
+                    //alert(num);
+                    //alert(c.length);
+                    /*while(conta>num)
+                    {
+                        //alert(c[conta]);
+                        //alert(conta);
+                        //alert(c);
+                      if(search(c[conta])){
+                          jQuery("img#categoria"+ c[conta]).attr('src','img/checkbox0.png');
+                      } 
+                      conta++;
+                    }*/
+                    c=0;
+                    datas=0;
+                    jQuery("#observacions").val('');
+                    observacions ='';
+                    jQuery("span#data").html('');
+                    jQuery("span#num").html('');
+                    jQuery("span#nom").html("");
+                } else {
+                    alert('Error');
+                }
+            }
+        });
+        }
+    });
+
+

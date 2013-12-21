@@ -1,0 +1,89 @@
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+            
+         <div id="left-column" class="column narrow attached-menu group">
+          <?php
+                //aqui fem un include
+                echo $this->render("opcionsperfil.phtml"); ?>
+
+            <div id="sidebar-sources">
+            </div>
+        </div>
+        <div id="main-column" class="column attached-menu group">
+           <div id="carregador-url">
+            <form id="submit-form" class="group">
+                <input type="text" value="¡Envía su Link!" tabindex="1" id="url-submit-url" class="text-input text-input1">
+                <button id="url-submit-button" tabindex="2" class="btn2 btn-special2 has-tooltip" name="button" type="button">Subir URL</button>
+            </form>
+           </div>
+            <ul id="comment-sorting" class="pillboxes filter-menu group" style="margin-top: 10px; margin-bottom: 10px;background: #eee;">
+                <li>
+                    <a id="filter-recients" class="sort active">Más recientes</a>
+                </li>
+                <li>
+                    <a id="filter-votadas" class="sort">Más votadas</a>
+                </li>
+            </ul>
+            <div id="aquiNews">
+                <?php
+                //aqui fem un include
+                echo $this->render("foreachnoticiesprivatad.phtml"); ?>
+
+            </div>
+        </div>
+       <div id="right-column" class="column wide group">
+           <?php
+            //aqui fem un include
+            echo $this->render("rightsidebar.phtml");  
+            ?>
+       </div>
+     </div>
+    </div>
+</div>
+
+
+<script>
+
+
+
+    jQuery("a#filter-recients").live("click",function(){
+
+            jQuery.ajax({
+                        type: "POST",
+                        url: baseUrl+"/privat/recientes",
+                        async: true,
+                        data: "",
+
+                        success: function(data){
+                            if(data){
+                               jQuery("div#aquiNews").html(data);
+                               jQuery("a#filter-votadas").removeClass("active");
+                               jQuery("a#filter-recients").addClass("active");
+                            }
+                        }
+            })
+
+     });
+
+    jQuery("a#filter-votadas").live("click",function(){
+
+            jQuery.ajax({
+                        type: "POST",
+                        url: baseUrl+"/privat/votadas",
+                        async: true,
+                        data: "",
+
+                        success: function(data){
+                            if(data){
+                               jQuery("div#aquiNews").html(data);
+                               jQuery("a#filter-recients").removeClass("active");
+                               jQuery("a#filter-votadas").addClass("active");
+                            }
+                        }
+            })
+
+     });
+
+
+</script>

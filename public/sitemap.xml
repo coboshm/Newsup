@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+<url>
+  <loc>http://www.newsup.es/</loc>
+  <changefreq>always</changefreq>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/index/index</loc>
+  <changefreq>always</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/map</loc>
+  <changefreq>always</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/feed</loc>
+  <changefreq>always</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/categoria/Economía</loc>
+  <changefreq>always</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/categoria/Política</loc>
+  <changefreq>always</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/categoria/Internacional</loc>
+  <changefreq>always</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/categoria/Sucesos</loc>
+  <changefreq>always</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/categoria/Videojuegos</loc>
+  <changefreq>always</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/categoria/Deportes</loc>
+  <changefreq>always</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/categoria/Nacional</loc>
+  <changefreq>always</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/categoria/Tecnología</loc>
+  <changefreq>always</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/categoria/Ciencia</loc>
+  <changefreq>always</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/categoria/Otras</loc>
+  <changefreq>always</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/index/contactar</loc>
+  <changefreq>always</changefreq>
+  <priority>0.40</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/index/ranking</loc>
+  <changefreq>always</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/index/faq</loc>
+  <changefreq>always</changefreq>
+  <priority>0.40</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/index/terminos</loc>
+  <changefreq>always</changefreq>
+  <priority>0.40</priority>
+</url>
+<url>
+  <loc>http://www.newsup.es/index/privacidad</loc>
+  <changefreq>always</changefreq>
+  <priority>0.40</priority>
+</url>
+</urlset>

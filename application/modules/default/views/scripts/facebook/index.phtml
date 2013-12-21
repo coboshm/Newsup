@@ -1,0 +1,31 @@
+<div class="column-container group">
+    <div class="columns group">
+        <div class="pre-content">
+
+        <div id="left-column" class="column narrow attached-menu group">
+
+        </div>
+        <div id="main-column" class="column attached-menu group">
+            <?php if($this->registrat == 0): ?>
+            <a href="<?php echo $this->url ?>">pulsa aqui </a>
+            <?php else: ?> 
+                Mi nombre de usuario es: <?php echo $this->mynombre ?><br/>
+                Mis amigos son:
+                <?php foreach($this->myFriends as $amigo): ?>
+                    <?php echo $amigo['name'] ?><br/>
+                <?php endforeach; ?>
+            <?php endif;?>
+            
+ 
+        </div>
+        <div id="right-column" class="column wide group">
+
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+</script>

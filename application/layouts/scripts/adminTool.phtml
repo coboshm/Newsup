@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <meta http-equiv="expires" content="-1" />
+        <meta name="Description" content="NewsUP Cambia la forma de ver las noticias!" />
+
+        <title>NewsUp Administration</title>
+
+        <?php echo $this->headTitle() ?>
+
+
+<!-- Meta Images -->
+         <base href="http://<?php echo $this->escape($_SERVER['HTTP_HOST']) . $this->escape($this->baseUrl()); ?>/" />
+
+	 <link rel="shortcut icon" href="<?php echo $this->baseUrl();?>/images/favicon.ico" type="image/x-icon" />
+         <script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/jquery-1.3.2.min.js"></script>
+         <script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/jquery-ui-1.7.2.custom.min.js"></script>
+
+
+<!-- Stylesheets -->
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/style3.css',      'screen, projection') ?>
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/styleSearch.css',      'screen, projection') ?>
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/style2.css',      'screen, projection') ?>
+         <?php $this->headLink()->appendStylesheet( $this->baseUrl() . '/css/style.css',      'screen, projection') ?>
+	 <?php echo $this->headLink() ?>
+         <?php echo $this->headScript() ?>
+
+         <script type="text/javascript">
+             var baseUrl = "<?php echo $this->baseUrl() ?>";
+             var loggedIn = false;
+         </script>
+
+    </head>
+    <body style="min-width:992px;" style="background:#336600;">
+        <?php echo $this->render("missatjesAdmin.phtml"); ?>
+
+         <?php echo $this->layout()->content ?>
+    </body>
+</html>

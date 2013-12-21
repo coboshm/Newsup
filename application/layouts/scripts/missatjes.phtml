@@ -1,0 +1,784 @@
+<?php if($this->loggedIn!=true){ ?>
+
+<script type="text/javascript">
+ var RecaptchaOptions = {
+    theme : 'clean',
+    custom_theme_widget: 'recaptcha_widget',
+    lang : 'es',
+    tabindex :8
+
+ };
+
+</script>
+<div id="modal-wrapper">
+    <?php
+     $navegador = getenv("HTTP_USER_AGENT");
+     if (preg_match("/MSIE/i", "$navegador")){
+     ?>
+      <div id="modal-screen" style="background: url('<?php echo $this->baseUrl(); ?>/images/degradat.png'); height: 100%; width: 100%; position: fixed;"></div>
+     <?php }else{ ?>
+       <div id="modal-screen" style="background-color:rgba(0, 0, 0, 0.3); height: 100%; width: 100%; position: fixed;"></div>
+       <?php } ?>
+       <form id="loginform" name="loginform" style="position:relative; " action="<?php echo $this->baseUrl();?>/login" method="post">
+            <div id="login-dock" class="login">
+                <p>
+                    <span class="sprite1 message-icon"></span>
+                    <span class="modal-header">Login<span style="color:#006600; font-weight: bold;">newsUP</span></span>
+                    <a class="dismiss"></a>
+                    <?php
+                     $navegador = getenv("HTTP_USER_AGENT");
+                     if (preg_match("/MSIE/i", "$navegador")){
+                     ?>
+                        <span style="color:#000; float: left; clear:both;margin-top:23px; margin-left:15px; font-size:12px;">Está a punto de acceder a <strong>NewsUP</strong></span>
+                        <span  style=" width: 120px; clear:both; margin-top: 40px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 17px;">Usuario:</span>
+                        <input type="text" style="width: 230px; float:left; margin-top:30px;" tabindex="1" class="text-input placeholder-input" id="email_login" name="email_login"/>
+                        <label  style="width: 120px; clear:both; margin-top: 15px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 17px;">Password:</label>
+                        <input type="password" style=" float:left; margin-top:10px;" tabindex="1" class="text-input placeholder-input" id="password_login" name="password_login"/>
+                        <input type="submit" onClick="return verificar()" style="margin-top:10px; margin-right:10px;" id="entrar-submit" tabindex="2" class="btn2 btn-special2 has-tooltip" value="Entrar"/>
+                        <span style="margin-top:20px; clear:both; float:left; margin-left:150px; color: #000;"><input tabindex="1" type="checkbox" name="mantenirOpen" />Guardar Usuario en este Ordenador</span>
+                        <a id="olvidarpass2" style="margin-top:30px; clear:both; float:right; margin-right:43px; font-size:11px; color:#666;">Password o Usuario Olvidados</a>
+
+                        <script>
+
+
+                            jQuery("a#olvidarpass2").live("click",function(){
+                                jQuery("div#login-dock").html("<p>"+
+                                                              "<span class=\"sprite1 message-icon\"></span>"+
+                                                              "<span class=\"modal-header\">Recordar<span style=\"color:#006600; font-weight: bold;\">newsUP</span></span>"+
+                                                              "<a class=\"dismiss\"></a>"+
+                                                              "<span style=\"color:#000; float: left; clear:both;margin-top:23px; margin-left:15px; font-size:12px;\">Si ha olvidado su <strong>contraseña</strong> o su <strong>nombre de usuario.</strong></span>"+
+                                                              "<span style=\"color:#000; float: left; clear:both;margin-top:5px; margin-left:15px; font-size:12px;\">Rellene aquí su <strong>email</strong> y enseguida recibirá en él sus nuevos datos.</span>"+
+                                                              "<span style=\"color:#000; float: left; clear:both;margin-top:5px; margin-left:15px; font-size:12px;\">Si no recibe su email en la <strong>bandeja de entrada</strong> de su correo,</span>"+
+                                                              "<span style=\"color:#000; float: left; clear:both;margin-top:5px; margin-left:15px; font-size:12px;\">puede que se encuentre en la <strong>bandeja de correo no deseado.</strong></span>"+
+                                                              "<span  style=\" width: 90px; clear:both; margin-top: 35px; margin-left: 15px; font-weight: bold; float: left; color: #000; font-size: 17px;\">E-mail:</span>"+
+                                                              "<input type=\"text\" style=\"width: 230px; float:left; margin-top:30px;\" tabindex=\"1\" class=\"text-input placeholder-input\" id=\"email_olvidada\" name=\"email_olvidada\"/>"+
+                                                              "<span id=\"botoOlvi\"><button style=\"margin-top:30px; margin-right:10px;\" id=\"olvidar-submit\" tabindex=\"2\" class=\"btn2 btn-special2 has-tooltip\" name=\"button\" type=\"button\">Enviar</button></span>"+
+                                                              "<a id=\"submit-cancel2\" style=\"margin-top:30px; clear:both; float:right; margin-right:43px; font-size:11px; color:#666;\">Volver al Login</a>"+
+                                                              "</p>");
+                            });
+
+                             jQuery("button#olvidar-submit").live("click",function(){
+                                var error = 0;
+
+                                if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(jQuery("input#email_olvidada").val())){
+                                    email_olvidada = jQuery("input#email_olvidada").val();
+                                }else{
+                                   jQuery("div#message-dock").fadeIn(300);
+                                   error=1;
+                                   setTimeout("tancarFinestreLogin2()", 5000);
+                                }
+
+                                if(error!=1){
+
+                                    jQuery("span#botoOlvi").html("<img style=\"margin-top:30px;padding-top:7px; padding-left:10px; margin-right:10px;\" src=\""+baseUrl+"/images/loading-ico.gif\">");
+                                    jQuery.ajax({
+                                        type: "POST",
+                                        url: baseUrl+"/index/passwrenew",
+                                        async: true,
+                                        data: "&email_olvidada="+email_olvidada,
+
+                                        success: function(data){
+                                            if(data){
+
+                                                jQuery("#missatjeRecup").html(data);
+                                                jQuery("span#botoOlvi").html("<button style=\"margin-top:30px; margin-right:10px;\" id=\"olvidar-submit\" tabindex=\"2\" class=\"btn2 btn-special2 has-tooltip\" name=\"button\" type=\"button\">Enviar</button>");
+                                            }
+                                        }
+                                    })
+                                }
+                            });
+
+                            function tancarFinestreLogin2(){
+                                jQuery("div#message-dock").slideUp(300);
+                            }
+
+                            jQuery("a#submit-cancel2").live("click",function(){
+                                jQuery("div#login-dock").html("<p>"+
+                                                              "<span class=\"sprite1 message-icon\"></span>"+
+                                                              "<span class=\"modal-header\">Login<span style=\"color:#006600; font-weight: bold;\">newsUP</span></span>"+
+                                                              "<a class=\"dismiss\"></a>"+
+                                                              "<span style=\"color:#000; float: left; clear:both;margin-top:23px; margin-left:15px; font-size:12px;\">Está a punto de acceder a <strong>NewsUP</strong></span>"+
+                                                              "<span  style=\" width: 120px; clear:both; margin-top: 40px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 17px;\">Usuario:</span>"+
+                                                              "<input type=\"text\" style=\"width: 230px; float:left; margin-top:30px;\" tabindex=\"1\" class=\"text-input placeholder-input\" id=\"email_login\" name=\"email_login\"/>"+
+                                                              "<label style=\"width: 120px; clear:both; margin-top: 15px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 17px;\">Password:</label>"+
+                                                              "<input type=\"password\" style=\" float:left; margin-top:10px;\" tabindex=\"1\" class=\"text-input placeholder-input\" id=\"password_login\" name=\"password_login\"/>"+
+                                                              "<input type=\"submit\" onClick=\"return verificar()\" style=\"margin-top:10px; margin-right:10px;\" id=\"entrar-submit\" tabindex=\"1\" class=\"btn2 btn-special2 has-tooltip\" value=\"Entrar\"/>"+
+                                                              "<span style=\"margin-top:20px; clear:both; float:left; margin-left:150px; color: #000;\"><input tabindex=\"1\" type=\"checkbox\" name=\"mantenirOpen\" />Guardar Usuario en este Ordenador</span>"+
+                                                              "<a id=\"olvidarpass2\" style=\"margin-top:30px; clear:both; float:right; margin-right:43px; font-size:11px; color:#666;\">Password o Usuario Olvidados</a>"+
+                                                              "</p>");
+                            });
+                        </script>
+                    <?php }else{?>
+                        <span style="color:#000; float: left; clear:both;margin-top:23px; margin-left:15px; font-size:12px;">Está a punto de acceder a <strong>NewsUP</strong></span>
+                        <span  style=" width: 120px; clear:both; margin-top: 40px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 17px;">Usuario:</span>
+                        <input type="text" style="width: 230px; float:left; margin-top:30px;" tabindex="1" class="text-input placeholder-input" id="email_login" name="email_login"/>
+                        <label  style="width: 120px; clear:both; margin-top: 15px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 17px;">Password:</label>
+                        <input type="password" style=" float:left; margin-top:10px;" tabindex="1" class="text-input placeholder-input" id="password_login" name="password_login"/>
+                        <input type="submit" onClick="return verificar()" style="margin-top:10px; margin-right:10px;" id="entrar-submit" tabindex="1" class="btn2 btn-special2 has-tooltip" value="Entrar"/>
+                        <span style="margin-top:20px; clear:both; float:left; margin-left:150px; color: #000;"><input tabindex="1" type="checkbox" name="mantenirOpen"/>Guardar Usuario en este Ordenador</span>
+                        <a id="olvidarpass2" style="margin-top:30px; clear:both; float:right; margin-right:43px; font-size:11px; color:#666;">Password o Usuario Olvidados</a>
+
+                        <script>
+
+                            jQuery("a#olvidarpass2").live("click",function(){
+                                jQuery("div#login-dock").html("<p>"+
+                                                              "<span class=\"sprite1 message-icon\"></span>"+
+                                                              "<span class=\"modal-header\">Recordar<span style=\"color:#006600; font-weight: bold;\">newsUP</span></span>"+
+                                                              "<a class=\"dismiss\"></a>"+
+                                                              "<span style=\"color:#000; float: left; clear:both;margin-top:23px; margin-left:15px; font-size:12px;\">Si ha olvidado su <strong>contraseña</strong> o su <strong>nombre de usuario.</strong></span>"+
+                                                              "<span style=\"color:#000; float: left; clear:both;margin-top:5px; margin-left:15px; font-size:12px;\">Rellene aquí su <strong>email</strong> y enseguida recibirá en él sus nuevos datos.</span>"+
+                                                              "<span style=\"color:#000; float: left; clear:both;margin-top:5px; margin-left:15px; font-size:12px;\">Si no recibe su email en la <strong>bandeja de entrada</strong> de su correo,</span>"+
+                                                              "<span style=\"color:#000; float: left; clear:both;margin-top:5px; margin-left:15px; font-size:12px;\">puede que se encuentre en la <strong>bandeja de correo no deseado.</strong></span>"+
+                                                              "<span  style=\" width: 90px; clear:both; margin-top: 35px; margin-left: 15px; font-weight: bold; float: left; color: #000; font-size: 17px;\">E-mail:</span>"+
+                                                              "<input type=\"text\" style=\"width: 230px; float:left; margin-top:30px;\" tabindex=\"1\" class=\"text-input placeholder-input\" id=\"email_olvidada\" name=\"email_olvidada\"/>"+
+                                                              "<span id=\"botoOlvi\"><button style=\"margin-top:30px; margin-right:10px;\" id=\"olvidar-submit\" tabindex=\"2\" class=\"btn2 btn-special2 has-tooltip\" name=\"button\" type=\"button\">Enviar</button></span>"+
+                                                              "<a id=\"submit-cancel2\" style=\"margin-top:30px; clear:both; float:right; margin-right:43px; font-size:11px; color:#666;\">Volver al Login</a>"+
+                                                              "</p>");
+                            });
+
+                            jQuery("button#olvidar-submit").live("click",function(){
+                                var error = 0;
+                                
+                                if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(jQuery("input#email_olvidada").val())){
+                                    email_olvidada = jQuery("input#email_olvidada").val();
+                                }else{
+                                   jQuery("div#message-dock").fadeIn(300);
+                                   setTimeout("tancarFinestreLogin2()", 5000);
+                                   error=1;
+                                }
+
+                                if(error!=1){
+
+                                    jQuery("span#botoOlvi").html("<img style=\"margin-top:30px; padding-top:7px; padding-left:10px; float:left; margin-right:10px;\" src=\""+baseUrl+"/images/loading-ico.gif\">");
+                                    jQuery.ajax({
+                                        type: "POST",
+                                        url: baseUrl+"/index/passwrenew",
+                                        async: true,
+                                        data: "&email_olvidada="+email_olvidada,
+
+                                        success: function(data){
+                                            if(data){
+                                                
+                                                jQuery("#missatjeRecup").html(data);
+                                                jQuery("span#botoOlvi").html("<button style=\"margin-top:30px; margin-right:10px;\" id=\"olvidar-submit\" tabindex=\"2\" class=\"btn2 btn-special2 has-tooltip\" name=\"button\" type=\"button\">Enviar</button>");
+                                            }
+                                        }
+                                    })
+                                }
+                            });
+
+                            function tancarFinestreLogin2(){
+                                jQuery("div#message-dock").slideUp(300);
+                            }
+
+                            jQuery("a#submit-cancel2").live("click",function(){
+                                jQuery("div#login-dock").html("<p>"+
+                                                              "<span class=\"sprite1 message-icon\"></span>"+
+                                                              "<span class=\"modal-header\">Login<span style=\"color:#006600; font-weight: bold;\">newsUP</span></span>"+
+                                                              "<a class=\"dismiss\"></a>"+
+                                                              "<span style=\"color:#000; float: left; clear:both;margin-top:23px; margin-left:15px; font-size:12px;\">Está a punto de acceder a <strong>NewsUP</strong></span>"+
+                                                              "<span  style=\" width: 120px; clear:both; margin-top: 40px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 17px;\">Usuario:</span>"+
+                                                              "<input type=\"text\" style=\"width: 230px; float:left; margin-top:30px;\" tabindex=\"1\" class=\"text-input placeholder-input\" id=\"email_login\" name=\"email_login\"/>"+
+                                                              "<label style=\"width: 120px; clear:both; margin-top: 15px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 17px;\">Password:</label>"+
+                                                              "<input type=\"password\" style=\" float:left; margin-top:10px;\" tabindex=\"1\" class=\"text-input placeholder-input\" id=\"password_login\" name=\"password_login\"/>"+
+                                                              "<input type=\"submit\" onClick=\"return verificar()\" style=\"margin-top:10px; margin-right:10px;\" id=\"entrar-submit\" tabindex=\"1\" class=\"btn2 btn-special2 has-tooltip\" value=\"Entrar\"/>"+
+                                                              "<span style=\"margin-top:20px; clear:both; float:left; margin-left:150px; color: #000;\"><input tabindex=\"1\" type=\"checkbox\" name=\"mantenirOpen\" />Guardar Usuario en este Ordenador</span>"+
+                                                              "<a id=\"olvidarpass2\" style=\"margin-top:30px; clear:both; float:right; margin-right:43px; font-size:11px; color:#666;\">Password o Usuario Olvidados</a>"+
+                                                              "</p>");
+                            });
+                        </script>
+                    <?php }?>
+                </p>
+            </div>
+       </form>
+    </div>
+ <div id="modal-wrapper2">
+      <?php
+         $navegador = getenv("HTTP_USER_AGENT");
+         if (preg_match("/MSIE/i", "$navegador")){
+      ?>
+      <div id="modal-screen" style="background: url('<?php echo $this->baseUrl(); ?>/images/degradat.png'); height: 100%; width: 100%; position: fixed;"></div>
+      <?php }else{ ?>
+      <div id="modal-screen" style="background-color:rgba(0, 0, 0, 0.3); height: 100%; width: 100%; position: fixed;"></div>
+      <?php } ?>
+       <form id="registroform" name="registroform" style="position:relative; "  action="<?php echo $this->baseUrl();?>/registrar/afegir" method="post">
+            <div id="registro-dock" class="registro">
+                <p>
+                    <span class="sprite1 message-icon"></span>
+                    <span class="modal-header">Registrarse<span style="color:#006600; font-weight: bold;">newsUP</span></span>
+                    <a class="dismiss2"></a>
+
+                        <span style="color:#000; float: left; clear:both;margin-top:23px; margin-left:15px; font-size:12px;">Está a punto de registrarse en <strong>NewsUP</strong></span>
+                        <span  style=" width: 190px; clear:both; margin-top: 40px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 15px;">Nombre y Apellidos:</span>
+                        <input type="text" style="width: 230px; float:left; margin-top:30px;" tabindex="1" class="text-input placeholder-input" id="nombre" name="nombre"/>
+                        <label  style="width: 190px; clear:both; margin-top: 15px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 15px;">Email:</label>
+                        <input type="text" style="width: 230px; float:left; margin-top:10px;" tabindex="1" class="text-input placeholder-input" id="email" name="email"/>
+                        <label  style="width: 190px; clear:both; margin-top: 15px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 15px;">Nombre de Usuario:</label>
+                        <input type="text" style="width: 230px; float:left; margin-top:10px;" tabindex="1" class="text-input placeholder-input" id="username" name="username"/>
+                        <label  style="width: 190px; clear:both; margin-top: 15px; margin-left: 30px; font-weight: bold; float: left; color: #000; font-size: 15px;">Contraseña:</label>
+                        <input type="password" style="width: 230px; float:left; margin-top:10px;" tabindex="1" class="text-input placeholder-input" id="password" name="password"/>
+                        <span style="color:#000; float: left; clear:both; width: 350px; margin-top:30px; margin-left:15px; font-size:12px;">En el momento de crear una cuenta en NewsUp acepta los <a href="<?php echo $this->baseUrl();?>/index/terminos">Términos de servicio</a> y la <a href="<?php echo $this->baseUrl();?>/index/privacidad">Política de privacidad</a>
+                        </span>
+                        <input type="button"  style="margin-top:25px; float:right; margin-right:30px;" id="ContinuarRegistre" tabindex="1" class="btn btn-primary has-tooltip" value="Continuar"/>
+                        
+                </p>
+            </div>
+           <div id="captcha-dock" class="captcha">
+               <span class="sprite1 message-icon"></span>
+                <span class="modal-header">Registrarse<span style="color:#006600; font-weight: bold;">newsUP</span></span>
+                <a class="dismiss3"></a>
+                <span style="color:#000; float: left;clear:both;margin-top:20px; margin-left:15px; font-size:16px; margin-bottom: 30px;">Copie estos caracteres - Paso 2/2</span>
+                <div style="clear:both; margin-top:8px; padding-left:10px;">
+                <?php
+                  require_once('recaptchalib.php');
+                  $publickey = "	6LeOu8ISAAAAAIrdn7BwgAkGGFUInIcmOaxlP_Vt"; // you got this from the signup page
+                  echo recaptcha_get_html($publickey);
+                ?>
+                </div>
+                <input type="button" id="enviarRegistre" name="enviarRegistre"  style="margin-top:25px; float:right; margin-right:30px;" tabindex="1" class="btn btn-primary has-tooltip" value="Crear Cuenta"/>
+
+            </div>
+       </form>
+
+    </div>
+
+<?php } ?>
+<?php if($this->feed ==1){ ?>
+ <div id="modal-wrapper3">
+     <?php
+         $navegador = getenv("HTTP_USER_AGENT");
+         if (preg_match("/MSIE/i", "$navegador")){
+      ?>
+      <div id="modal-screen" style="background: url('<?php echo $this->baseUrl(); ?>/images/degradat.png'); height: 100%; width: 100%; position: fixed;"></div>
+      <?php }else{ ?>
+      <div id="modal-screen" style="background-color:rgba(0, 0, 0, 0.3); height: 100%; width: 100%; position: fixed;"></div>
+      <?php } ?><div style="position:relative; ">
+         <div id="feed-dock" class="feed">
+                    <a class="dismissFeed"></a>
+                    <h3 style="margin-bottom:10px;padding-left: 20px;">Selecionar<span style="color:#336600;">   Diarios e Medios de Comunicación</span></h3>
+                    <div style="margin-bottom:20px;padding-left: 20px;">Seleccione los diarios que desea ver en el Quiosco.</div>
+                    <?php $cont = 0; ?>
+                    <span style="font-weight:bold;margin-bottom: 10px; padding-left: 20px; padding-top:6px; padding-bottom:6px;  float: left; padding-right: 15px;">Filtrar Por: </span>
+                    <?php foreach($this->tipus as $tipuDiari): ?>
+                            <span class="tipusDiari" id="tipusdiari<?php echo $tipuDiari->getId(); ?>"  rel="<?php echo $tipuDiari->getId(); ?>" ><?php echo $tipuDiari->getNom(); ?></span>
+                    <?php endforeach ?>
+                    <span class="tipusDiari activeJa" id="tipusdiari6"  rel="6" >Todos</span>
+                    <span style="clear:both;font-weight:bold;margin-bottom: 15px; padding-left: 20px; padding-top:6px; padding-bottom:6px;  float: left; padding-right: 15px;">Filtrar Por: </span>
+                    <?php foreach($this->medis as $medi): ?>
+                            <span class="tipusIdioma" id="tipusidioma<?php echo $medi->getId(); ?>"  rel="<?php echo $medi->getId(); ?>" ><?php echo $medi->getNom(); ?></span>
+                    <?php endforeach ?>
+                    <span class="tipusIdioma activeIdioma" id="tipusidioma4"  rel="4" >Todos</span>
+                        <?php  $cont = 0; ?>
+                        <span style="font-weight:bold;margin-bottom:0px; padding-left: 20px;clear:both; padding-top:6px; padding-bottom:6px;  float: left; padding-right: 15px;">Lista de Medios que coinciden con sus filtros: </span>
+                        <div style="overflow-y:auto; margin-bottom: 9px; max-height: 290px; min-height: 290px; clear:both; padding-top: 5px;" id="AquiDiaris">
+                        <?php foreach($this->feedDiaris as $diari){ ?>
+                            <?php if($cont==0){ ?>
+                                <div style="clear:both;" class="diari-tic" >
+                                  <div class="checkbox-marker-cat" id="categoriesMarkers<?php echo $diari->getId(); ?>" rel="<?php echo $diari->getId(); ?>"><img style="vertical-align: -3px;" src="<?php echo $this->baseUrl(); ?>/images/checkbox0.png"/></div>
+                                  <div class="checkbox-marker-cat2" rel="<?php echo $diari->getId(); ?>"><img style="vertical-align: -3px; padding-left: 10px;" src="<?php echo $this->baseUrl(); ?>/favicons/<?php echo $diari->getFavicon(); ?>" width="16px" height="16px"/></div>
+                                  <span style="padding-left:15px;padding-top:3px;"><?php echo $diari->getNom(); ?></span>
+                                </div>
+                            <?php }else{ ?>
+                               <div class="diari-tic">
+                                  <div class="checkbox-marker-cat" id="categoriesMarkers<?php echo $diari->getId(); ?>" rel="<?php echo $diari->getId(); ?>"><img style="vertical-align: -3px;" src="<?php echo $this->baseUrl(); ?>/images/checkbox0.png"/></div>
+                                  <div class="checkbox-marker-cat2" rel="<?php echo $diari->getId(); ?>"><img style="vertical-align: -3px; padding-left: 10px;" src="<?php echo $this->baseUrl(); ?>/favicons/<?php echo $diari->getFavicon(); ?>" width="16px" height="16px"/></div>
+                                  <span style="padding-left:15px;padding-top:3px;"><?php echo $diari->getNom(); ?></span>
+                                </div>
+                            <?php } ?>
+                            <?php $cont++ ?>
+                        <?php } ?>
+                        </div>
+                        <span style="float:right; margin-right: 20px;" class="btn btn-primary" id="acceptar-diaris">Cargar diarios</span>
+
+                </div>
+     </div>
+  </div>
+<?php } ?>
+    <?php if($this->responseLogin!=null){?>
+<div id="login-error-dock" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text"><?php echo $this->responseLogin; ?></span><a class="dismiss-login"></a></p>
+        </div>
+    </div>
+<script type="text/javascript">
+    jQuery("div#login-error-dock").fadeIn(300);
+    jQuery("div#modal-wrapper").fadeIn(0);
+    jQuery("div#login-dock").fadeIn(300);
+    setTimeout("tancarFinestreLogin()", 5000);
+
+    jQuery("a.dismiss-login").live("click",function(){
+        jQuery("div#login-error-dock").fadeOut(50);
+    });
+
+    function tancarFinestreLogin(){
+        jQuery("div#login-error-dock").slideUp(300);
+    }
+
+</script>
+    <?php } ?>
+    <?php if($this->responsePropietario!=null){?>
+<div id="login-error-dock" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text"><?php echo $this->responsePropietario; ?></span><a class="dismiss-login"></a></p>
+        </div>
+    </div>
+<script type="text/javascript">
+    jQuery("div#login-error-dock").fadeIn(300);
+    setTimeout("tancarFinestreLogin()", 5000);
+
+    jQuery("a.dismiss-login").live("click",function(){
+        jQuery("div#login-error-dock").fadeOut(50);
+        
+    });
+
+    function tancarFinestreLogin(){
+        jQuery("div#login-error-dock").slideUp(300);
+    }
+
+</script>
+    <?php } ?>
+    <div id="missatjeRecup"></div>
+    <?php if($this->responseVotoFail!=null){?>
+    <div id="login-error-dock" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text"><?php echo $this->responseVotoFail; ?></span><a class="dismiss-login"></a></p>
+        </div>
+    </div>
+<script type="text/javascript">
+    jQuery("div#login-error-dock").fadeIn(300);
+    setTimeout("tancarFinestreLogin()", 5000);
+    
+    jQuery("a.dismiss-login").live("click",function(){
+        jQuery("div#login-error-dock").fadeOut(50);
+    });
+
+    function tancarFinestreLogin(){
+        jQuery("div#login-error-dock").slideUp(300);
+    }
+
+</script>
+    <?php } ?>
+    <?php if($this->responseComent!=null){?>
+    <div id="login-error-dock" class="error" >
+        <div class="group" id="message-sleeve">
+            <p style="background-color: #669900;"><span class="sprite" style="background-position:-21px -249px;float:left;margin-right: 6px;position: relative; width: 21px; height: 21px;"></span><span id="message-text"><?php echo $this->responseComent; ?></span><a class="dismiss-login" style="background-color: #669900;"></a></p>
+        </div>
+    </div>
+<script type="text/javascript">
+    jQuery("div#login-error-dock").fadeIn(300);
+    setTimeout("tancarFinestreLogin()", 5000);
+
+    jQuery("a.dismiss-login").live("click",function(){
+        jQuery("div#login-error-dock").fadeOut(50);
+    });
+
+    function tancarFinestreLogin(){
+        jQuery("div#login-error-dock").slideUp(300);
+    }
+
+</script>
+    <?php } ?>
+
+    <div id="same-password-dock" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text">Las contraseñas no coinciden.</span><a class="dismiss"></a></p>
+        </div>
+    </div>
+    <div id="same-password-dock2" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text">La contraseña antigua no es correcta.</span><a class="dismiss_password2"></a></p>
+        </div>
+    </div>
+    <div id="same-email-dock" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text">Ya tenemos una cuenta NewsUP con este Email o Username.</span><a class="dismiss"></a></p>
+        </div>
+    </div>
+    <div id="message-dock" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text">Tiene que rellenar todos los campos correctamente.</span><a class="dismiss-dock"></a></p>
+        </div>
+    </div>
+    <div id="no-login-dock" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text">Tiene que estar registrado para subir Url's.</span><a class="dismiss-no-login"></a></p>
+        </div>
+    </div>
+    <div id="no-categoria-dock" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text">Tiene que seleccionar una categoría.</span><a class="dismiss-no-categoria"></a></p>
+        </div>
+    </div>
+    <div id="no-camposnew-dock" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text">Tiene que rellenar correctamente el título y la descripci&oacute;n.</span><a class="dismiss-no-camposnew"></a></p>
+        </div>
+    </div>
+    <div id="no-login-dock-punts" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text">Tiene que estar registrado para realizar esta operación.</span><a class="dismiss-no-login-punts"></a></p>
+        </div>
+    </div>
+    <div id="message-dock-password" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text">La contraseña no es correcta, demasiado corta. Mínimo 6 caracteres.</span><a class="dismiss-passwordcurta"></a></p>
+        </div>
+    </div>
+    <div id="okCambis" class="error" >
+        <div class="group" id="message-sleeve">
+            <p style="background-color: #669900;"><span class="sprite" style="background-position:-21px -249px;float:left;margin-right: 6px;position: relative; width: 21px; height: 21px;"></span><span id="message-text">Los Cambios se han realizado con éxito.</span><a class="dismiss-okCambis" style="background-color: #669900;"></a></p>
+        </div>
+    </div>
+    <div id="okRegistre" class="error" >
+        <div class="group" id="message-sleeve">
+            <p style="background-color: #669900;"><span class="sprite" style="background-position:-21px -249px;float:left;margin-right: 6px;position: relative; width: 21px; height: 21px;"></span><span id="message-text">Bienvenido/a a Newsup. En breve recibirá su email de verificación.</span><a class="dismiss-okRegistre" style="background-color: #669900;"></a></p>
+        </div>
+    </div>
+   <div id="okSugerencia" class="error" >
+        <div class="group" id="message-sleeve">
+            <p style="background-color: #669900;"><span class="sprite" style="background-position:-21px -249px;float:left;margin-right: 6px;position: relative; width: 21px; height: 21px;"></span><span id="message-text">Se ha sugerido al creador de la noticia que cambie su ubicación.</span><a class="dismiss-okSugerencia" style="background-color: #669900;"></a></p>
+        </div>
+    </div>
+<div id="capchaerror" class="error">
+        <div class="group" id="message-sleeve">
+            <p><span class="sprite message-icon"></span><span id="message-text">Los caracteres de seguridad son erroneos.</span><a class="dismiss-capchaerror"></a></p>
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+
+    //jQuery("input#boto-login2").live("click",function(){
+      function verificar(){
+         
+        var error=0;
+
+        if(jQuery("input#password_login").val().length<2){
+           jQuery("div#message-dock").fadeIn(300);
+           setTimeout("tancarFinestreDock()", 5000);
+           error=1;
+           return false;
+        }else{
+
+            password_login = jQuery("input#password_login").val();
+
+        }
+
+        if(jQuery("input#email_login").val().length>2){
+            
+            email_login = jQuery("input#email_login").val();
+        }else{
+           jQuery("div#message-dock").fadeIn(300);
+           setTimeout("tancarFinestreDock()", 5000);
+           error=1;
+           return false;
+        }
+
+        if(error==0){
+           //jQuery("form#loginform").submit();
+           return true;
+        }
+    };
+
+
+    function tancarFinestreDock(){
+        jQuery("div#message-dock").slideUp(300);
+    }
+
+     jQuery("a.dismiss-dock").live("click",function(){
+        jQuery("div#message-dock").fadeOut(50);
+        
+    });
+
+    var x=0;
+    var y=0;
+
+    jQuery("input#q").live("click",function(){
+       if(y==0){
+        jQuery("input#q").val("");
+         y=1;
+       }
+    });
+
+    jQuery("input#url-submit-url").live("click",function(){
+       if(x==0){
+        jQuery("input#url-submit-url").val("");
+         x=1;
+       }
+    });
+
+    function tancarFinestreNoLogin(){
+        jQuery("div#no-login-dock").slideUp(300);
+    }
+
+    jQuery("#url-submit-button").live("click",function(){
+
+        var error = 0;
+        inici = jQuery("input#url-submit-url").val().substr(0,7);
+        inici2 = jQuery("input#url-submit-url").val().substr(0,4);
+        
+        if(loggedIn==false){
+            jQuery("div#no-login-dock").fadeIn(300);
+            setTimeout("tancarFinestreNoLogin()", 5000);
+            x=0;
+            jQuery("input#url-submit-url").val("Envia tu Link!");
+            error =1;
+        }else{
+            if(inici=="http://"){
+                url= jQuery("input#url-submit-url").val();             
+                //jQuery("#submit-form").submit();
+            }else{
+                if(inici2=="www."){
+                    url= jQuery("input#url-submit-url").val();
+                }else{
+                    jQuery("div#message-dock").fadeIn(300);
+                    setTimeout("tancarFinestreDock()", 5000);
+                    x=0;
+                    jQuery("input#url-submit-url").val("Envia tu Link!");
+                    error=1;
+                }
+            }
+        }
+
+        google = jQuery("input#url-submit-url").val().substr(0,18);
+        google2 = jQuery("input#url-submit-url").val().substr(0,11);
+        facebook = jQuery("input#url-submit-url").val().substr(0,20);
+        facebook2 = jQuery("input#url-submit-url").val().substr(0,13);
+
+        if(google =="http://www.google."){
+            jQuery("div#message-dock").fadeIn(300);
+            setTimeout("tancarFinestreDock()", 5000);
+            x=0;
+            jQuery("input#url-submit-url").val("Envia tu Link!");
+            error=1;
+        }else{
+            if(google2=="www.google."){
+                jQuery("div#message-dock").fadeIn(300);
+                setTimeout("tancarFinestreDock()", 5000);
+                x=0;
+                jQuery("input#url-submit-url").val("Envia tu Link!");
+                error=1;
+            }
+        }
+
+        if(facebook =="http://www.facebook."){
+            jQuery("div#message-dock").fadeIn(300);
+            setTimeout("tancarFinestreDock()", 5000);
+            x=0;
+            jQuery("input#url-submit-url").val("Envia tu Link!");
+            error=1;
+        }else{
+            if(facebook2=="www.facebook."){
+                jQuery("div#message-dock").fadeIn(300);
+                setTimeout("tancarFinestreDock()", 5000);
+                x=0;
+                jQuery("input#url-submit-url").val("Envia tu Link!");
+                error=1;
+            }
+        }
+
+                post = url.split("?");
+                if(post[1]==null){
+                    postsi = false;
+                }else{
+                    postsi = true
+                    elements = post[1].split("&");
+                    //alert(elements);
+                }
+
+        if(error==0){
+            jQuery("div#carregador-url").html("<div style='margin:0 auto; text-align:center;'><img src='"+baseUrl+"/images/loading.gif'> </div> ");
+
+            if(postsi==false){
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: baseUrl+"/index/afegirnew",
+                    async: true,
+                    data: "&url="+url+"&post="+'no',
+
+                    success: function(data){
+                        if(data){
+                           jQuery("div#carregador-url").html(data);
+                        } else{
+                            //aqui hi ha que posar el contenidor per tal de pujar url's si hi ha agut un error'
+                            jQuery("div#carregador-url").html("<input type=\"text\" value=\"Envia tu Link!\" tabindex=\"1\" id=\"url-submit-url\" class=\"text-input text-input1\">"+
+                                                              "<button id=\"url-submit-button\" tabindex=\"2\" class=\"btn2 btn-special2 has-tooltip\" name=\"button\" type=\"button\">Subir URL</button>");
+                            x=0;
+                        }
+                    }
+                })
+            }else{
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: baseUrl+"/index/afegirnew",
+                    async: true,
+                    data: "&url="+post[0]+"&post="+'si'+"&elementspost="+elements+"&numeroelements="+elements.length,
+
+                    success: function(data){
+                        if(data){
+                           jQuery("div#carregador-url").html(data);
+                        } else{
+                             //aqui hi ha que posar el contenidor per tal de pujar url's si hi ha agut un error'
+                            jQuery("div#carregador-url").html("<input type=\"text\" value=\"Envia tu Link!\" tabindex=\"1\" id=\"url-submit-url\" class=\"text-input text-input1\">"+
+                                                              "<button id=\"url-submit-button\" tabindex=\"2\" class=\"btn2 btn-special2 has-tooltip\" name=\"button\" type=\"button\">Subir URL</button>");
+                            x=0;
+                        }
+                    }
+                })
+
+
+            }
+        }
+    });
+
+    jQuery("a.dismiss-no-login").live("click",function(){
+        jQuery("div#no-login-dock").fadeOut(50);
+        
+    });
+
+    jQuery("a.dismiss-passwordcurta").live("click",function(){
+        jQuery("div#message-dock-password").fadeOut(50);
+
+    });
+
+    jQuery("a.dismiss-no-login-punts").live("click",function(){
+        jQuery("div#no-login-dock-punts").fadeOut(50);
+
+    });
+
+       var categories=0;
+    
+    jQuery("div#topic-dropdown-list").live("click",function(){
+        if(categories==0){
+            jQuery("ul#categorias-lista").fadeIn(100);
+            categories=1;
+        }else{
+            categories=0;
+            jQuery("ul#categorias-lista").fadeOut(100);
+        }
+    });
+
+
+    function tancarFinestreNoLoginDockPunts(){
+        jQuery("div#no-login-dock-punts").slideUp(300);
+    }
+
+    jQuery(".story-item-newcomment").live("click",function(){
+
+        id = jQuery(this).attr("rel");
+
+        if(loggedIn==false){
+            jQuery("div#no-login-dock-punts").fadeIn(300);
+            setTimeout("tancarFinestreNoLoginDockPunts()", 5000);
+        }else{
+            jQuery("div#inline-comment-container"+id).fadeIn(100);
+        }
+
+     });
+
+     jQuery("#closeComent").live("click",function(){
+
+        id = jQuery(this).attr("rel");
+        jQuery("div#inline-comment-container"+id).fadeOut(0);
+
+     });
+
+
+
+
+
+    jQuery("a.dismiss-okCambis").live("click",function(){
+        jQuery("div#okCambis").fadeOut(50);
+    });
+
+    jQuery("a.dismiss-okSugerencia").live("click",function(){
+        jQuery("div#okSugerencia").fadeOut(50);
+
+    });
+
+    if(loggedIn==true){
+       
+       $(document).ready(function(){
+            timerGo();
+         });
+        var tiempo = 25000;
+        function timerGo()
+        {
+            setTimeout("cargarNotificacio()", tiempo);
+        }
+
+
+        function cargarNotificacio()
+        {
+        
+            jQuery.ajax({
+                        type: "POST",
+                        url: baseUrl+"/index/recargarnotificacion",
+                        async: true,
+
+                        success: function(data){
+                            
+                            jQuery("#notifications-container").html(data);
+                        }
+            });
+            timerGo();
+
+        }
+   }
+
+</script>
+<?php if($this->error==1){ ?>
+
+<script type="text/javascript">
+
+    jQuery("div#same-email-dock").fadeIn(300);
+    setTimeout("tancarFinestreLoginEmail()", 5000);
+
+    jQuery("a.dismiss").live("click",function(){
+        jQuery("div#same-email-dock").fadeOut(50);
+    });
+
+    function tancarFinestreLoginEmail(){
+        jQuery("div#same-email-dock").slideUp(400);
+    }
+
+    jQuery("div#modal-wrapper2").fadeIn(0);
+    jQuery("div#registro-dock").fadeIn(500);
+
+</script>
+<?php }
+        if($this->error==2){
+?>
+
+<script type="text/javascript">
+
+    jQuery("div#capchaerror").fadeIn(300);
+    setTimeout("tancarFinestreLogincaptcha()", 5000);
+
+    function tancarFinestreLogincaptcha(){
+        jQuery("div#capchaerror").slideUp(400);
+    }
+
+    jQuery("a.dismiss-capchaerror").live("click",function(){
+        jQuery("div#capchaerror").fadeOut(50);
+    });
+
+    jQuery("div#modal-wrapper2").fadeIn(0);
+    jQuery("div#registro-dock").fadeIn(500);
+
+</script>
+<?php }
+        if($this->error==3){
+?>
+
+<script type="text/javascript">
+
+    jQuery("div#message-dock").fadeIn(300);
+    setTimeout("tancarFinestreDock()", 5000);
+
+    jQuery("div#modal-wrapper2").fadeIn(0);
+    jQuery("div#registro-dock").fadeIn(500);
+</script>
+<?php }?>

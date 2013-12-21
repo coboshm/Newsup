@@ -1,0 +1,32 @@
+<?php if($this->noticiesFinals == null){ ?>
+    <div class="nothing-found topbar-spacer">
+        <p class="title">Este Usuario aun no ha subido nada.</p>
+    </div>
+<?php }else{ ?>
+<?php
+//aqui fem un include
+echo $this->render("foreachnoticies.phtml"); ?>
+<?php } ?>
+<?php if($this->cantitat >15){ ?>
+  <script>
+
+    var cantitat = <?php echo $this->cantitat; ?>;
+
+  </script>
+    <ul class="pagination group btn-loader btn-loader-bottom no-prev no-next story-list-container" role="navigation"aria-labelledby="paginglabel">
+        <li class="prev" >
+            <a class="btn btn-default btn-small" id="prev-out" rel="<?php echo $this->pagina; ?>" idus="<?php echo $this->userfora->getId(); ?>">
+                <span class="uitext" id="prev">Prev</span>
+            </a>
+        </li>
+        <li class="page-num" style="padding-top:7px;">
+            Pagina
+            <span class="pagination-current"><?php echo $this->pagina; ?></span>
+        </li>
+        <li class="next">
+            <a class="btn btn-default btn-small" id="next-out" rel="<?php echo $this->pagina; ?>" idus="<?php echo $this->userfora->getId(); ?>">
+                <span class="uitext" id="next">Next</span>
+            </a>
+        </li>
+    </ul>
+ <?php } ?>

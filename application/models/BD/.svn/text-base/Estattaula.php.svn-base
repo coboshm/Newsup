@@ -1,0 +1,45 @@
+<?php
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of Tipustaula
+ *
+ * Marc Cobos
+ */
+class Estattaula extends Zend_Db_Table
+{
+    protected $_name = "estat";
+    protected $_primary = "id_estat";
+
+
+    public function getEstat($id)
+    {
+        $tipus = $this->find($id)->current();
+        return $tipus;
+    }
+
+    public function modEstat($id,$nom)
+    {
+        $tipus = $this->find($id)->current();
+        $tipus->nom = $nom;
+        $tipus->save();
+    }
+
+    public function borrEstat($id)
+    {
+        $cat = $this->find($id)->current();
+        $cat->delete();
+    }
+
+    public function getAllEstat()
+    {
+        $estats = array();
+        $estats = $this->fetchAll();
+        return $estats;
+    }
+
+}
+

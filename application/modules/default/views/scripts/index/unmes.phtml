@@ -1,0 +1,25 @@
+<?php if($this->noticiesFinals == null){ ?>
+    <div class="nothing-found topbar-spacer">
+        <p class="title">No hay noticias con estas características.</p>
+    </div>
+<?php }else{ ?>
+<?php echo $this->render("foreachnoticies.phtml"); ?>
+<?php if($this->cantitat >15){ ?>
+<ul class="pagination group btn-loader btn-loader-bottom no-prev no-next story-list-container" role="navigation"aria-labelledby="paginglabel">
+    <li class="prev" >
+        <a class="btn btn-default btn-small" id="prev" rel="<?php echo $this->pagina; ?>" tip="1" cat="<?php echo $this->idCategoria; ?>">
+            <span class="uitext">Anterior</span>
+        </a>
+    </li>
+    <li class="page-num" style="padding-top:7px;">
+        Página
+        <span class="pagination-current"><?php echo $this->pagina; ?></span>
+    </li>
+    <li class="next">
+        <a class="btn btn-default btn-small" id="next" rel="<?php echo $this->pagina; ?>" tip="1" cat="<?php echo $this->idCategoria; ?>">
+            <span class="uitext">Siguiente</span>
+        </a>
+    </li>
+</ul>
+<?php } ?>
+<?php } ?>
